@@ -196,7 +196,7 @@ function HealthBar({ value, color }: { value: number; color?: string }) {
   const barColor =
     color ||
     (value >= 90
-      ? "#12FF80"
+      ? "#0d9488"
       : value >= 75
         ? PURPLE
         : value >= 60

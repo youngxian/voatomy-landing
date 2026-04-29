@@ -15,6 +15,8 @@ import {
   ShieldAlert,
   ArrowDown,
 } from "lucide-react";
+import { SectionBackgroundDecor } from "@/components/marketing/section-background-decor";
+import { WireflowRail } from "@/components/marketing/wireflow-rail";
 
 const SIGNAL_ICONS = [Braces, Users, BarChart3, AlertTriangle, Hexagon, DollarSign] as const;
 
@@ -23,8 +25,9 @@ export function WorkflowsSection() {
   const { ref: convRef, isVisible: convVisible } = useScrollAnimation();
 
   return (
-    <section className="light-surface-typography bg-sky-light px-4 py-16 sm:py-24 transition-colors duration-300">
-      <div className="mx-auto max-w-container">
+    <section className="light-surface-typography relative overflow-hidden bg-sky-light px-4 py-16 sm:py-24 transition-colors duration-300">
+      <SectionBackgroundDecor tone="sky" />
+      <div className="relative z-[1] mx-auto max-w-container">
         <div
           ref={ref}
           className={cn(
@@ -43,6 +46,11 @@ export function WorkflowsSection() {
             high-confidence sprint plan. No guessing required.
           </p>
         </div>
+
+        <WireflowRail
+          className="mt-8"
+          label="Data signals along the delivery wireflow"
+        />
 
         {/* Bento grid: first 2 cards span wider */}
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-6">

@@ -200,6 +200,23 @@ const config: Config = {
           from: { opacity: "0", transform: "translateY(8px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
+        "wire-crawl": {
+          "0%": { left: "4%" },
+          "50%": { left: "96%" },
+          "100%": { left: "4%" },
+        },
+        "orb-drift-1": {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
+          "50%": { transform: "translate(8%, -6%) scale(1.05)" },
+        },
+        "orb-drift-2": {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
+          "50%": { transform: "translate(-6%, 8%) scale(1.04)" },
+        },
+        "picture-float": {
+          "0%, 100%": { transform: "translateY(0) rotate(0deg)" },
+          "50%": { transform: "translateY(-5px) rotate(0.3deg)" },
+        },
       },
       animation: {
         "fade-in-up": "fade-in-up 600ms cubic-bezier(0.16, 1, 0.3, 1) both",
@@ -222,6 +239,10 @@ const config: Config = {
         "pulse-ring": "pulse-ring 3s ease-in-out infinite",
         "count-up": "count-up 0.5s ease-out both",
         "orbit": "orbit 30s linear infinite",
+        "wire-crawl": "wire-crawl 4.2s ease-in-out infinite",
+        "orb-drift-1": "orb-drift-1 16s ease-in-out infinite",
+        "orb-drift-2": "orb-drift-2 20s ease-in-out infinite 2s",
+        "picture-float": "picture-float 6s ease-in-out infinite",
       },
       backgroundImage: {
         "green-glow":

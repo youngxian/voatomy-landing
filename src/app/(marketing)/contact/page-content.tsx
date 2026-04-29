@@ -26,6 +26,7 @@ import {
   Building2,
   Activity,
 } from "lucide-react";
+import { SubpageHeroAtmosphere } from "@/components/marketing/subpage-hero-atmosphere";
 
 /* ------------------------------------------------------------------ */
 /*  Contact options data                                               */
@@ -48,7 +49,7 @@ const CONTACT_OPTIONS: ContactOption[] = [
     email: "sales@voatomy.global",
     cta: "Contact Sales",
     icon: <DollarSign className="h-5 w-5" />,
-    color: "#12FF80",
+    color: "#0d9488",
   },
   {
     title: "Support",
@@ -193,13 +194,14 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="bg-white">
+    <div className="relative overflow-hidden bg-white">
+      <SubpageHeroAtmosphere />
       {/* ============================================================ */}
       {/*  HERO                                                        */}
       {/* ============================================================ */}
-      <Section variant="white" className="pt-28 pb-12 sm:pt-36 sm:pb-16">
+      <Section variant="white" className="relative z-10 pt-28 pb-12 sm:pt-36 sm:pb-16">
         <div className="mx-auto max-w-3xl text-center">
-          <Chip dotColor="#12FF80" className="mb-6">
+          <Chip dotColor="#0d9488" className="mb-6">
             Contact
           </Chip>
 

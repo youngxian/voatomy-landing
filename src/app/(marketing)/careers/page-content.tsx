@@ -32,10 +32,11 @@ import {
   Users,
   Send,
 } from "lucide-react";
+import { BRAND_GREEN } from "@/lib/marketing-visual";
+
 
 /* ─────────────────── Constants ─────────────────── */
 
-const BRAND_GREEN = "#12FF80";
 const BRAND_ORANGE = "#f16e2c";
 
 const WHY_BENEFITS = [

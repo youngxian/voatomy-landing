@@ -46,14 +46,17 @@ import {
 } from "lucide-react";
 import { usePricing } from "@/hooks/use-pricing";
 import { buildProductCheckoutUrl } from "@/lib/product-purchase";
+import { ProductHeroAtmosphere } from "@/components/marketing/product-hero-atmosphere";
+import { productBrand } from "@/lib/product-brand";
 
 /* ================================================================
    LOOP — Revenue Feedback Engine
    Product Landing Page
    ================================================================ */
 
-const LOOP_COLOR = "#6366F1";
-const LOOP_COLOR_LIGHT = "rgba(99, 102, 241, 0.12)";
+const LOOP_COLOR = productBrand.loop.accent;
+const LOOP_COLOR_LIGHT = productBrand.loop.accentLight;
+const LOOP_BORDER_SOFT = productBrand.loop.borderSoft;
 
 /* ---------- animated entrance hook ---------- */
 function useReveal() {
@@ -95,10 +98,19 @@ function HeroSection() {
 
   return (
     <section className="relative min-h-[92vh] overflow-hidden bg-theme px-4 pb-24 pt-24 text-charcoal">
+      <ProductHeroAtmosphere variant="loop" />
       {/* Premium hero background */}
-      <div className="product-hero-gradient" style={{ "--hero-gradient": "radial-gradient(ellipse, #6366f1, transparent 70%)", "--hero-gradient-secondary": "radial-gradient(ellipse, #8b5cf6, transparent 70%)" } as React.CSSProperties} />
-      <div className="pointer-events-none absolute inset-0 fine-grid" aria-hidden="true" />
-      <div className="pointer-events-none absolute inset-0 noise-overlay" aria-hidden="true" />
+      <div
+        className="product-hero-gradient z-[1]"
+        style={
+          {
+            "--hero-gradient": productBrand.loop.heroGradient,
+            "--hero-gradient-secondary": productBrand.loop.heroGradientSecondary,
+          } as React.CSSProperties
+        }
+      />
+      <div className="pointer-events-none absolute inset-0 z-[1] fine-grid" aria-hidden="true" />
+      <div className="pointer-events-none absolute inset-0 z-[1] noise-overlay" aria-hidden="true" />
 
       <div className="relative z-[2] mx-auto max-w-container text-center">
         {/* Badge */}
@@ -111,7 +123,7 @@ function HeroSection() {
           <span
             className="inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-semibold backdrop-blur-sm"
             style={{
-              borderColor: "rgba(99,102,241,0.3)",
+              borderColor: LOOP_BORDER_SOFT,
               background: LOOP_COLOR_LIGHT,
               color: LOOP_COLOR,
             }}
@@ -229,20 +241,20 @@ function FeedbackLoopVisual() {
       {/* Outer ring */}
       <div
         className="absolute inset-4 rounded-full border-2 border-dashed animate-[spin_30s_linear_infinite]"
-        style={{ borderColor: "rgba(99,102,241,0.25)" }}
+        style={{ borderColor: "rgba(79,70,229,0.25)" }}
       />
       {/* Inner ring */}
       <div
         className="absolute inset-16 rounded-full border animate-[spin_20s_linear_infinite_reverse]"
-        style={{ borderColor: "rgba(99,102,241,0.15)" }}
+        style={{ borderColor: "rgba(79,70,229,0.15)" }}
       />
       {/* Center infinity */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div
           className="flex items-center gap-1 rounded-2xl border px-4 py-2"
           style={{
-            borderColor: "rgba(99,102,241,0.3)",
-            background: "rgba(99,102,241,0.08)",
+            borderColor: "rgba(79,70,229,0.3)",
+            background: "rgba(79,70,229,0.08)",
           }}
         >
           <Infinity className="h-6 w-6" style={{ color: LOOP_COLOR }} />
@@ -276,9 +288,9 @@ function FeedbackLoopVisual() {
             <div
               className="grid h-10 w-10 place-items-center rounded-xl border shadow-lg sm:h-11 sm:w-11"
               style={{
-                borderColor: "rgba(99,102,241,0.3)",
-                background: "rgba(99,102,241,0.1)",
-                boxShadow: `0 4px 24px rgba(99,102,241,0.15)`,
+                borderColor: "rgba(79,70,229,0.3)",
+                background: "rgba(79,70,229,0.1)",
+                boxShadow: `0 4px 24px rgba(79,70,229,0.15)`,
               }}
             >
               <Icon className="h-4 w-4 sm:h-5 sm:w-5" style={{ color: LOOP_COLOR }} />
@@ -420,9 +432,9 @@ function LoopVisualizationSection() {
                     <div
                       className="grid h-14 w-14 place-items-center rounded-2xl border shadow-lg"
                       style={{
-                        borderColor: "rgba(99,102,241,0.4)",
-                        background: `linear-gradient(135deg, rgba(99,102,241,0.2), rgba(99,102,241,0.05))`,
-                        boxShadow: `0 8px 32px rgba(99,102,241,0.2)`,
+                        borderColor: "rgba(79,70,229,0.4)",
+                        background: `linear-gradient(135deg, rgba(79,70,229,0.2), rgba(79,70,229,0.05))`,
+                        boxShadow: `0 8px 32px rgba(79,70,229,0.2)`,
                       }}
                     >
                       <Icon className="h-6 w-6" style={{ color: LOOP_COLOR }} />
@@ -433,7 +445,7 @@ function LoopVisualizationSection() {
                     {i < processing.length - 1 && (
                       <div
                         className="hidden lg:block h-6 w-px"
-                        style={{ background: "rgba(99,102,241,0.3)" }}
+                        style={{ background: "rgba(79,70,229,0.3)" }}
                       />
                     )}
                   </div>
@@ -617,7 +629,7 @@ function OutboundIntelligenceSection() {
   return (
     <Section variant="white" className="py-20 sm:py-28">
       <div ref={ref} className="text-center mb-14">
-        <Chip dotColor="#12FF80" className="mb-4">
+        <Chip dotColor="#0d9488" className="mb-4">
           Outbound Intelligence
         </Chip>
         <h2
@@ -695,7 +707,7 @@ function DashboardSection() {
             "mx-auto max-w-[960px] rounded-2xl border border-theme bg-theme-subtle shadow-2xl transition-all duration-1000",
             inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10",
           )}
-          style={{ boxShadow: `0 24px 80px rgba(99,102,241,0.08)` }}
+          style={{ boxShadow: `0 24px 80px rgba(79,70,229,0.08)` }}
         >
           {/* Window bar */}
           <div className="flex items-center gap-2 border-b border-theme px-5 py-3">
@@ -723,7 +735,7 @@ function DashboardSection() {
               value="$3.2M"
               change="+41% this quarter"
               changePositive
-              color="#12FF80"
+              color="#0d9488"
             />
             {/* Signals Processed */}
             <DashboardCard
@@ -739,7 +751,7 @@ function DashboardSection() {
               value="87%"
               change="+5pts this month"
               changePositive
-              color="#12FF80"
+              color="#0d9488"
             />
           </div>
 
@@ -758,7 +770,7 @@ function DashboardSection() {
                       key={i}
                       className="aspect-square rounded-md transition-colors"
                       style={{
-                        background: `rgba(99,102,241,${intensity})`,
+                        background: `rgba(79,70,229,${intensity})`,
                       }}
                     />
                   );
@@ -771,7 +783,7 @@ function DashboardSection() {
                     <div
                       key={o}
                       className="h-2 w-4 rounded-sm"
-                      style={{ background: `rgba(99,102,241,${o})` }}
+                      style={{ background: `rgba(79,70,229,${o})` }}
                     />
                   ))}
                 </div>
@@ -803,7 +815,7 @@ function DashboardSection() {
                       className="w-full rounded-t-md transition-all duration-1000"
                       style={{
                         height: `${bar.h}%`,
-                        background: `linear-gradient(to top, rgba(99,102,241,0.3), rgba(99,102,241,0.7))`,
+                        background: `linear-gradient(to top, rgba(79,70,229,0.3), rgba(79,70,229,0.7))`,
                       }}
                     />
                     <span className="text-[9px] text-charcoal/45">{bar.label}</span>
@@ -1163,7 +1175,7 @@ function StatsSection() {
             <div
               className="h-10 w-10 rounded-full"
               style={{
-                background: `linear-gradient(135deg, ${LOOP_COLOR}, rgba(99,102,241,0.4))`,
+                background: `linear-gradient(135deg, ${LOOP_COLOR}, rgba(79,70,229,0.4))`,
               }}
             />
             <div className="text-left">
@@ -1204,7 +1216,7 @@ function WaitlistSection() {
               <div
                 className="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-2xl border"
                 style={{
-                  borderColor: "rgba(99,102,241,0.3)",
+                  borderColor: "rgba(79,70,229,0.3)",
                   background: LOOP_COLOR_LIGHT,
                 }}
               >
@@ -1491,7 +1503,7 @@ const LOOP_PIPELINE = [
     desc: "Closed-loop delivery back to every revenue team",
     detail: "When features ship, LOOP auto-generates sales enablement, marketing copy, CS talking points, and deal-risk resolution notifications.",
     inputs: ["Sales enablement", "Marketing copy", "CS scripts", "Deal alerts"],
-    color: "#12FF80",
+    color: "#0d9488",
   },
 ];
 
@@ -1746,7 +1758,7 @@ function LoopExtractVisual({ color }: { color: string }) {
     { category: "Feature Request", count: 23, sentiment: 0.72, color },
     { category: "Competitive Mention", count: 8, sentiment: -0.3, color: "#f59e0b" },
     { category: "Pain Point", count: 15, sentiment: -0.65, color: "#ef4444" },
-    { category: "Positive Feedback", count: 31, sentiment: 0.89, color: "#12FF80" },
+    { category: "Positive Feedback", count: 31, sentiment: 0.89, color: "#0d9488" },
     { category: "Objection", count: 6, sentiment: -0.45, color: "#f97316" },
   ];
   return (
@@ -1772,7 +1784,7 @@ function LoopExtractVisual({ color }: { color: string }) {
                 style={{
                   width: `${Math.abs(ext.sentiment) * 100}%`,
                   marginLeft: ext.sentiment < 0 ? `${(1 - Math.abs(ext.sentiment)) * 100}%` : "0",
-                  backgroundColor: ext.sentiment >= 0 ? "#12FF80" : "#ef4444",
+                  backgroundColor: ext.sentiment >= 0 ? "#0d9488" : "#ef4444",
                 }}
               />
             </div>
@@ -1823,9 +1835,9 @@ function LoopWeightVisual({ color }: { color: string }) {
             <span className="text-[10px] text-center rounded-full px-1.5 py-0.5" style={{ backgroundColor: `${color}12`, color }}>{a.tier}</span>
             <div className="flex items-center justify-center gap-1">
               <div className="h-1.5 w-6 rounded-full bg-theme-subtle overflow-hidden">
-                <div className="h-full rounded-full" style={{ width: `${a.weight}%`, backgroundColor: a.weight >= 80 ? "#12FF80" : color }} />
+                <div className="h-full rounded-full" style={{ width: `${a.weight}%`, backgroundColor: a.weight >= 80 ? "#0d9488" : color }} />
               </div>
-              <span className="text-[10px] font-bold" style={{ color: a.weight >= 80 ? "#12FF80" : color }}>{a.weight}</span>
+              <span className="text-[10px] font-bold" style={{ color: a.weight >= 80 ? "#0d9488" : color }}>{a.weight}</span>
             </div>
           </div>
         ))}
@@ -1858,7 +1870,7 @@ function LoopPrioritizeVisual({ color }: { color: string }) {
         <span className="text-xs font-mono text-charcoal/70">Clustering 347 signals into themes…</span>
       </div>
       {themes.map((t, i) => {
-        const barColor = t.score >= 90 ? "#12FF80" : t.score >= 75 ? color : t.score >= 60 ? "#f59e0b" : "rgba(128,128,128,0.4)";
+        const barColor = t.score >= 90 ? "#0d9488" : t.score >= 75 ? color : t.score >= 60 ? "#f59e0b" : "rgba(128,128,128,0.4)";
         return (
           <div
             key={t.name}

@@ -473,7 +473,7 @@ export default function SreDevOpsSolutionPage() {
                   <div
                     className="h-1.5 w-1.5 rounded-full transition-colors duration-500"
                     style={{
-                      background: alertPhase === "raw" ? RED : "#12FF80",
+                      background: alertPhase === "raw" ? RED : "#0d9488",
                     }}
                   />
                 </div>

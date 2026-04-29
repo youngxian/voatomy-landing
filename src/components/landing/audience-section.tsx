@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { AUDIENCES } from "@/lib/constants";
 import { PersonaIllustration } from "@/components/illustrations/abstract-illustrations";
+import { SectionBackgroundDecor } from "@/components/marketing/section-background-decor";
 
 const PERSONA_VARIANTS = ["manager", "product"] as const;
 
@@ -12,11 +13,13 @@ export function AudienceSection() {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section className="light-surface-typography bg-amber-light px-4 py-16 sm:py-24 transition-colors duration-300">
+    <section className="light-surface-typography relative overflow-hidden bg-amber-light px-4 py-16 sm:py-24 transition-colors duration-300">
+      <SectionBackgroundDecor tone="amber" />
       <div className="mx-auto max-w-container">
         <div
           ref={ref}
           className={cn(
+            "relative z-[1]",
             "transition-all duration-700",
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
           )}

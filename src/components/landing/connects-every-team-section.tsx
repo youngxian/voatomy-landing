@@ -6,13 +6,16 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { ArrowRight, GitBranch, Users, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SectionBackgroundDecor } from "@/components/marketing/section-background-decor";
+import { WireflowRail } from "@/components/marketing/wireflow-rail";
 
 export function ConnectsEveryTeamSection() {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section className="bg-white px-4 py-16 sm:py-24 transition-colors duration-300">
-      <div ref={ref} className="mx-auto max-w-container">
+    <section className="relative overflow-hidden bg-white px-4 py-16 sm:py-24 transition-colors duration-300">
+      <SectionBackgroundDecor tone="white" />
+      <div ref={ref} className="relative z-[1] mx-auto max-w-container">
         {/* Header */}
         <div
           className={cn(
@@ -30,6 +33,8 @@ export function ConnectsEveryTeamSection() {
             Six AI products work as one intelligent system — data flows automatically from customer signal to organizational intelligence.
           </p>
         </div>
+
+        <WireflowRail className="mt-4 max-w-2xl" label="Flow between teams" />
 
         {/* Bento grid — Clause style */}
         <div className="mt-12 grid gap-4 lg:grid-cols-3">

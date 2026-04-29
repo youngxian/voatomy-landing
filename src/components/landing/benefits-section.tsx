@@ -6,15 +6,19 @@ import { cn } from "@/lib/utils";
 import { Check, TrendingUp, Users, Zap, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { SectionBackgroundDecor } from "@/components/marketing/section-background-decor";
+import { FloatingPictureFrame } from "@/components/marketing/floating-picture-frame";
+import { MARKETING_IMAGES } from "@/lib/marketing-images";
 
 export function BenefitsSection() {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section className="bg-white px-4 py-16 sm:py-24 transition-colors duration-300">
+    <section className="relative overflow-hidden bg-white px-4 py-16 sm:py-24 transition-colors duration-300">
+      <SectionBackgroundDecor tone="white" />
       <div
         ref={ref}
-        className="mx-auto max-w-container grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-20"
+        className="relative z-[1] mx-auto grid max-w-container gap-12 lg:grid-cols-2 lg:items-center lg:gap-20"
       >
         {/* Left: Visual bento with real image + dashboard */}
         <div
@@ -25,15 +29,18 @@ export function BenefitsSection() {
         >
           <div className="grid grid-cols-5 gap-3">
             {/* Real workspace image — spans 3 cols */}
-            <div className="col-span-3 overflow-hidden rounded-2xl border border-charcoal/10 shadow-md">
-              <Image
-                src="/images/landing/collaboration.jpg"
-                alt="Team collaboration"
-                width={480}
-                height={360}
-                className="h-full w-full object-cover"
-              />
-            </div>
+            <FloatingPictureFrame className="col-span-3" delay={0.08}>
+              <div className="overflow-hidden rounded-2xl border border-charcoal/10 shadow-md">
+                <Image
+                  src={MARKETING_IMAGES.collaboration}
+                  alt="Team collaboration in product review"
+                  width={960}
+                  height={720}
+                  className="h-full w-full object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
+            </FloatingPictureFrame>
 
             {/* Stacked stat cards — spans 2 cols */}
             <div className="col-span-2 flex flex-col gap-3">

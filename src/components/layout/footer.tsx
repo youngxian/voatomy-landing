@@ -132,7 +132,7 @@ export function Footer() {
   const legalCol = FOOTER_COLUMNS.find((c) => c.title === "Legal")!;
 
   return (
-    <footer className="relative bg-teal-dark text-white overflow-hidden">
+    <footer className="relative z-20 bg-teal-dark text-white overflow-hidden">
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent"
         aria-hidden="true"

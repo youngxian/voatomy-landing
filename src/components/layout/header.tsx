@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X, ChevronRight, ChevronDown, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -24,7 +25,12 @@ export function Header() {
   const [mobileExpanded, setMobileExpanded] = React.useState<string | null>(null);
   const closeTimer = React.useRef<ReturnType<typeof setTimeout>>(null);
   const { isLoggedIn, dashboardUrl, logout } = useSession();
-  const homeLight = !scrolled;
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+  /** Solid teal bar: any inner page, or home after scroll */
+  const useSolidNavShell = !isHome || scrolled;
+  /** Charcoal-on-glass: home hero only */
+  const lightTextMode = !useSolidNavShell;
 
   // Scroll listener for glassmorphism effect
   React.useEffect(() => {
@@ -91,11 +97,9 @@ export function Header() {
       <header
         className={cn(
           "sticky top-0 z-50 transition-all duration-500",
-          homeLight
-            ? "bg-transparent border-b border-transparent"
-            : scrolled
-            ? "border-b border-theme bg-teal-dark/95 shadow-sm shadow-black/25 backdrop-blur-xl"
-            : "bg-transparent"
+          useSolidNavShell
+            ? "border-b border-white/10 bg-teal-dark/96 shadow-md shadow-black/20 backdrop-blur-xl"
+            : "border-b border-charcoal/[0.07] bg-white/90 shadow-sm shadow-black/[0.06] backdrop-blur-lg",
         )}
       >
         <div className="mx-auto flex min-h-[52px] max-w-container items-center justify-between gap-3 px-4 sm:px-6 lg:min-h-[60px] lg:gap-4">
@@ -108,7 +112,9 @@ export function Header() {
               <span
                 className={cn(
                   "grid h-[22px] w-[22px] place-items-center rounded-[6px] shadow-sm",
-                  homeLight ? "bg-teal shadow-teal/25" : "bg-accent-lime shadow-accent-lime/25",
+                  lightTextMode
+                    ? "bg-teal shadow-teal/25 ring-1 ring-[#f16e2c]/35"
+                    : "bg-accent-lime shadow-accent-lime/25 ring-1 ring-white/20",
                 )}
                 aria-hidden="true"
               >
@@ -117,7 +123,7 @@ export function Header() {
               <span
                 className={cn(
                   "text-[15px] font-bold tracking-tight",
-                  homeLight ? "text-charcoal" : "text-white",
+                  lightTextMode ? "text-charcoal" : "text-white",
                 )}
               >
                 Voatomy
@@ -129,11 +135,11 @@ export function Header() {
                 type="button"
                 className={cn(
                   "inline-flex h-10 items-center gap-1 rounded-md px-3.5 text-sm font-semibold transition-colors",
-                  homeLight
+                  lightTextMode
                     ? "text-charcoal/75 hover:bg-charcoal/[0.06] hover:text-charcoal"
                     : "text-white/75 hover:bg-white/10 hover:text-white",
                   activeMega === "product" &&
-                    (homeLight ? "bg-charcoal/[0.08] text-charcoal" : "bg-white/10 text-white"),
+                    (lightTextMode ? "bg-charcoal/[0.08] text-charcoal" : "bg-white/10 text-white"),
                 )}
                 onClick={() => openMega(activeMega === "product" ? null : "product")}
                 onMouseEnter={() => openMega("product")}
@@ -154,11 +160,11 @@ export function Header() {
                 type="button"
                 className={cn(
                   "inline-flex h-10 items-center gap-1 rounded-md px-3.5 text-sm font-semibold transition-colors",
-                  homeLight
+                  lightTextMode
                     ? "text-charcoal/75 hover:bg-charcoal/[0.06] hover:text-charcoal"
                     : "text-white/75 hover:bg-white/10 hover:text-white",
                   activeMega === "solutions" &&
-                    (homeLight ? "bg-charcoal/[0.08] text-charcoal" : "bg-white/10 text-white"),
+                    (lightTextMode ? "bg-charcoal/[0.08] text-charcoal" : "bg-white/10 text-white"),
                 )}
                 onClick={() => openMega(activeMega === "solutions" ? null : "solutions")}
                 onMouseEnter={() => openMega("solutions")}
@@ -179,7 +185,7 @@ export function Header() {
                 href="/pricing"
                 className={cn(
                   "inline-flex h-10 items-center rounded-md px-3.5 text-sm font-semibold transition-colors",
-                  homeLight
+                  lightTextMode
                     ? "text-charcoal/75 hover:bg-charcoal/[0.06] hover:text-charcoal"
                     : "text-white/75 hover:bg-white/10 hover:text-white",
                 )}
@@ -191,11 +197,11 @@ export function Header() {
                 type="button"
                 className={cn(
                   "inline-flex h-10 items-center gap-1 rounded-md px-3.5 text-sm font-semibold transition-colors",
-                  homeLight
+                  lightTextMode
                     ? "text-charcoal/75 hover:bg-charcoal/[0.06] hover:text-charcoal"
                     : "text-white/75 hover:bg-white/10 hover:text-white",
                   activeMega === "resources" &&
-                    (homeLight ? "bg-charcoal/[0.08] text-charcoal" : "bg-white/10 text-white"),
+                    (lightTextMode ? "bg-charcoal/[0.08] text-charcoal" : "bg-white/10 text-white"),
                 )}
                 onClick={() => openMega(activeMega === "resources" ? null : "resources")}
                 onMouseEnter={() => openMega("resources")}
@@ -219,7 +225,7 @@ export function Header() {
             <span
               className={cn(
                 "hidden h-6 w-px shrink-0 sm:block",
-                homeLight ? "bg-charcoal/15" : "bg-white/20",
+                lightTextMode ? "bg-charcoal/15" : "bg-white/20",
               )}
               aria-hidden="true"
             />
@@ -227,7 +233,7 @@ export function Header() {
               href="/contact"
               className={cn(
                 "whitespace-nowrap px-2 text-sm font-semibold transition-colors",
-                homeLight ? "text-charcoal/80 hover:text-charcoal" : "text-white/80 hover:text-white",
+                lightTextMode ? "text-charcoal/80 hover:text-charcoal" : "text-white/80 hover:text-white",
               )}
             >
               Contact
@@ -238,7 +244,7 @@ export function Header() {
                 onClick={logout}
                 className={cn(
                   "whitespace-nowrap px-1 text-sm font-semibold transition-colors",
-                  homeLight ? "text-charcoal/70 hover:text-charcoal" : "text-white/70 hover:text-white",
+                  lightTextMode ? "text-charcoal/70 hover:text-charcoal" : "text-white/70 hover:text-white",
                 )}
               >
                 Sign out
@@ -249,7 +255,7 @@ export function Header() {
               size="sm"
               className={cn(
                 "rounded-lg border font-semibold shadow-none",
-                homeLight
+                lightTextMode
                   ? "border-charcoal/15 bg-white/70 text-charcoal hover:bg-white hover:border-charcoal/20"
                   : "border-white/20 bg-transparent text-white hover:bg-white/10 hover:border-white/30",
               )}
@@ -264,7 +270,7 @@ export function Header() {
               size="sm"
               className={cn(
                 "gap-1 rounded-lg px-4 font-semibold shadow-sm",
-                homeLight ? "bg-teal text-white hover:bg-teal-dark" : "bg-accent-lime text-teal hover:bg-accent-lime/90",
+                lightTextMode ? "bg-teal text-white hover:bg-teal-dark" : "bg-accent-lime text-teal hover:bg-accent-lime/90",
               )}
               asChild
             >
@@ -279,7 +285,7 @@ export function Header() {
                 <ChevronRight className="h-3.5 w-3.5" />
               </Link>
             </Button>
-            <div className={cn("pl-0.5", homeLight ? "text-charcoal" : "text-white")}>
+            <div className={cn("pl-0.5", lightTextMode ? "text-charcoal" : "text-white")}>
               <ThemeToggle />
             </div>
           </div>
@@ -289,7 +295,12 @@ export function Header() {
             <ThemeToggle />
             <button
               type="button"
-              className="grid h-9 w-9 place-items-center rounded-lg border border-theme bg-theme-subtle text-theme-s transition-colors hover:bg-theme-subtle"
+              className={cn(
+                "grid h-9 w-9 place-items-center rounded-lg border transition-colors",
+                lightTextMode
+                  ? "border-charcoal/15 bg-white/80 text-charcoal hover:bg-white"
+                  : "border-white/25 bg-white/10 text-white hover:bg-white/15",
+              )}
               onClick={() => {
                 setMobileOpen(true);
                 trackEvent("navigation", "mobile_menu_open", "Mobile menu opened");

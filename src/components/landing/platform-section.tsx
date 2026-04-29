@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { PRODUCTS, PRODUCT_DETAILS, JOURNEY_STEPS } from "@/lib/constants";
+import { SectionBackgroundDecor } from "@/components/marketing/section-background-decor";
+import { WireflowRail } from "@/components/marketing/wireflow-rail";
 
 const PRODUCT_TABS = PRODUCTS.filter((p) => p.key !== "nexus");
 
@@ -22,8 +24,9 @@ export function PlatformSection() {
   const journeyAnim = useScrollAnimation();
 
   return (
-    <section className="bg-teal dark-section px-4 py-16 sm:py-24 transition-colors duration-300">
-      <div className="mx-auto max-w-container">
+    <section className="relative overflow-hidden bg-teal dark-section px-4 py-16 sm:py-24 transition-colors duration-300">
+      <SectionBackgroundDecor tone="dark" />
+      <div className="relative z-[1] mx-auto max-w-container">
         {/* Section header */}
         <div
           ref={headerAnim.ref}
@@ -47,11 +50,17 @@ export function PlatformSection() {
           </p>
         </div>
 
+        <WireflowRail
+          className="mt-6 max-w-2xl opacity-90"
+          dark
+          label="Platform product signal path"
+        />
+
         {/* 9A: Product Evolution Timeline */}
         <div
           ref={timelineAnim.ref}
           className={cn(
-            "mt-16 transition-all duration-700 delay-100",
+            "mt-12 transition-all duration-700 delay-100",
             timelineAnim.isVisible
               ? "opacity-100 translate-y-0"
               : "opacity-0 translate-y-8",

@@ -19,8 +19,9 @@ import {
   Lightbulb,
   BarChart3,
 } from "lucide-react";
+import { BRAND_GREEN } from "@/lib/marketing-visual";
 
-const BRAND_GREEN = "#12FF80";
+
 
 const PRODUCT_COLORS: Record<string, string> = {
   ATLAS: "#f16e2c",
@@ -28,7 +29,7 @@ const PRODUCT_COLORS: Record<string, string> = {
   SIGNAL: "#38bdf8",
   PHANTOM: "#ef4444",
   DRIFT: "#fbbf24",
-  NEXUS: "#12FF80",
+  NEXUS: "#0d9488",
 };
 
 const ALL_SLUGS = Object.keys(CASE_STUDIES);

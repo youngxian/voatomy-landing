@@ -45,12 +45,15 @@ import {
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { SignalIllustration } from "@/components/illustrations/product-illustrations";
+import { ProductHeroAtmosphere } from "@/components/marketing/product-hero-atmosphere";
+import { productBrand } from "@/lib/product-brand";
 
 /* ─────────────────────────── Constants ─────────────────────────── */
 
-const SIGNAL_RED = "#EF4444";
-const SIGNAL_RED_LIGHT = "rgba(239,68,68,0.12)";
-const SIGNAL_RED_GLOW = "rgba(239,68,68,0.25)";
+const SIGNAL_RED = productBrand.signal.accent;
+const SIGNAL_RED_LIGHT = productBrand.signal.accentLight;
+const SIGNAL_RED_GLOW = productBrand.signal.accentGlow;
+const SIGNAL_AMBER = productBrand.signal.secondary;
 
 const PROBLEM_ROLES = [
   {
@@ -58,7 +61,7 @@ const PROBLEM_ROLES = [
     icon: Server,
     sees: "Logs, dashboards, runbooks",
     pain: "No idea which customers are affected",
-    color: "#F97316",
+    color: SIGNAL_AMBER,
   },
   {
     role: "Customer Success",
@@ -79,7 +82,7 @@ const PROBLEM_ROLES = [
     icon: Crown,
     sees: "... nothing until it escalates",
     pain: "Revenue impact is invisible",
-    color: "#EF4444",
+    color: "SIGNAL_RED",
   },
 ];
 
@@ -115,7 +118,7 @@ const DASHBOARD_TABS = [
     id: "sre",
     label: "SRE / DevOps",
     icon: Server,
-    color: "#F97316",
+    color: SIGNAL_AMBER,
     items: [
       { label: "Blast Radius", value: "3 services, 2 regions", icon: Target },
       { label: "Related Alerts", value: "4 correlated alerts", icon: Bell },
@@ -151,7 +154,7 @@ const DASHBOARD_TABS = [
     id: "leadership",
     label: "Leadership",
     icon: Crown,
-    color: "#EF4444",
+    color: "SIGNAL_RED",
     items: [
       { label: "Revenue Impact", value: "$450K ARR at risk", icon: DollarSign },
       { label: "Customer Exposure", value: "12 enterprise accounts", icon: Eye },
@@ -248,7 +251,7 @@ const SIGNAL_PIPELINE = [
     desc: "Auto-discover blast radius across service topology",
     detail: "SIGNAL maintains a live service dependency graph and instantly identifies every upstream/downstream service in the blast radius of an incident.",
     metrics: ["Services scanned: 142", "Dependencies mapped: 380+", "Blast radius: 3 services", "Regions affected: 2"],
-    color: "#F97316",
+    color: SIGNAL_AMBER,
   },
   {
     id: "impact",
@@ -257,7 +260,7 @@ const SIGNAL_PIPELINE = [
     desc: "Cross-reference affected services with customer data",
     detail: "Affected services are mapped to customer deployments, contract values, renewal timelines, and account tiers to compute real-time revenue exposure.",
     metrics: ["Accounts matched: 46", "ARR at risk: $450K", "Renewal < 30d: 3", "Enterprise affected: 12"],
-    color: "#EF4444",
+    color: "SIGNAL_RED",
   },
   {
     id: "analyze",
@@ -284,7 +287,7 @@ const SIGNAL_PIPELINE = [
     desc: "Auto-generate post-mortem and retrain models",
     detail: "When resolved, SIGNAL auto-generates a structured post-mortem, updates the pattern library, and closes the loop with all notified teams.",
     metrics: ["Post-mortem: generated", "Model updated: yes", "Teams notified: 4", "MTTR saved: 40%"],
-    color: "#12FF80",
+    color: "#0d9488",
   },
 ];
 
@@ -339,7 +342,7 @@ function SignalAIWorkflow({
                 className="h-full rounded-full transition-all duration-700 ease-out"
                 style={{
                   width: `${(activeStage / (SIGNAL_PIPELINE.length - 1)) * 100}%`,
-                  background: `linear-gradient(90deg, ${SIGNAL_RED}, #F97316, #3B82F6, #12FF80)`,
+                  background: `linear-gradient(90deg, ${SIGNAL_RED}, ${SIGNAL_AMBER}, #3B82F6, #0d9488)`,
                 }}
               />
             </div>
@@ -486,7 +489,7 @@ function SignalDetectVisual() {
         <span className="text-xs font-mono text-theme-m">Ingesting alerts… correlating duplicates</span>
       </div>
       {alerts.map((a, i) => {
-        const sevColor = a.sev === "critical" ? SIGNAL_RED : "#F97316";
+        const sevColor = a.sev === "critical" ? SIGNAL_RED : SIGNAL_AMBER;
         return (
           <div
             key={i}
@@ -596,7 +599,7 @@ function SignalImpactVisual() {
           <span>Account</span><span className="text-right">ARR</span><span className="text-center">Risk</span><span className="text-center">Renew</span>
         </div>
         {accounts.map((a, i) => {
-          const riskColor = a.risk >= 90 ? SIGNAL_RED : a.risk >= 70 ? "#F97316" : "#f59e0b";
+          const riskColor = a.risk >= 90 ? SIGNAL_RED : a.risk >= 70 ? SIGNAL_AMBER : "#f59e0b";
           return (
             <div
               key={a.name}
@@ -678,10 +681,10 @@ function SignalRootCauseVisual() {
 /* ── Signal Visual: Smart Routing ── */
 function SignalRouteVisual() {
   const briefs = [
-    { team: "SRE / DevOps", icon: Server, color: "#F97316", detail: "Root cause + runbook + blast radius map", status: "Delivered" },
+    { team: "SRE / DevOps", icon: Server, color: SIGNAL_AMBER, detail: "Root cause + runbook + blast radius map", status: "Delivered" },
     { team: "Customer Success", icon: Headphones, color: "#8B5CF6", detail: "Affected accounts + talking points + status template", status: "Delivered" },
     { team: "Sales", icon: Briefcase, color: "#3B82F6", detail: "Pipeline exposure + hold recommendations", status: "Delivered" },
-    { team: "Leadership", icon: Crown, color: "#EF4444", detail: "Revenue impact + ETA + board-ready brief", status: "Delivered" },
+    { team: "Leadership", icon: Crown, color: "SIGNAL_RED", detail: "Revenue impact + ETA + board-ready brief", status: "Delivered" },
   ];
   return (
     <div className="space-y-3">
@@ -820,10 +823,18 @@ export default function SignalProductPage() {
         variant="premium"
         className="relative min-h-[90vh] flex items-center overflow-hidden pt-24 pb-24"
       >
-        {/* Premium background */}
-        <div className="product-hero-gradient" style={{ "--hero-gradient": `radial-gradient(ellipse, ${SIGNAL_RED}, transparent 70%)`, "--hero-gradient-secondary": "radial-gradient(ellipse, #f97316, transparent 70%)" } as React.CSSProperties} />
-        <div className="pointer-events-none absolute inset-0 fine-grid" />
-        <div className="pointer-events-none absolute inset-0 noise-overlay" />
+        <ProductHeroAtmosphere variant="signal" />
+        <div
+          className="product-hero-gradient z-[1]"
+          style={
+            {
+              "--hero-gradient": productBrand.signal.heroGradient,
+              "--hero-gradient-secondary": productBrand.signal.heroGradientSecondary,
+            } as React.CSSProperties
+          }
+        />
+        <div className="pointer-events-none absolute inset-0 z-[1] fine-grid" />
+        <div className="pointer-events-none absolute inset-0 z-[1] noise-overlay" />
 
         {/* Animated scan line */}
         <div
@@ -1199,10 +1210,10 @@ export default function SignalProductPage() {
               {TIMELINE_EVENTS.map((event, i) => {
                 const statusColors: Record<string, string> = {
                   critical: SIGNAL_RED,
-                  processing: "#F97316",
+                  processing: SIGNAL_AMBER,
                   active: "#3B82F6",
                   resolved: "#22C55E",
-                  complete: "#12FF80",
+                  complete: "#0d9488",
                 };
                 const dotColor = statusColors[event.status] || SIGNAL_RED;
                 const isLast = i === TIMELINE_EVENTS.length - 1;

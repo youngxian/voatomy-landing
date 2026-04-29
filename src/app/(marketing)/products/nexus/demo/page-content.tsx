@@ -17,9 +17,10 @@ import {
   Sparkles,
   CheckCircle2,
 } from "lucide-react";
+import { BRAND_GREEN } from "@/lib/marketing-visual";
 
-const BRAND_GREEN = "#12FF80";
-const PRODUCT_COLOR = "#12FF80";
+
+const PRODUCT_COLOR = "#0d9488";
 
 const FEATURES = [
   {

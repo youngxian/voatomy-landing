@@ -21,8 +21,9 @@ import {
   Lightbulb,
   MessageSquare,
 } from "lucide-react";
+import { BRAND_GREEN } from "@/lib/marketing-visual";
 
-const BRAND_GREEN = "#12FF80";
+
 
 const PRODUCT_COLORS: Record<string, string> = {
   ATLAS: "#f16e2c",
@@ -30,14 +31,14 @@ const PRODUCT_COLORS: Record<string, string> = {
   SIGNAL: "#38bdf8",
   PHANTOM: "#ef4444",
   DRIFT: "#fbbf24",
-  NEXUS: "#12FF80",
+  NEXUS: "#0d9488",
   Platform: "#94a3b8",
 };
 
 type Status = "shipped" | "in-progress" | "planned" | "exploring";
 
 const STATUS_CONFIG: Record<Status, { label: string; icon: typeof CheckCircle2; color: string }> = {
-  shipped: { label: "Shipped", icon: CheckCircle2, color: "#12FF80" },
+  shipped: { label: "Shipped", icon: CheckCircle2, color: "#0d9488" },
   "in-progress": { label: "In Progress", icon: Clock, color: "#38bdf8" },
   planned: { label: "Planned", icon: Circle, color: "#8b5cf6" },
   exploring: { label: "Exploring", icon: Sparkles, color: "#fbbf24" },

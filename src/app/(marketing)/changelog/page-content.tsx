@@ -38,9 +38,9 @@ interface ReleaseTypeConfig {
 const RELEASE_TYPES: Record<ReleaseType, ReleaseTypeConfig> = {
   feature: {
     label: "Feature",
-    color: "#12FF80",
-    bgClass: "bg-[#12FF80]/10",
-    textClass: "text-[#12FF80]",
+    color: "#0d9488",
+    bgClass: "bg-[#0d9488]/10",
+    textClass: "text-[#0d9488]",
   },
   fix: {
     label: "Fix",
@@ -56,9 +56,9 @@ const RELEASE_TYPES: Record<ReleaseType, ReleaseTypeConfig> = {
   },
   major: {
     label: "Major Release",
-    color: "#12FF80",
-    bgClass: "bg-[#12FF80]/15",
-    textClass: "text-[#12FF80]",
+    color: "#0d9488",
+    bgClass: "bg-[#0d9488]/15",
+    textClass: "text-[#0d9488]",
   },
   product: {
     label: "New Product",
@@ -226,7 +226,7 @@ function TimelineEntry({
           className={cn(
             "relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-colors duration-300",
             entry.type === "major"
-              ? "border-[#12FF80]/40 bg-[#12FF80]/10 text-[#12FF80]"
+              ? "border-[#0d9488]/40 bg-[#0d9488]/10 text-[#0d9488]"
               : "border-theme bg-theme-card text-theme-s",
           )}
         >
@@ -317,7 +317,7 @@ export default function ChangelogPage() {
       {/* ============================================================ */}
       <Section variant="sky" className="pt-28 pb-12 sm:pt-36 sm:pb-16">
         <div className="mx-auto max-w-3xl text-center">
-          <Chip dotColor="#12FF80" className="mb-6">
+          <Chip dotColor="#0d9488" className="mb-6">
             Changelog
           </Chip>
 
@@ -352,7 +352,7 @@ export default function ChangelogPage() {
       <Section variant="violet" className="py-8 sm:py-10">
         <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
           {[
-            { label: "Latest", value: "v2.4.0", color: "#12FF80" },
+            { label: "Latest", value: "v2.4.0", color: "#0d9488" },
             { label: "Releases this year", value: "4", color: "#3B82F6" },
             { label: "Total releases", value: "8", color: "#A855F7" },
             { label: "Avg. cycle", value: "~3 weeks", color: "#F59E0B" },
@@ -413,11 +413,11 @@ export default function ChangelogPage() {
           </p>
 
           {subscribed ? (
-            <div className="mt-8 rounded-2xl border border-[#12FF80]/20 bg-[#12FF80]/5 p-6">
-              <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-[#12FF80]/15">
-                <Bell className="h-5 w-5 text-[#12FF80]" />
+            <div className="mt-8 rounded-2xl border border-[#0d9488]/20 bg-[#0d9488]/5 p-6">
+              <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-[#0d9488]/15">
+                <Bell className="h-5 w-5 text-[#0d9488]" />
               </div>
-              <p className="text-sm font-semibold text-[#12FF80]">You&apos;re subscribed!</p>
+              <p className="text-sm font-semibold text-[#0d9488]">You&apos;re subscribed!</p>
               <p className="mt-1 text-xs text-theme-m">
                 We&apos;ll send you an email whenever we ship something new.
               </p>

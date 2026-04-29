@@ -48,10 +48,10 @@ const STATUS_CONFIG: Record<
 > = {
   operational: {
     label: "Operational",
-    color: "#12FF80",
-    bgClass: "bg-[#12FF80]/10",
-    textClass: "text-[#12FF80]",
-    dotClass: "bg-[#12FF80]",
+    color: "#0d9488",
+    bgClass: "bg-[#0d9488]/10",
+    textClass: "text-[#0d9488]",
+    dotClass: "bg-[#0d9488]",
   },
   degraded: {
     label: "Degraded",
@@ -282,8 +282,8 @@ function IncidentCard({ incident }: { incident: Incident }) {
   };
 
   const statusConfig = {
-    resolved: { color: "#12FF80", bg: "bg-[#12FF80]/10", text: "text-[#12FF80]", label: "Resolved" },
-    completed: { color: "#12FF80", bg: "bg-[#12FF80]/10", text: "text-[#12FF80]", label: "Completed" },
+    resolved: { color: "#0d9488", bg: "bg-[#0d9488]/10", text: "text-[#0d9488]", label: "Resolved" },
+    completed: { color: "#0d9488", bg: "bg-[#0d9488]/10", text: "text-[#0d9488]", label: "Completed" },
     monitoring: { color: "#3B82F6", bg: "bg-blue-500/10", text: "text-blue-400", label: "Monitoring" },
     investigating: { color: "#F59E0B", bg: "bg-amber-500/10", text: "text-amber-400", label: "Investigating" },
   };
@@ -381,7 +381,7 @@ function IncidentCard({ incident }: { incident: Incident }) {
                       className={cn(
                         "h-2 w-2 rounded-full shrink-0 mt-1.5",
                         i === incident.updates.length - 1
-                          ? "bg-[#12FF80]"
+                          ? "bg-[#0d9488]"
                           : "bg-theme-subtle",
                       )}
                     />
@@ -415,7 +415,7 @@ function UptimeBar({
   data: { day: number; status: DayStatus }[];
 }) {
   const statusColors: Record<DayStatus, string> = {
-    full: "#12FF80",
+    full: "#0d9488",
     degraded: "#F59E0B",
     down: "#EF4444",
   };
@@ -490,7 +490,7 @@ export default function StatusPage() {
       {/* ============================================================ */}
       <Section variant="mint" className="pt-28 pb-12 sm:pt-36 sm:pb-16">
         <div className="mx-auto max-w-3xl text-center">
-          <Chip dotColor="#12FF80" className="mb-6">
+          <Chip dotColor="#0d9488" className="mb-6">
             System Status
           </Chip>
 
@@ -504,7 +504,7 @@ export default function StatusPage() {
               className={cn(
                 "flex items-center justify-center gap-3 rounded-2xl border px-6 py-4",
                 allOperational
-                  ? "border-[#12FF80]/20 bg-[#12FF80]/5"
+                  ? "border-[#0d9488]/20 bg-[#0d9488]/5"
                   : "border-amber-500/20 bg-amber-500/5",
               )}
             >
@@ -513,13 +513,13 @@ export default function StatusPage() {
                 <span
                   className={cn(
                     "absolute inline-flex h-full w-full animate-ping rounded-full opacity-75",
-                    allOperational ? "bg-[#12FF80]" : "bg-amber-400",
+                    allOperational ? "bg-[#0d9488]" : "bg-amber-400",
                   )}
                 />
                 <span
                   className={cn(
                     "relative inline-flex h-3 w-3 rounded-full",
-                    allOperational ? "bg-[#12FF80]" : "bg-amber-400",
+                    allOperational ? "bg-[#0d9488]" : "bg-amber-400",
                   )}
                 />
               </span>
@@ -527,7 +527,7 @@ export default function StatusPage() {
               <span
                 className={cn(
                   "text-base font-semibold sm:text-lg",
-                  allOperational ? "text-[#12FF80]" : "text-amber-400",
+                  allOperational ? "text-[#0d9488]" : "text-amber-400",
                 )}
               >
                 {allOperational ? "All Systems Operational" : "Partial System Disruption"}
@@ -553,7 +553,7 @@ export default function StatusPage() {
             <Server className="h-4 w-4 text-brand" />
           </span>
           <h2 className="text-lg font-semibold text-theme">Services</h2>
-          <span className="rounded-full bg-[#12FF80]/10 px-2.5 py-0.5 text-xs font-semibold text-[#12FF80]">
+          <span className="rounded-full bg-[#0d9488]/10 px-2.5 py-0.5 text-xs font-semibold text-[#0d9488]">
             {SERVICES.filter((s) => s.status === "operational").length}/{SERVICES.length} operational
           </span>
         </div>
@@ -584,7 +584,7 @@ export default function StatusPage() {
             {/* Legend */}
             <div className="flex items-center gap-4">
               {[
-                { label: "Operational", color: "#12FF80" },
+                { label: "Operational", color: "#0d9488" },
                 { label: "Degraded", color: "#F59E0B" },
                 { label: "Down", color: "#EF4444" },
               ].map((item) => (
@@ -605,7 +605,7 @@ export default function StatusPage() {
 
             <div className="mt-4 flex items-center justify-between text-[11px] text-theme-m">
               <span>90 days ago</span>
-              <span className="font-semibold text-[#12FF80]">99.97% overall uptime</span>
+              <span className="font-semibold text-[#0d9488]">99.97% overall uptime</span>
               <span>Today</span>
             </div>
           </Card>
@@ -619,7 +619,7 @@ export default function StatusPage() {
               { label: "90-day uptime", value: "99.97%", sub: "~38.9 s downtime" },
             ].map((stat) => (
               <Card key={stat.label} variant="light" className="text-center">
-                <p className="text-lg font-bold text-[#12FF80] sm:text-xl">{stat.value}</p>
+                <p className="text-lg font-bold text-[#0d9488] sm:text-xl">{stat.value}</p>
                 <p className="mt-0.5 text-xs font-medium text-theme-s">{stat.label}</p>
                 <p className="mt-0.5 text-[11px] text-theme-m">{stat.sub}</p>
               </Card>
@@ -675,11 +675,11 @@ export default function StatusPage() {
           </p>
 
           {subscribed ? (
-            <div className="mt-8 rounded-2xl border border-[#12FF80]/20 bg-[#12FF80]/5 p-6">
-              <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-[#12FF80]/15">
-                <CheckCircle2 className="h-5 w-5 text-[#12FF80]" />
+            <div className="mt-8 rounded-2xl border border-[#0d9488]/20 bg-[#0d9488]/5 p-6">
+              <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-[#0d9488]/15">
+                <CheckCircle2 className="h-5 w-5 text-[#0d9488]" />
               </div>
-              <p className="text-sm font-semibold text-[#12FF80]">Subscribed to status updates</p>
+              <p className="text-sm font-semibold text-[#0d9488]">Subscribed to status updates</p>
               <p className="mt-1 text-xs text-theme-m">
                 You&apos;ll receive email notifications whenever an incident is reported or resolved.
               </p>

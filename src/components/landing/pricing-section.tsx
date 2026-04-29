@@ -13,6 +13,7 @@ import {
 import { usePricing } from "@/hooks/use-pricing";
 import { Check, ChevronDown, ChevronUp, Minus, Users, Zap, Shield, Sparkles } from "lucide-react";
 import { trackFeature, trackConversion } from "@/lib/analytics";
+import { SectionBackgroundDecor } from "@/components/marketing/section-background-decor";
 
 /* ─── helpers ─── */
 
@@ -606,13 +607,14 @@ export function PricingSection() {
     <section
       id="pricing"
       data-track-section="pricing"
-      className="bg-theme px-4 py-16 sm:py-24 transition-colors duration-300"
+      className="relative overflow-hidden bg-theme px-4 py-16 sm:py-24 transition-colors duration-300"
     >
+      <SectionBackgroundDecor tone="cream" />
       <div className="mx-auto max-w-container">
         <div
           ref={ref}
           className={cn(
-            "transition-all duration-700",
+            "relative z-[1] transition-all duration-700",
             isVisible
               ? "opacity-100 translate-y-0"
               : "opacity-0 translate-y-8",

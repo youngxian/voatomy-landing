@@ -20,8 +20,9 @@ import {
   DollarSign,
   ChevronRight,
 } from "lucide-react";
+import { BRAND_GREEN } from "@/lib/marketing-visual";
 
-const BRAND_GREEN = "#12FF80";
+
 
 const ALL_COMPETITORS = Object.keys(COMPETITORS);
 

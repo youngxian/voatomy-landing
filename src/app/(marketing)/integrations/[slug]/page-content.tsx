@@ -19,8 +19,9 @@ import {
   RefreshCw,
   Code2,
 } from "lucide-react";
+import { BRAND_GREEN } from "@/lib/marketing-visual";
 
-const BRAND_GREEN = "#12FF80";
+
 
 const PRODUCT_NAMES: Record<string, string> = {
   atlas: "ATLAS",
@@ -37,7 +38,7 @@ const PRODUCT_COLORS: Record<string, string> = {
   signal: "#38bdf8",
   phantom: "#ef4444",
   drift: "#fbbf24",
-  nexus: "#12FF80",
+  nexus: "#0d9488",
 };
 
 const CATEGORY_ICONS: Record<string, typeof Blocks> = {

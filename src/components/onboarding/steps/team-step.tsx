@@ -473,7 +473,7 @@ function DepartmentTeamBuilder({
           description: "Your entire team",
           headEmail: "",
           teamIds: [teamId],
-          color: "#12FF80",
+          color: "#0d9488",
         },
       ]);
       onSetTeams([

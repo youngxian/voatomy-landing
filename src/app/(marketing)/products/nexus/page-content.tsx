@@ -9,6 +9,8 @@ import { Chip } from "@/components/ui/chip";
 import Link from "next/link";
 import { buildProductCheckoutUrl } from "@/lib/product-purchase";
 import { NexusIllustration } from "@/components/illustrations/product-illustrations";
+import { ProductHeroAtmosphere } from "@/components/marketing/product-hero-atmosphere";
+import { productBrand } from "@/lib/product-brand";
 import {
   Search,
   Shield,
@@ -43,12 +45,12 @@ import {
 /* ─────────────────────── constants ─────────────────────── */
 
 const PRODUCT_COLORS = {
-  atlas: "#F97316",
-  loop: "#6366F1",
-  phantom: "#06B6D4",
-  signal: "#EF4444",
-  drift: "#A855F7",
-  nexus: "#10B981",
+  atlas: productBrand.atlas.accent,
+  loop: productBrand.loop.accent,
+  phantom: productBrand.phantom.accent,
+  signal: productBrand.signal.accent,
+  drift: productBrand.drift.accent,
+  nexus: productBrand.nexus.accent,
 };
 
 const PRODUCTS = [
@@ -133,9 +135,9 @@ const UNIFIED_QUERY_RESULTS = [
 ];
 
 const EXECUTIVE_METRICS = [
-  { label: "Org Health Score", value: "87", suffix: "/100", color: "#10B981", icon: Gauge },
-  { label: "Revenue Pipeline", value: "$14.2M", suffix: " aligned", color: "#6366F1", icon: TrendingUp },
-  { label: "Delivery Velocity", value: "94%", suffix: " on-track", color: "#F97316", icon: Activity },
+  { label: "Org Health Score", value: "87", suffix: "/100", color: productBrand.nexus.accent, icon: Gauge },
+  { label: "Revenue Pipeline", value: "$14.2M", suffix: " aligned", color: productBrand.loop.accent, icon: TrendingUp },
+  { label: "Delivery Velocity", value: "94%", suffix: " on-track", color: productBrand.atlas.accent, icon: Activity },
   { label: "Debt Ratio", value: "1.4x", suffix: " trending down", color: "#06B6D4", icon: LineChart },
   { label: "Design Coverage", value: "96%", suffix: " synced", color: "#A855F7", icon: Eye },
   { label: "Incident MTTR", value: "18min", suffix: " avg", color: "#EF4444", icon: Clock },
@@ -463,7 +465,7 @@ function PulsingDot({ color }: { color: string }) {
 
 /* ──────────────────── AI Workflow ──────────────────── */
 
-const NEXUS_GREEN = "#10B981";
+const NEXUS_GREEN = productBrand.nexus.accent;
 
 const NEXUS_PIPELINE = [
   {
@@ -916,9 +918,19 @@ export default function NexusProductPage() {
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-[#060a08]">
         {/* Premium multi-gradient background */}
         <div className="absolute inset-0">
+          <ProductHeroAtmosphere variant="nexus" />
+          <div
+            className="product-hero-gradient z-[1]"
+            style={
+              {
+                "--hero-gradient": productBrand.nexus.heroGradient,
+                "--hero-gradient-secondary": productBrand.nexus.heroGradientSecondary,
+              } as React.CSSProperties
+            }
+          />
           <div className="absolute inset-0 bg-gradient-to-br from-[#F97316]/8 via-[#6366F1]/6 to-[#06B6D4]/8" />
           <div className="absolute inset-0 bg-gradient-to-tl from-[#EF4444]/6 via-transparent to-[#A855F7]/8" />
-          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#10B981]/10 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[#047857]/12 to-transparent" />
           <NeuralCanvas />
           <div className="absolute inset-0 fine-grid" />
           <div className="absolute inset-0 noise-overlay" />

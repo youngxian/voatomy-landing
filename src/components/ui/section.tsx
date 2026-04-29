@@ -37,7 +37,7 @@ export function Section({
   return (
     <section
       className={cn(
-        "relative flex flex-col items-center justify-center px-4 py-16 sm:py-24 transition-colors duration-300",
+        "relative flex flex-col items-center justify-center px-4 py-16 sm:py-24 transition-[background-color,color,border-color] duration-300 ease-out",
         lightTypography && "light-surface-typography",
         variant === "default" && "bg-theme",
         variant === "white" && "bg-white",

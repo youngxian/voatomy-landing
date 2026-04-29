@@ -28,10 +28,11 @@ import {
   ShieldCheck,
   ChevronRight,
 } from "lucide-react";
+import { BRAND_GREEN } from "@/lib/marketing-visual";
+
 
 /* ─────────────────── Constants ─────────────────── */
 
-const BRAND_GREEN = "#12FF80";
 
 const TRUST_BADGES = [
   {

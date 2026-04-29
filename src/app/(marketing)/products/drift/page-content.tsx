@@ -41,12 +41,14 @@ import {
   Minus,
   Github,
 } from "lucide-react";
+import { ProductHeroAtmosphere } from "@/components/marketing/product-hero-atmosphere";
+import { productBrand } from "@/lib/product-brand";
 
 /* ─────────────────────── Constants ─────────────────────── */
 
-const DRIFT_PURPLE = "#8B5CF6";
-const DRIFT_PURPLE_LIGHT = "rgba(139, 92, 246, 0.12)";
-const DRIFT_PURPLE_BORDER = "rgba(139, 92, 246, 0.25)";
+const DRIFT_PURPLE = productBrand.drift.accent;
+const DRIFT_PURPLE_LIGHT = productBrand.drift.accentLight;
+const DRIFT_PURPLE_BORDER = productBrand.drift.accentBorder;
 
 const DRIFT_EXAMPLES = [
   {
@@ -184,7 +186,7 @@ function SeverityBadge({ level }: { level: string }) {
 function HealthBar({ value, size = "md" }: { value: number; size?: "sm" | "md" }) {
   const color =
     value >= 90
-      ? "#12FF80"
+      ? "#0d9488"
       : value >= 75
         ? DRIFT_PURPLE
         : value >= 60
@@ -246,7 +248,7 @@ const DRIFT_PIPELINE = [
     desc: "Automated code patches aligned to design intent",
     detail: "GPT-powered code generation creates precise patches — updating CSS vars, Tailwind classes, or style-dictionary tokens to match the latest Figma source of truth.",
     tags: ["CSS var patches", "Tailwind updates", "Token file edits", "PR description"],
-    color: "#12FF80",
+    color: "#0d9488",
   },
   {
     id: "gate",
@@ -264,7 +266,7 @@ const DRIFT_PIPELINE = [
     desc: "Design system health trends over time",
     detail: "Every scan feeds a dashboard showing system-wide health, component adoption, drift trends, and a11y scores — giving design and eng teams a shared source of truth.",
     tags: ["Health score", "Adoption %", "Drift trend", "A11y compliance"],
-    color: "#8B5CF6",
+    color: DRIFT_PURPLE,
   },
 ];
 
@@ -431,7 +433,7 @@ function DriftScanVisual() {
     { name: "radius.lg", value: "12px", type: "radius" },
     { name: "font.weight.bold", value: "700", type: "typography" },
     { name: "shadow.card", value: "0 4px 12px", type: "shadow" },
-    { name: "color.success", value: "#12FF80", type: "color" },
+    { name: "color.success", value: "#0d9488", type: "color" },
   ];
   return (
     <div className="space-y-2">
@@ -620,14 +622,14 @@ function DriftHealthVisual() {
         <div className="flex items-end gap-2 h-24">
           {trend.map((v, i) => (
             <div key={i} className="flex-1 flex flex-col items-center gap-1">
-              <span className="text-[9px] font-bold" style={{ color: v >= 90 ? "#12FF80" : DRIFT_PURPLE }}>{v}%</span>
+              <span className="text-[9px] font-bold" style={{ color: v >= 90 ? "#0d9488" : DRIFT_PURPLE }}>{v}%</span>
               <div className="w-full rounded-t-md bg-theme-subtle" style={{ height: "100%" }}>
                 <div
                   className="w-full rounded-t-md"
                   style={{
                     height: `${v}%`,
                     marginTop: `${100 - v}%`,
-                    background: v >= 90 ? `linear-gradient(180deg, #12FF80, ${DRIFT_PURPLE}50)` : `linear-gradient(180deg, ${DRIFT_PURPLE}, ${DRIFT_PURPLE}40)`,
+                    background: v >= 90 ? `linear-gradient(180deg, #0d9488, ${DRIFT_PURPLE}50)` : `linear-gradient(180deg, ${DRIFT_PURPLE}, ${DRIFT_PURPLE}40)`,
                   }}
                 />
               </div>
@@ -639,7 +641,7 @@ function DriftHealthVisual() {
       {/* Summary stats */}
       <div className="grid grid-cols-3 gap-2">
         {[
-          { label: "Health Score", value: "96%", color: "#12FF80" },
+          { label: "Health Score", value: "96%", color: "#0d9488" },
           { label: "Adoption", value: "92%", color: DRIFT_PURPLE },
           { label: "A11y", value: "AA+", color: "#3B82F6" },
         ].map((s) => (
@@ -669,10 +671,18 @@ export default function DriftPage() {
           1. HERO
       ═══════════════════════════════════════════════════ */}
       <section className="relative min-h-screen overflow-hidden bg-theme px-4 pb-20 pt-20 transition-colors duration-300">
-        {/* Premium background */}
-        <div className="product-hero-gradient" style={{ "--hero-gradient": `radial-gradient(ellipse, ${DRIFT_PURPLE}, transparent 70%)`, "--hero-gradient-secondary": "radial-gradient(ellipse, #a78bfa, transparent 70%)" } as React.CSSProperties} />
-        <div className="pointer-events-none absolute inset-0 fine-grid" aria-hidden="true" />
-        <div className="pointer-events-none absolute inset-0 noise-overlay" aria-hidden="true" />
+        <ProductHeroAtmosphere variant="drift" />
+        <div
+          className="product-hero-gradient z-[1]"
+          style={
+            {
+              "--hero-gradient": productBrand.drift.heroGradient,
+              "--hero-gradient-secondary": productBrand.drift.heroGradientSecondary,
+            } as React.CSSProperties
+          }
+        />
+        <div className="pointer-events-none absolute inset-0 z-[1] fine-grid" aria-hidden="true" />
+        <div className="pointer-events-none absolute inset-0 z-[1] noise-overlay" aria-hidden="true" />
 
         <div className="relative z-[2] mx-auto max-w-container text-center">
           {/* Status badge */}
@@ -940,7 +950,7 @@ export default function DriftPage() {
           </Chip>
           <h2 className="text-heading-1 text-theme max-w-[680px] mx-auto">
             Design drift is{" "}
-            <span className="bg-clip-text text-transparent" style={{ backgroundImage: `linear-gradient(135deg, ${DRIFT_PURPLE}, #a78bfa)` }}>invisible</span> until
+            <span className="bg-clip-text text-transparent" style={{ backgroundImage: `linear-gradient(135deg, ${DRIFT_PURPLE}, ${productBrand.drift.secondary})` }}>invisible</span> until
             it&apos;s expensive
           </h2>
           <p className="mt-4 text-body-lg text-theme-m max-w-[560px] mx-auto">
@@ -1177,7 +1187,7 @@ export default function DriftPage() {
                 <div className="rounded-xl border border-theme bg-theme-subtle p-4 text-center">
                   <div
                     className="text-3xl font-bold"
-                    style={{ color: "#12FF80" }}
+                    style={{ color: "#0d9488" }}
                   >
                     94
                   </div>
@@ -1303,7 +1313,7 @@ export default function DriftPage() {
                     style={{
                       color:
                         comp.health >= 90
-                          ? "#12FF80"
+                          ? "#0d9488"
                           : comp.health >= 75
                             ? DRIFT_PURPLE
                             : "#F59E0B",

@@ -33,10 +33,11 @@ import {
   Hash,
   Layers,
 } from "lucide-react";
+import { BRAND_GREEN } from "@/lib/marketing-visual";
+
 
 /* ─────────────────── Constants ─────────────────── */
 
-const BRAND_GREEN = "#12FF80";
 
 const PRODUCT_COLORS: Record<string, string> = {
   ATLAS: "#f16e2c",
@@ -44,7 +45,7 @@ const PRODUCT_COLORS: Record<string, string> = {
   PHANTOM: "#ef4444",
   SIGNAL: "#38bdf8",
   DRIFT: "#fbbf24",
-  NEXUS: "#12FF80",
+  NEXUS: "#0d9488",
 };
 
 const QUICK_START_GUIDES = [

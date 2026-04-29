@@ -73,7 +73,7 @@ export default function CheckoutPage() {
     monthlyPrice: matchedTier?.monthlyPrice ?? (plan === "pro" ? 14 : 28),
     annualPrice: matchedTier?.annualPrice ?? (plan === "pro" ? 11 : 22),
     icon: PLAN_ICONS[plan] ?? <Zap className="h-5 w-5" />,
-    color: "#12FF80",
+    color: "#0d9488",
   };
 
   const [seats, setSeats] = React.useState(seatsParam ? Math.max(1, parseInt(seatsParam, 10) || 1) : 5);

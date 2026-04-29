@@ -7,15 +7,17 @@ import { INTEGRATIONS } from "@/lib/constants";
 import { BrandIcon, getBrandColor } from "@/components/icons/brand-icons";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { SectionBackgroundDecor } from "@/components/marketing/section-background-decor";
 
 export function IntegrationsSection() {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section className="bg-teal dark-section px-4 py-16 sm:py-24 transition-colors duration-300">
+    <section className="relative overflow-hidden bg-teal dark-section px-4 py-16 sm:py-24 transition-colors duration-300">
+      <SectionBackgroundDecor tone="dark" />
       <div
         ref={ref}
-        className="mx-auto max-w-container"
+        className="relative z-[1] mx-auto max-w-container"
       >
         {/* Header */}
         <div

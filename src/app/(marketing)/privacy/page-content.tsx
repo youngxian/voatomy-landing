@@ -19,8 +19,9 @@ import {
   ArrowRight,
   CheckCircle2,
 } from "lucide-react";
+import { BRAND_GREEN } from "@/lib/marketing-visual";
 
-const BRAND_GREEN = "#12FF80";
+
 const BRAND_ORANGE = "#f16e2c";
 const EFFECTIVE_DATE = "January 1, 2026";
 

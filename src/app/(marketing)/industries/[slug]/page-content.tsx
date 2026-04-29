@@ -20,8 +20,8 @@ import { Chip } from "@/components/ui/chip";
 import { Section } from "@/components/ui/section";
 import { INDUSTRY_OPTIONS, PRODUCTS } from "@/lib/constants";
 import { INDUSTRY_PAGE_BY_SLUG, type MarketingIndustrySlug } from "@/lib/industry-pages";
+import { BRAND_GREEN } from "@/lib/marketing-visual";
 
-const BRAND_GREEN = "#12FF80";
 
 function productMeta(key: string) {
   const p = PRODUCTS.find((x) => x.key === key);

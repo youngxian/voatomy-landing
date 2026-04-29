@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { JsonLd, faqPageJsonLd } from "@/components/json-ld";
 import { usePricing } from "@/hooks/use-pricing";
+import { SubpageHeroAtmosphere } from "@/components/marketing/subpage-hero-atmosphere";
 
 /* ------------------------------------------------------------------ */
 /*  Product color map                                                  */
@@ -240,7 +241,7 @@ const FEATURE_GROUPS: FeatureGroup[] = [
   },
   {
     group: "Support",
-    color: "#12FF80",
+    color: "#0d9488",
     rows: [
       { feature: "Community (Discord)", starter: true, pro: true, business: true, enterprise: true },
       { feature: "Email support", starter: false, pro: true, business: true, enterprise: true },
@@ -402,7 +403,8 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="bg-theme">
+    <div className="relative overflow-hidden bg-theme">
+      <SubpageHeroAtmosphere />
       <JsonLd data={faqPageJsonLd(FAQS)} />
 
       {/* ── Dashboard navigation overlay ── */}
@@ -428,9 +430,9 @@ export default function PricingPage() {
       {/* ============================================================ */}
       {/*  HERO                                                        */}
       {/* ============================================================ */}
-      <Section variant="white" className="pt-28 pb-12 sm:pt-36 sm:pb-16">
+      <Section variant="white" className="relative z-10 pt-28 pb-12 sm:pt-36 sm:pb-16">
         <div className="mx-auto max-w-3xl text-center">
-          <Chip dotColor="#12FF80" className="mb-6">
+          <Chip dotColor="#0d9488" className="mb-6">
             Pricing
           </Chip>
 

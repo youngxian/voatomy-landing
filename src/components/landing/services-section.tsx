@@ -16,6 +16,9 @@ import {
   ArrowUpRight,
   ArrowRight,
 } from "lucide-react";
+import { SectionBackgroundDecor } from "@/components/marketing/section-background-decor";
+import { FloatingPictureFrame } from "@/components/marketing/floating-picture-frame";
+import { MARKETING_IMAGES } from "@/lib/marketing-images";
 
 const ICON_MAP = {
   target: Target,
@@ -30,8 +33,9 @@ export function ServicesSection() {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section className="bg-white px-4 py-16 sm:py-24 transition-colors duration-300">
-      <div ref={ref} className="mx-auto max-w-container">
+    <section className="relative overflow-hidden bg-white px-4 py-16 sm:py-24 transition-colors duration-300">
+      <SectionBackgroundDecor tone="white" />
+      <div ref={ref} className="relative z-[1] mx-auto max-w-container">
         <div
           className={cn(
             "text-center transition-all duration-700",
@@ -84,22 +88,24 @@ export function ServicesSection() {
                   </Link>
                 </div>
                 {/* Dashboard mockup visual */}
-                <div className="mt-6 overflow-hidden rounded-xl border border-charcoal/10 bg-white shadow-md">
-                  <div className="flex items-center gap-1.5 border-b border-charcoal/10 px-3 py-2">
-                    <span className="h-2 w-2 rounded-full bg-red-400/50" />
-                    <span className="h-2 w-2 rounded-full bg-yellow-400/50" />
-                    <span className="h-2 w-2 rounded-full bg-green-400/50" />
+                <FloatingPictureFrame className="mt-6" delay={0.05}>
+                  <div className="overflow-hidden rounded-xl border border-charcoal/10 bg-white shadow-md">
+                    <div className="flex items-center gap-1.5 border-b border-charcoal/10 px-3 py-2">
+                      <span className="h-2 w-2 rounded-full bg-red-400/50" />
+                      <span className="h-2 w-2 rounded-full bg-yellow-400/50" />
+                      <span className="h-2 w-2 rounded-full bg-green-400/50" />
+                    </div>
+                    <div className="flex h-32 items-end justify-between gap-1 p-4">
+                      {[40, 65, 50, 80, 55, 90, 45, 70, 60, 85].map((h, j) => (
+                        <div
+                          key={j}
+                          className="flex-1 rounded-t bg-teal/25 transition-all group-hover:bg-teal/40"
+                          style={{ height: `${h}%` }}
+                        />
+                      ))}
+                    </div>
                   </div>
-                  <div className="flex h-32 items-end justify-between gap-1 p-4">
-                    {[40, 65, 50, 80, 55, 90, 45, 70, 60, 85].map((h, j) => (
-                      <div
-                        key={j}
-                        className="flex-1 rounded-t bg-teal/25 transition-all group-hover:bg-teal/40"
-                        style={{ height: `${h}%` }}
-                      />
-                    ))}
-                  </div>
-                </div>
+                </FloatingPictureFrame>
               </>
             )}
           </div>
@@ -156,15 +162,18 @@ export function ServicesSection() {
                   {SERVICES_GRID[5].description}
                 </p>
               </div>
-              <div className="overflow-hidden rounded-xl border border-white/10">
-                <Image
-                  src="/images/landing/dashboard-screen.jpg"
-                  alt="Analytics dashboard preview"
-                  width={320}
-                  height={180}
-                  className="h-36 w-64 object-cover opacity-80"
-                />
-              </div>
+              <FloatingPictureFrame delay={0.2}>
+                <div className="overflow-hidden rounded-xl border border-white/10">
+                  <Image
+                    src={MARKETING_IMAGES.dashboardMood}
+                    alt="Analytics dashboard preview"
+                    width={640}
+                    height={360}
+                    className="h-36 w-64 object-cover opacity-90"
+                    sizes="256px"
+                  />
+                </div>
+              </FloatingPictureFrame>
             </div>
           </div>
         )}

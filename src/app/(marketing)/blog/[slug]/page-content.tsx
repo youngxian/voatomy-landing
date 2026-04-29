@@ -18,11 +18,12 @@ import {
   BookOpen,
   ChevronRight,
 } from "lucide-react";
+import { BRAND_GREEN } from "@/lib/marketing-visual";
 
-const BRAND_GREEN = "#12FF80";
+
 
 const CATEGORY_COLORS: Record<string, string> = {
-  Engineering: "#12FF80",
+  Engineering: "#0d9488",
   Product: "#8b5cf6",
   Design: "#f472b6",
   Data: "#38bdf8",

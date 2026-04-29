@@ -32,8 +32,8 @@ export const metadata: Metadata = createPageMetadata({
  *
  * 1. Announcement Bar (in layout)
  * 2. Header/Navbar (in layout)
- * 3. Hero — ATLAS-focused with email capture + dashboard mockup
- * 4. Trust Strip — Teams + flow orchestrator
+ * 3. Hero — Value prop, risk reducers, proof row, bento (CRO: clarity → credibility)
+ * 4. Trust — Logo strip + impact stats + flow orchestrator
  * 5. Problem — Pain point stat cards
  * 6. How It Works — 6-signal convergence
  * 7. Demo — Video/interactive preview

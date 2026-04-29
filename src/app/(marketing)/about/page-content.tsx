@@ -22,10 +22,12 @@ import {
   UserCircle,
   TrendingUp,
 } from "lucide-react";
+import { BRAND_GREEN } from "@/lib/marketing-visual";
+import { SubpageHeroAtmosphere } from "@/components/marketing/subpage-hero-atmosphere";
+
 
 /* ─────────────────── Constants ─────────────────── */
 
-const BRAND_GREEN = "#12FF80";
 const BRAND_ORANGE = "#f16e2c";
 
 const VALUES = [
@@ -159,11 +161,12 @@ export default function AboutPage() {
 
   return (
     <div className="relative overflow-hidden">
+      <SubpageHeroAtmosphere className="opacity-80" />
       {/* ═══════════════ 1. HERO ═══════════════ */}
       <Section
         variant="coral"
         container={false}
-        className="relative min-h-[70vh] flex items-center pt-32 pb-20 overflow-hidden"
+        className="relative z-10 min-h-[70vh] flex items-center pt-32 pb-20 overflow-hidden"
       >
         {/* Background Effects */}
         <div className="pointer-events-none absolute inset-0">

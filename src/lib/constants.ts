@@ -4,7 +4,7 @@ export const SITE_CONFIG = {
   name: "Voatomy",
   tagline: "The AI Product Operating System",
   description:
-    "Replace gut-feel sprint estimation with AI that analyzes code complexity, team capacity, and business priority. ATLAS is your entry point into the full Voatomy platform.",
+    "Defensible sprint plans from code complexity, team capacity, tech-debt cost, and revenue weighting—so your team ships the right work, not the loudest work. ATLAS is the entry wedge into the full Voatomy platform.",
   url: "https://voatomy.global",
   ogImage: "/images/og.png",
 } as const;
@@ -17,7 +17,7 @@ export const PRODUCTS = [
     name: "ATLAS",
     tagline: "AI Sprint Planner",
     description:
-      "Sprint planning that understands code complexity, team capacity, and business priority.",
+      "Code-aware sprint plans that factor capacity, tech-debt cost, and revenue—so the plan matches reality.",
     icon: "🎯",
     color: "#f16e2c",
     status: "available" as const,
@@ -292,12 +292,21 @@ export const NAV_LINKS = {
 
 export const HERO_CONTENT = {
   eyebrow: "ATLAS by Voatomy",
-  headline: "Sprint planning that actually understands your code.",
+  /** Benefit-led headline — outcome for ICP in one scan (B2B SaaS CRO pattern) */
+  headline: "Ship the right sprint—without the spreadsheet war.",
   subheadline:
-    "ATLAS analyzes code complexity, team capacity, tech debt, and business priority to generate sprint plans backed by data — not gut feel.",
+    "Code-aware plans that blend complexity, team capacity, tech-debt cost, and revenue weighting so every sprint is defensible in standup and in the boardroom.",
   ctaPrimary: "Get Early Access",
   ctaSecondary: "Watch the 3-minute demo",
-  socialProof: "Join 1,200+ engineering leaders on the waitlist",
+  /** Risk reducers under primary CTA — friction reduction, common on high-converting B2B pages */
+  ctaRiskReducer: "No credit card · Join the waitlist in under a minute",
+  /** Three proof-oriented chips — “comprehension before scroll” (problem → solution narrative) */
+  valuePills: [
+    { label: "Repo-aware scope", detail: "AST and dependencies, not story points in a vacuum" },
+    { label: "Capacity you can trust", detail: "Velocity, PTO, and focus time in one model" },
+    { label: "Revenue-weighted tradeoffs", detail: "Tie work to what actually drives the business" },
+  ] as const,
+  socialProof: "1,200+ on the waitlist · 4.8/5 from beta teams",
   statCards: [
     { type: "visual" as const, value: "", label: "" },
     { type: "teal" as const, value: "100+", label: "Integrations" },
@@ -1878,7 +1887,7 @@ export const SPRINT_CADENCE_OPTIONS = [
 ] as const;
 
 export const PROJECT_COLOR_OPTIONS = [
-  "#12FF80", "#6366F1", "#F59E0B", "#EF4444", "#8B5CF6",
+  "#0d9488", "#6366F1", "#F59E0B", "#EF4444", "#8B5CF6",
   "#EC4899", "#22D3EE", "#F97316", "#14B8A6", "#A855F7",
 ] as const;
 
@@ -1892,7 +1901,7 @@ export const DEFAULT_MOCK_PROJECTS = [
     teamId: "team-1",
     environment: "production" as const,
     sprintCadence: "2-week" as const,
-    color: "#12FF80",
+    color: "#0d9488",
   },
   {
     id: "proj-2",

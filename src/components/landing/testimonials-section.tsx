@@ -6,6 +6,9 @@ import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Quote } from "lucide-react";
+import { SectionBackgroundDecor } from "@/components/marketing/section-background-decor";
+import { FloatingPictureFrame } from "@/components/marketing/floating-picture-frame";
+import { MARKETING_IMAGES } from "@/lib/marketing-images";
 
 function avatarUrl(seed: string) {
   return `https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(seed)}&backgroundColor=transparent`;
@@ -17,8 +20,9 @@ export function TestimonialsSection() {
   const { ref: statsRef, isVisible: statsVisible } = useScrollAnimation();
 
   return (
-    <section className="light-surface-typography bg-rose-light px-4 py-16 sm:py-24 transition-colors duration-300">
-      <div className="mx-auto max-w-container">
+    <section className="light-surface-typography relative overflow-hidden bg-rose-light px-4 py-16 sm:py-24 transition-colors duration-300">
+      <SectionBackgroundDecor tone="rose" />
+      <div className="relative z-[1] mx-auto max-w-container">
         <ScrollReveal>
           <div className="text-center">
             <span className="inline-flex items-center gap-2 rounded-full bg-rose/10 px-3 py-1 text-sm font-semibold text-rose">
@@ -73,39 +77,42 @@ export function TestimonialsSection() {
             </div>
 
             {/* Right: Image + featured quote overlay */}
-            <div className="relative overflow-hidden rounded-2xl border border-charcoal/10">
-              <Image
-                src="/images/landing/meeting.jpg"
-                alt="Engineering team in sprint planning session"
-                width={600}
-                height={400}
-                className="h-full w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/20 to-transparent" />
-              {featured && (
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <Quote className="h-6 w-6 text-accent-lime/80" />
-                  <p className="mt-2 text-sm leading-relaxed text-white/90 line-clamp-3">
-                    {featured.text}
-                  </p>
-                  <div className="mt-3 flex items-center gap-2">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={avatarUrl(featured.author)}
-                      alt=""
-                      width={32}
-                      height={32}
-                      className="h-8 w-8 rounded-full bg-white/20 ring-1 ring-white/30"
-                      loading="lazy"
-                    />
-                    <div>
-                      <span className="text-xs font-semibold text-white">{featured.author}</span>
-                      <span className="ml-1.5 text-[10px] text-white/60">{featured.role}</span>
+            <FloatingPictureFrame delay={0.12} className="h-full min-h-[220px]">
+              <div className="relative h-full min-h-[220px] overflow-hidden rounded-2xl border border-charcoal/10">
+                <Image
+                  src={MARKETING_IMAGES.meeting}
+                  alt="Engineering team in sprint planning session"
+                  width={1200}
+                  height={800}
+                  className="h-full w-full min-h-[220px] object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/20 to-transparent" />
+                {featured && (
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <Quote className="h-6 w-6 text-accent-lime/80" />
+                    <p className="mt-2 text-sm leading-relaxed text-white/90 line-clamp-3">
+                      {featured.text}
+                    </p>
+                    <div className="mt-3 flex items-center gap-2">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={avatarUrl(featured.author)}
+                        alt=""
+                        width={32}
+                        height={32}
+                        className="h-8 w-8 rounded-full bg-white/20 ring-1 ring-white/30"
+                        loading="lazy"
+                      />
+                      <div>
+                        <span className="text-xs font-semibold text-white">{featured.author}</span>
+                        <span className="ml-1.5 text-[10px] text-white/60">{featured.role}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            </FloatingPictureFrame>
           </div>
 
           {/* Testimonial grid */}

@@ -4,16 +4,20 @@ import { Play, Monitor, CheckCircle2, BarChart3, Zap, ArrowUpRight } from "lucid
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { SectionBackgroundDecor } from "@/components/marketing/section-background-decor";
+import { FloatingPictureFrame } from "@/components/marketing/floating-picture-frame";
+import { MARKETING_IMAGES } from "@/lib/marketing-images";
 
 export function DemoSection() {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section id="demo" className="bg-white px-4 py-16 sm:py-24 transition-colors duration-300">
+    <section id="demo" className="relative overflow-hidden bg-white px-4 py-16 sm:py-24 transition-colors duration-300">
+      <SectionBackgroundDecor tone="white" />
       <div
         ref={ref}
         className={cn(
-          "mx-auto max-w-container transition-all duration-700",
+          "relative z-[1] mx-auto max-w-container transition-all duration-700",
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
         )}
       >
@@ -54,14 +58,23 @@ export function DemoSection() {
           </div>
 
           {/* Right: Video frame */}
-          <div
+          <FloatingPictureFrame
             className={cn(
-              "relative lg:col-span-3 transition-all duration-700 delay-[0.2s]",
+              "relative lg:col-span-3",
               isVisible
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-8",
             )}
+            delay={0.15}
           >
+            <div
+              className={cn(
+                "relative transition-all duration-700 delay-[0.2s]",
+                isVisible
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8",
+              )}
+            >
             {/* Floating badge */}
             <div className="pointer-events-none absolute -left-3 top-[15%] z-10 hidden animate-float-slow lg:block" aria-hidden>
               <div className="flex items-center gap-2 rounded-xl border border-charcoal/10 bg-white px-3 py-2 shadow-lg">
@@ -88,11 +101,12 @@ export function DemoSection() {
 
               <div className="relative flex aspect-video items-center justify-center">
                 <Image
-                  src="/images/landing/code-screen.jpg"
+                  src={MARKETING_IMAGES.codeScreen}
                   alt="ATLAS sprint planning dashboard preview"
-                  width={900}
-                  height={506}
+                  width={1200}
+                  height={675}
                   className="h-full w-full object-cover"
+                  sizes="(max-width: 1024px) 100vw, 60vw"
                 />
                 <div className="absolute inset-0 bg-charcoal/20" />
                 <button
@@ -123,7 +137,8 @@ export function DemoSection() {
                 )}
               </div>
             </div>
-          </div>
+            </div>
+          </FloatingPictureFrame>
         </div>
       </div>
     </section>

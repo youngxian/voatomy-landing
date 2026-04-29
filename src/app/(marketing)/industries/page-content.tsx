@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Building2, GitBranch, Layers, Quote, Shield, Sparkles } from "lucide-react";
+import { BRAND_GREEN } from "@/lib/marketing-visual";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -18,7 +20,6 @@ import {
   MARKETING_INDUSTRY_SLUGS,
 } from "@/lib/industry-pages";
 
-const BRAND_GREEN = "#12FF80";
 
 const HUB_STATS = [
   { value: "7", label: "Industry playbooks", sub: "Curated vertical lenses" },

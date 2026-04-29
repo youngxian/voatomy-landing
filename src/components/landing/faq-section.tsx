@@ -2,11 +2,13 @@ import { FAQ_ITEMS } from "@/lib/constants";
 import { ScrollReveal } from "./scroll-reveal";
 import { FAQAccordion } from "./faq-accordion";
 import { MessageCircle } from "lucide-react";
+import { SectionBackgroundDecor } from "@/components/marketing/section-background-decor";
 
 export function FAQSection() {
   return (
-    <section className="bg-white px-4 py-16 sm:py-24 transition-colors duration-300">
-      <div className="mx-auto max-w-container">
+    <section className="relative overflow-hidden bg-white px-4 py-16 sm:py-24 transition-colors duration-300">
+      <SectionBackgroundDecor tone="white" />
+      <div className="relative z-[1] mx-auto max-w-container">
         <ScrollReveal>
           {/* Two-column: left header + right accordion */}
           <div className="grid gap-10 lg:grid-cols-5">

@@ -30,8 +30,9 @@ import {
   HeartPulse,
   Users,
 } from "lucide-react";
+import { BRAND_GREEN } from "@/lib/marketing-visual";
 
-const BRAND_GREEN = "#12FF80";
+
 
 const PAIN_POINTS = [
   {

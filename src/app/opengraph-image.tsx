@@ -123,7 +123,7 @@ export default async function OGImage() {
             right: 0,
             height: 4,
             background:
-              "linear-gradient(90deg, #f16e2c, #12FF80, #6366F1, #f16e2c)",
+              "linear-gradient(90deg, #f16e2c, #0d9488, #6366F1, #f16e2c)",
           }}
         />
 

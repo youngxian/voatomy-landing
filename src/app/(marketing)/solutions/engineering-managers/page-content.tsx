@@ -180,7 +180,7 @@ const METRICS = [
     icon: Target,
     description: "Trending up over 3 sprints",
     barWidth: "87%",
-    color: "#12FF80",
+    color: "#0d9488",
   },
   {
     label: "Team Velocity",
@@ -191,7 +191,7 @@ const METRICS = [
     icon: Activity,
     description: "Consistent output, no burnout",
     barWidth: "84%",
-    color: "#12FF80",
+    color: "#0d9488",
   },
   {
     label: "Tech Debt Index",
@@ -285,7 +285,7 @@ export default function EngineeringManagersPage() {
               loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
             )}
           >
-            <Chip dotColor="#12FF80" className="border border-brand/20 bg-brand/[0.08] text-brand font-semibold">
+            <Chip dotColor="#0d9488" className="border border-brand/20 bg-brand/[0.08] text-brand font-semibold">
               For Engineering Managers
             </Chip>
           </div>

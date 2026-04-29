@@ -668,7 +668,7 @@ function RevenueFeedbackLoopSection() {
                     className="relative z-[1] grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 text-sm font-bold text-white shadow-lg"
                     style={{
                       borderColor: INDIGO,
-                      background: i === steps.length - 1 ? "#12FF80" : INDIGO,
+                      background: i === steps.length - 1 ? "#0d9488" : INDIGO,
                       color: i === steps.length - 1 ? "#0a0a0a" : "white",
                       boxShadow: `0 4px 20px ${i === steps.length - 1 ? "rgba(18,255,128,0.3)" : "rgba(99,102,241,0.3)"}`,
                     }}
@@ -695,7 +695,7 @@ function RevenueFeedbackLoopSection() {
                         <Icon
                           className="h-5 w-5"
                           style={{
-                            color: i >= 4 ? "#12FF80" : INDIGO,
+                            color: i >= 4 ? "#0d9488" : INDIGO,
                           }}
                         />
                       </div>
@@ -706,7 +706,7 @@ function RevenueFeedbackLoopSection() {
                       className="mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold"
                       style={{
                         background: step.accent,
-                        color: i >= 4 ? "#12FF80" : INDIGO,
+                        color: i >= 4 ? "#0d9488" : INDIGO,
                       }}
                     >
                       <TrendingUp className="h-3 w-3" />
@@ -796,8 +796,8 @@ function FeatureDemandDashboardSection() {
           <div className="grid grid-cols-2 gap-4 p-5 md:grid-cols-4">
             <DashboardMetric label="Total Pipeline at Risk" value="$6.7M" color={INDIGO} />
             <DashboardMetric label="Features Requested" value="47" color={INDIGO} />
-            <DashboardMetric label="Accounts with Requests" value="89" color="#12FF80" />
-            <DashboardMetric label="Signal-to-Ship Avg" value="18 days" color="#12FF80" />
+            <DashboardMetric label="Accounts with Requests" value="89" color="#0d9488" />
+            <DashboardMetric label="Signal-to-Ship Avg" value="18 days" color="#0d9488" />
           </div>
 
           {/* Feature demand table */}
@@ -903,7 +903,7 @@ function FeatureDemandDashboardSection() {
                       <div className="mt-1 flex gap-2">
                         <span className="text-theme-f">{acct.features} requests</span>
                         <span className="text-theme-f">&middot;</span>
-                        <span style={{ color: acct.health >= 80 ? "#12FF80" : "#f59e0b" }}>
+                        <span style={{ color: acct.health >= 80 ? "#0d9488" : "#f59e0b" }}>
                           {acct.health}% health
                         </span>
                       </div>

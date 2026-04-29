@@ -38,10 +38,13 @@ import { AtlasIllustration } from "@/components/illustrations/product-illustrati
 import { BrandIcon } from "@/components/icons/brand-icons";
 import { usePricing } from "@/hooks/use-pricing";
 import { buildProductCheckoutUrl } from "@/lib/product-purchase";
+import { ProductHeroAtmosphere } from "@/components/marketing/product-hero-atmosphere";
+import { productBrand } from "@/lib/product-brand";
 
 /* ─────────────────── Constants ─────────────────── */
 
-const ATLAS_ORANGE = "#f16e2c";
+const ATLAS_ORANGE = productBrand.atlas.accent;
+const ATLAS_TEAL = productBrand.atlas.support;
 
 const SIGNALS = [
   { icon: Brain, label: "Code Complexity", desc: "Repo-aware story sizing from AST analysis", delay: 0 },
@@ -196,7 +199,7 @@ function SprintRow({ title, points, confidence, status, delay }: { title: string
     return () => clearTimeout(timer);
   }, [delay]);
 
-  const confidenceColor = confidence >= 85 ? "#12FF80" : confidence >= 70 ? ATLAS_ORANGE : "#ef4444";
+  const confidenceColor = confidence >= 85 ? ATLAS_TEAL : confidence >= 70 ? ATLAS_ORANGE : "#ef4444";
 
   return (
     <div
@@ -218,7 +221,7 @@ function SprintRow({ title, points, confidence, status, delay }: { title: string
           {confidence}%
         </span>
       </div>
-      <Chip dotColor={status === "Ready" ? "#12FF80" : status === "Review" ? ATLAS_ORANGE : "#a1a3a7"} className="text-xs justify-center">
+      <Chip dotColor={status === "Ready" ? ATLAS_TEAL : status === "Review" ? ATLAS_ORANGE : "#a1a3a7"} className="text-xs justify-center">
         {status}
       </Chip>
     </div>
@@ -280,7 +283,7 @@ const PIPELINE_STAGES = [
     desc: "Continuous accuracy feedback loop",
     detail: "Post-sprint retro data auto-tunes weights so every plan is better than the last.",
     sources: ["Accuracy delta", "Velocity trend", "Scope creep %", "Model retrain"],
-    color: "#12FF80",
+    color: ATLAS_TEAL,
   },
 ];
 
@@ -347,7 +350,7 @@ function AIWorkflowSection() {
             className="h-full transition-all duration-700 ease-out rounded-full"
             style={{
               width: `${(activeStage / (PIPELINE_STAGES.length - 1)) * 100}%`,
-              background: `linear-gradient(90deg, #6366f1, ${ATLAS_ORANGE}, #12FF80)`,
+              background: `linear-gradient(90deg, #6366f1, ${ATLAS_ORANGE}, ${ATLAS_TEAL})`,
             }}
           />
         </div>
@@ -723,7 +726,7 @@ function ScoreVisual({ color }: { color: string }) {
           <span>Ticket</span><span className="text-center">P10</span><span className="text-center">P50</span><span className="text-center">P90</span><span className="text-center">Confidence</span>
         </div>
         {tickets.map((t, i) => {
-          const confColor = t.confidence >= 90 ? "#12FF80" : t.confidence >= 75 ? ATLAS_ORANGE : "#ef4444";
+          const confColor = t.confidence >= 90 ? ATLAS_TEAL : t.confidence >= 75 ? ATLAS_ORANGE : "#ef4444";
           return (
             <div
               key={t.title}
@@ -815,18 +818,18 @@ function OptimizeVisual() {
         {/* Capacity indicator */}
         <div className="mt-4 flex items-center gap-2">
           <div className="flex-1 h-2 rounded-full bg-theme-subtle overflow-hidden">
-            <div className="h-full rounded-full" style={{ width: "89%", background: `linear-gradient(90deg, ${ATLAS_ORANGE}, #12FF80)` }} />
+            <div className="h-full rounded-full" style={{ width: "89%", background: `linear-gradient(90deg, ${ATLAS_ORANGE}, ${ATLAS_TEAL})` }} />
           </div>
           <span className="text-[11px] text-theme-s font-semibold">34/38 pts (89%)</span>
         </div>
-        <div className="text-[10px] text-theme-m mt-1">Capacity utilization — <span style={{ color: "#12FF80" }}>healthy range</span></div>
+        <div className="text-[10px] text-theme-m mt-1">Capacity utilization — <span style={{ color: ATLAS_TEAL }}>healthy range</span></div>
       </div>
       {/* Dependency arrows */}
       <div className="grid grid-cols-3 gap-2">
         {[
-          { label: "Dependencies resolved", value: "3", color: "#12FF80" },
+          { label: "Dependencies resolved", value: "3", color: ATLAS_TEAL },
           { label: "Constraints satisfied", value: "8/8", color: ATLAS_ORANGE },
-          { label: "Deadline conflicts", value: "0", color: "#12FF80" },
+          { label: "Deadline conflicts", value: "0", color: ATLAS_TEAL },
         ].map((c) => (
           <div key={c.label} className="rounded-lg border border-theme p-2.5 text-center">
             <div className="text-sm font-bold" style={{ color: c.color }}>{c.value}</div>
@@ -865,7 +868,7 @@ function DeliverVisual({ color }: { color: string }) {
         <div className="flex items-end gap-3 h-32">
           {sprints.map((s, i) => (
             <div key={s.id} className="flex-1 flex flex-col items-center gap-1">
-              <span className="text-[11px] font-bold" style={{ color: s.accuracy >= 80 ? "#12FF80" : ATLAS_ORANGE }}>
+              <span className="text-[11px] font-bold" style={{ color: s.accuracy >= 80 ? ATLAS_TEAL : ATLAS_ORANGE }}>
                 {s.accuracy}%
               </span>
               <div className="w-full rounded-t-md bg-theme-subtle overflow-hidden" style={{ height: "100%" }}>
@@ -874,7 +877,7 @@ function DeliverVisual({ color }: { color: string }) {
                   style={{
                     height: `${s.accuracy}%`,
                     marginTop: `${100 - s.accuracy}%`,
-                    background: s.accuracy >= 80 ? `linear-gradient(180deg, #12FF80, ${color}50)` : `linear-gradient(180deg, ${ATLAS_ORANGE}, ${ATLAS_ORANGE}40)`,
+                    background: s.accuracy >= 80 ? `linear-gradient(180deg, ${ATLAS_TEAL}, ${color}50)` : `linear-gradient(180deg, ${ATLAS_ORANGE}, ${ATLAS_ORANGE}40)`,
                     animation: `atlas-bar-grow 1s ease-out ${i * 0.15}s both`,
                   }}
                 />
@@ -942,10 +945,19 @@ export default function AtlasProductPage() {
     <div className="relative overflow-hidden">
       {/* ═══════════════ 1. HERO ═══════════════ */}
       <Section variant="coral" container={false} className="relative min-h-[90vh] flex items-center pt-24 pb-20 overflow-hidden">
+        <ProductHeroAtmosphere variant="atlas" />
         {/* Premium Background Effects */}
-        <div className="product-hero-gradient" style={{ "--hero-gradient": `radial-gradient(ellipse, ${ATLAS_ORANGE}, transparent 70%)`, "--hero-gradient-secondary": `radial-gradient(ellipse, #12FF80, transparent 70%)` } as React.CSSProperties} />
-        <div className="pointer-events-none absolute inset-0 fine-grid" />
-        <div className="pointer-events-none absolute inset-0 noise-overlay" />
+        <div
+          className="product-hero-gradient z-[1]"
+          style={
+            {
+              "--hero-gradient": productBrand.atlas.heroGradient,
+              "--hero-gradient-secondary": productBrand.atlas.heroGradientSecondary,
+            } as React.CSSProperties
+          }
+        />
+        <div className="pointer-events-none absolute inset-0 z-[1] fine-grid" />
+        <div className="pointer-events-none absolute inset-0 z-[1] noise-overlay" />
 
         <div className="relative z-[3] mx-auto w-full max-w-container px-4">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -1029,15 +1041,15 @@ export default function AtlasProductPage() {
                       </div>
                       <span className="text-sm font-semibold text-theme">Sprint 24 Plan</span>
                     </div>
-                    <Chip dotColor="#12FF80" className="text-xs">AI Generated</Chip>
+                    <Chip dotColor={ATLAS_TEAL} className="text-xs">AI Generated</Chip>
                   </div>
 
                   {/* Mini Metric Bar */}
                   <div className="grid grid-cols-3 gap-3">
                     {[
-                      { label: "Confidence", value: "87%", color: "#12FF80" },
+                      { label: "Confidence", value: "87%", color: ATLAS_TEAL },
                       { label: "Velocity Match", value: "94%", color: ATLAS_ORANGE },
-                      { label: "Risk Score", value: "Low", color: "#12FF80" },
+                      { label: "Risk Score", value: "Low", color: ATLAS_TEAL },
                     ].map((m, i) => (
                       <div
                         key={m.label}
@@ -1065,7 +1077,7 @@ export default function AtlasProductPage() {
                   {/* Bottom bar */}
                   <div className="flex items-center justify-between text-xs text-theme-m pt-1 border-t border-theme">
                     <span>Total: 34 points / 38 capacity</span>
-                    <span style={{ color: "#12FF80" }}>Healthy Sprint Load</span>
+                    <span style={{ color: ATLAS_TEAL }}>Healthy Sprint Load</span>
                   </div>
                 </div>
               </div>
@@ -1251,7 +1263,7 @@ export default function AtlasProductPage() {
                     <div key={kpi.label} className="rounded-xl border border-theme p-4">
                       <div className="text-xs text-theme-m mb-1">{kpi.label}</div>
                       <div className="text-heading-2 text-theme">{kpi.value}</div>
-                      <div className="text-xs font-medium mt-1" style={{ color: "#12FF80" }}>
+                      <div className="text-xs font-medium mt-1" style={{ color: ATLAS_TEAL }}>
                         {kpi.change} this quarter
                       </div>
                     </div>
@@ -1328,7 +1340,7 @@ export default function AtlasProductPage() {
         {/* Connection lines visual */}
         <div className="flex justify-center mt-8 animate-on-scroll stagger-5">
           <div className="flex items-center gap-2 rounded-full border border-theme bg-theme-card px-5 py-2.5">
-            <div className="h-2 w-2 rounded-full animate-glow-pulse" style={{ backgroundColor: "#12FF80" }} />
+            <div className="h-2 w-2 rounded-full animate-glow-pulse" style={{ backgroundColor: ATLAS_TEAL }} />
             <span className="text-sm text-theme-s">All systems synced</span>
           </div>
         </div>

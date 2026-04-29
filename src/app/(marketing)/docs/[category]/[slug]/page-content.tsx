@@ -19,8 +19,9 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import { BRAND_GREEN } from "@/lib/marketing-visual";
 
-const BRAND_GREEN = "#12FF80";
+
 
 function getAllPages() {
   const pages: { category: string; slug: string; label: string }[] = [];

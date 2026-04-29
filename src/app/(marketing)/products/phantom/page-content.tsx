@@ -9,6 +9,8 @@ import { Chip } from "@/components/ui/chip";
 import Link from "next/link";
 import { buildProductCheckoutUrl } from "@/lib/product-purchase";
 import { PhantomIllustration } from "@/components/illustrations/product-illustrations";
+import { ProductHeroAtmosphere } from "@/components/marketing/product-hero-atmosphere";
+import { productBrand } from "@/lib/product-brand";
 import {
   Radar,
   Ghost,
@@ -38,9 +40,10 @@ import {
 /*  Constants                                                          */
 /* ------------------------------------------------------------------ */
 
-const CYAN = "#22D3EE";
-const CYAN_DIM = "rgba(34,211,238,0.15)";
-const CYAN_GLOW = "rgba(34,211,238,0.25)";
+const CYAN = productBrand.phantom.accent;
+const CYAN_DIM = productBrand.phantom.dim;
+const CYAN_GLOW = productBrand.phantom.glow;
+const CYAN_DEEP = productBrand.phantom.deep;
 
 const HEATMAP_DATA = [
   [0.1, 0.2, 0.8, 0.3, 0.1, 0.4, 0.2, 0.1, 0.3, 0.2, 0.1, 0.5],
@@ -57,7 +60,7 @@ const SEVERITY_DATA = [
   { label: "Critical", count: 12, pct: 15, color: "#ef4444" },
   { label: "High", count: 34, pct: 42, color: "#f97316" },
   { label: "Medium", count: 28, pct: 35, color: "#eab308" },
-  { label: "Low", count: 7, pct: 8, color: "#22d3ee" },
+  { label: "Low", count: 7, pct: 8, color: CYAN },
 ];
 
 const MODULE_COSTS = [
@@ -297,7 +300,7 @@ const PHANTOM_PIPELINE = [
     desc: "Rank remediation by dollar-impact-per-hour",
     detail: "PHANTOM generates a prioritized remediation queue ranking every fix by ROI. It calculates effort-to-fix vs. annual savings, grouping quick-wins separately from strategic refactors.",
     tags: ["ROI score", "Quick wins", "Strategic fixes", "Effort estimate", "Annual savings"],
-    color: "#12FF80",
+    color: "#0d9488",
   },
   {
     id: "track",
@@ -516,7 +519,7 @@ function PhantomScanVisual() {
       {metrics.map((m, i) => {
         const pct = m.label === "Coupling Score" ? parseFloat(m.value) * 100 : parseFloat(m.value);
         const barPct = Math.min(100, (pct / m.max) * 100);
-        const color = m.status === "ok" ? "#22D3EE" : m.status === "warning" ? "#F59E0B" : m.status === "high" ? "#EF4444" : "#F97316";
+        const color = m.status === "ok" ? CYAN : m.status === "warning" ? "#F59E0B" : m.status === "high" ? "#EF4444" : "#F97316";
         return (
           <div key={m.label} className="space-y-1" style={{ animation: `phantomBarIn 0.4s ease-out ${i * 80}ms both` }}>
             <div className="flex justify-between text-[11px]">
@@ -604,10 +607,10 @@ function PhantomDollarVisual() {
 /* Visual: ROI Prioritization */
 function PhantomPrioritizeVisual() {
   const queue = [
-    { name: "Decouple auth-service", effort: "3d", savings: "$18K/yr", roi: "6.0x", color: "#12FF80" },
-    { name: "Add payment tests", effort: "2d", savings: "$12K/yr", roi: "4.8x", color: "#12FF80" },
-    { name: "Remove dead endpoints", effort: "1d", savings: "$4K/yr", roi: "4.0x", color: "#22D3EE" },
-    { name: "Refactor data layer", effort: "8d", savings: "$28K/yr", roi: "3.5x", color: "#22D3EE" },
+    { name: "Decouple auth-service", effort: "3d", savings: "$18K/yr", roi: "6.0x", color: "#0d9488" },
+    { name: "Add payment tests", effort: "2d", savings: "$12K/yr", roi: "4.8x", color: "#0d9488" },
+    { name: "Remove dead endpoints", effort: "1d", savings: "$4K/yr", roi: "4.0x", color: CYAN },
+    { name: "Refactor data layer", effort: "8d", savings: "$28K/yr", roi: "3.5x", color: CYAN },
     { name: "Update dep tree", effort: "5d", savings: "$8K/yr", roi: "1.6x", color: "#F59E0B" },
   ];
   return (
@@ -649,14 +652,14 @@ function PhantomTrackVisual() {
         <div className="flex items-end gap-2 h-24">
           {trend.map((v, i) => (
             <div key={i} className="flex-1 flex flex-col items-center gap-1">
-              <span className="text-[9px] font-bold" style={{ color: v <= 100 ? "#12FF80" : CYAN }}>{v}</span>
+              <span className="text-[9px] font-bold" style={{ color: v <= 100 ? "#0d9488" : CYAN }}>{v}</span>
               <div className="w-full rounded-t-md bg-theme-subtle" style={{ height: "100%" }}>
                 <div
                   className="w-full rounded-t-md"
                   style={{
                     height: `${(v / max) * 100}%`,
                     marginTop: `${100 - (v / max) * 100}%`,
-                    background: v <= 100 ? `linear-gradient(180deg, #12FF80, ${CYAN}50)` : `linear-gradient(180deg, ${CYAN}, ${CYAN}40)`,
+                    background: v <= 100 ? `linear-gradient(180deg, #0d9488, ${CYAN}50)` : `linear-gradient(180deg, ${CYAN}, ${CYAN}40)`,
                   }}
                 />
               </div>
@@ -668,7 +671,7 @@ function PhantomTrackVisual() {
       <div className="grid grid-cols-3 gap-2">
         {[
           { label: "Debt Score", value: "B+", color: CYAN },
-          { label: "Trend", value: "↓ 37%", color: "#12FF80" },
+          { label: "Trend", value: "↓ 37%", color: "#0d9488" },
           { label: "PR Gate", value: "Active", color: "#8B5CF6" },
         ].map((s) => (
           <div key={s.label} className="rounded-lg border border-theme p-2 text-center">
@@ -777,10 +780,18 @@ export default function PhantomPage() {
         variant="violet"
         className="relative overflow-hidden pt-20 pb-20 sm:pt-28 sm:pb-28"
       >
-        {/* Premium background */}
-        <div className="product-hero-gradient" style={{ "--hero-gradient": `radial-gradient(ellipse, ${CYAN}, transparent 70%)`, "--hero-gradient-secondary": "radial-gradient(ellipse, #06b6d4, transparent 70%)" } as React.CSSProperties} />
-        <div className="pointer-events-none absolute inset-0 fine-grid" />
-        <div className="pointer-events-none absolute inset-0 noise-overlay" />
+        <ProductHeroAtmosphere variant="phantom" />
+        <div
+          className="product-hero-gradient z-[1]"
+          style={
+            {
+              "--hero-gradient": productBrand.phantom.heroGradient,
+              "--hero-gradient-secondary": productBrand.phantom.heroGradientSecondary,
+            } as React.CSSProperties
+          }
+        />
+        <div className="pointer-events-none absolute inset-0 z-[1] fine-grid" />
+        <div className="pointer-events-none absolute inset-0 z-[1] noise-overlay" />
 
         <div className="relative z-10 flex flex-col items-center text-center">
           <div className="flex items-center gap-3 mb-6">
@@ -831,16 +842,16 @@ export default function PhantomPage() {
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
-            <Chip dotColor="#22d3ee" className="text-xs">
+            <Chip dotColor={CYAN} className="text-xs">
               Eng Directors
             </Chip>
-            <Chip dotColor="#22d3ee" className="text-xs">
+            <Chip dotColor={CYAN} className="text-xs">
               VP Engineering
             </Chip>
-            <Chip dotColor="#22d3ee" className="text-xs">
+            <Chip dotColor={CYAN} className="text-xs">
               CTO
             </Chip>
-            <Chip dotColor="#22d3ee" className="text-xs">
+            <Chip dotColor={CYAN} className="text-xs">
               CFO
             </Chip>
           </div>
@@ -1117,7 +1128,7 @@ export default function PhantomPage() {
                           className="h-full rounded-full transition-all duration-1000"
                           style={{
                             width: mounted ? `${m.pct}%` : "0%",
-                            background: `linear-gradient(to right, ${CYAN}, #06b6d4)`,
+                            background: `linear-gradient(to right, ${CYAN}, ${CYAN_DEEP})`,
                           }}
                         />
                       </div>

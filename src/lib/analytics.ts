@@ -280,7 +280,7 @@ export function trackEvent(
     const color = EVENT_COLORS[category] || "#888";
     console.log(
       `%c[Analytics] %c${category}%c ${action}`,
-      "color: #12FF80; font-weight: bold",
+      "color: #0d9488; font-weight: bold",
       `color: ${color}; font-weight: bold; background: ${color}15; padding: 1px 4px; border-radius: 3px`,
       "color: inherit",
       label ? `— ${label}` : "",
@@ -577,7 +577,7 @@ export function flushEvents(sync: boolean = false): void {
   if (CONFIG.debugLog) {
     console.groupCollapsed(
       `%c[Analytics] Flushed ${events.length} events`,
-      "color: #12FF80; font-weight: bold"
+      "color: #0d9488; font-weight: bold"
     );
     console.table(
       events.map((e) => ({
@@ -705,7 +705,7 @@ export function observeSection(
 // ── Console Colors by Category ──
 
 const EVENT_COLORS: Record<EventCategory, string> = {
-  page_view: "#12FF80",
+  page_view: "#0d9488",
   navigation: "#6366F1",
   click: "#F59E0B",
   scroll: "#8B5CF6",

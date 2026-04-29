@@ -5,6 +5,7 @@ import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { cn } from "@/lib/utils";
 import { TrendingDown, Clock, BarChart3, AlertTriangle, ArrowRight } from "lucide-react";
 import { BrokenChainIllustration } from "@/components/illustrations/abstract-illustrations";
+import { SectionBackgroundDecor } from "@/components/marketing/section-background-decor";
 
 const STAT_ICONS = [TrendingDown, Clock, BarChart3] as const;
 
@@ -12,15 +13,16 @@ export function ProblemSection() {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section className="light-surface-typography bg-coral-light px-4 py-16 sm:py-24 transition-colors duration-300">
-      <div ref={ref} className="mx-auto max-w-container">
+    <section className="light-surface-typography relative overflow-hidden bg-coral-light px-4 py-16 sm:py-24 transition-colors duration-300">
+      <SectionBackgroundDecor tone="coral" />
+      <div ref={ref} className="relative z-[1] mx-auto max-w-container">
         <div
           className={cn(
             "text-center transition-all duration-700",
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
           )}
         >
-          <BrokenChainIllustration className="mx-auto mb-2 h-20 w-full max-w-md sm:h-24" />
+          <BrokenChainIllustration className="mx-auto mb-2 h-20 w-full max-w-md animate-float-slow sm:h-24" />
           <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-coral">
             <AlertTriangle className="h-3.5 w-3.5" />
             The Problem

@@ -28,8 +28,9 @@ import {
   LayoutDashboard,
   GitBranch,
 } from "lucide-react";
+import { BRAND_GREEN } from "@/lib/marketing-visual";
 
-const BRAND_GREEN = "#12FF80";
+
 
 const PAIN_POINTS = [
   {
@@ -101,7 +102,7 @@ const PRODUCT_STACK = [
   },
   {
     name: "NEXUS",
-    color: "#12FF80",
+    color: "#0d9488",
     role: "Unifying",
     tagline: "Cross-Product Intelligence",
     features: [
@@ -123,7 +124,7 @@ const TIMELINE_EVENTS = [
       "NEXUS auto-generates your board deck data: org velocity trends, debt trajectory, delivery confidence, and headcount ROI — all current as of this morning.",
     highlight: "2 min vs 2 days",
     product: "NEXUS",
-    productColor: "#12FF80",
+    productColor: "#0d9488",
     icon: Presentation,
   },
   {
@@ -153,7 +154,7 @@ const TIMELINE_EVENTS = [
       "P1 in the payments service. NEXUS shows real-time revenue impact, affected customers, and auto-routes the right team leads. You have context in 30 seconds.",
     highlight: "30-second situational awareness",
     product: "NEXUS",
-    productColor: "#12FF80",
+    productColor: "#0d9488",
     icon: AlertTriangle,
   },
   {
@@ -163,7 +164,7 @@ const TIMELINE_EVENTS = [
       "End-of-day check: 8 teams on track, debt trending down, velocity stable across the org. You close your laptop with clarity, not anxiety.",
     highlight: "Org-wide confidence",
     product: "NEXUS",
-    productColor: "#12FF80",
+    productColor: "#0d9488",
     icon: LayoutDashboard,
   },
 ];
@@ -276,7 +277,7 @@ export default function CTOVPEngineeringPage() {
               loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
             )}
           >
-            <Chip dotColor="#12FF80" className="border border-brand/20 bg-brand/[0.08] text-brand font-semibold">
+            <Chip dotColor="#0d9488" className="border border-brand/20 bg-brand/[0.08] text-brand font-semibold">
               For CTOs &amp; VP Engineering
             </Chip>
           </div>
@@ -537,9 +538,9 @@ export default function CTOVPEngineeringPage() {
           <div className="h-2 w-2 rounded-full" style={{ background: "#f16e2c" }} />
           <div className="h-[1px] w-10 bg-gradient-to-r from-[#f16e2c]/40 to-[#22D3EE]/40" />
           <div className="h-2 w-2 rounded-full" style={{ background: "#22D3EE" }} />
-          <div className="h-[1px] w-10 bg-gradient-to-r from-[#22D3EE]/40 to-[#12FF80]/40" />
-          <div className="h-2 w-2 rounded-full" style={{ background: "#12FF80" }} />
-          <div className="h-[1px] w-16 bg-gradient-to-l from-transparent to-[#12FF80]/40" />
+          <div className="h-[1px] w-10 bg-gradient-to-r from-[#22D3EE]/40 to-[#0d9488]/40" />
+          <div className="h-2 w-2 rounded-full" style={{ background: "#0d9488" }} />
+          <div className="h-[1px] w-16 bg-gradient-to-l from-transparent to-[#0d9488]/40" />
         </div>
         <p className="mt-3 text-center text-xs text-theme-f">
           Integrated intelligence across velocity, debt, and executive reporting

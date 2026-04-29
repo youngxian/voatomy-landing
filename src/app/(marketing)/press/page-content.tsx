@@ -165,7 +165,7 @@ interface BrandColor {
 }
 
 const BRAND_COLORS: BrandColor[] = [
-  { name: "Brand Green", hex: "#12FF80", swatch: "#12FF80" },
+  { name: "Brand Green", hex: "#0d9488", swatch: "#0d9488" },
   { name: "Brand Dark", hex: "#0a0a0a", swatch: "#0a0a0a" },
 ];
 
@@ -181,7 +181,7 @@ export default function PressPage() {
       {/* ============================================================ */}
       <Section variant="white" className="pt-28 pb-12 sm:pt-36 sm:pb-16">
         <div className="mx-auto max-w-3xl text-center">
-          <Chip dotColor="#12FF80" className="mb-6">
+          <Chip dotColor="#0d9488" className="mb-6">
             Press & Media
           </Chip>
 

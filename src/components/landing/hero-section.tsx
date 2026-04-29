@@ -16,11 +16,13 @@ import {
   Zap,
   Users,
   Target,
+  CheckCircle2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSectionTracker } from "@/hooks/use-analytics";
 import { useSession } from "@/hooks/use-session";
 import { trackConversion } from "@/lib/analytics";
+import { MARKETING_IMAGES } from "@/lib/marketing-images";
 
 const FLOATING_ICONS = [
   { Icon: Sparkles, position: "top-[12%] left-[6%] sm:left-[10%]", delay: "0s", size: "h-4 w-4" },
@@ -45,7 +47,7 @@ export function HeroSection() {
     <section
       id="hero"
       ref={sectionRef as React.RefObject<HTMLElement>}
-      className="relative overflow-hidden bg-white px-4 pb-20 pt-24 sm:pb-24 sm:pt-28 transition-colors duration-300"
+      className="relative overflow-hidden border-b border-charcoal/[0.06] bg-white px-4 pb-20 pt-24 sm:pb-24 sm:pt-28 transition-colors duration-300"
     >
       {/* Subtle gradient + grid pattern */}
       <div
@@ -54,11 +56,12 @@ export function HeroSection() {
       >
         <div className="absolute inset-0 bg-gradient-to-b from-teal/[0.02] via-transparent to-transparent" />
         <div
-          className="absolute inset-0 opacity-[0.4]"
+          className="absolute inset-0 opacity-[0.4] animate-mesh-move"
           style={{
             backgroundImage: `linear-gradient(rgba(0,72,56,0.03) 1px, transparent 1px),
               linear-gradient(90deg, rgba(0,72,56,0.03) 1px, transparent 1px)`,
             backgroundSize: "48px 48px",
+            willChange: "transform",
           }}
         />
       </div>
@@ -95,17 +98,17 @@ export function HeroSection() {
         {/* Headline */}
         <h1
           className={cn(
-            "mx-auto mt-8 max-w-[820px] text-4xl font-semibold leading-[1.08] tracking-tight text-charcoal sm:text-5xl md:text-display-2 lg:text-display-1 transition-all duration-700 delay-[0.1s]",
+            "mx-auto mt-8 max-w-[900px] text-balance text-4xl font-semibold leading-[1.08] tracking-[-0.02em] text-charcoal sm:text-5xl md:text-display-2 lg:text-display-1 transition-all duration-700 delay-[0.1s]",
             loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
           )}
         >
           {HERO_CONTENT.headline}
         </h1>
 
-        {/* Subheadline */}
+        {/* Subheadline — ~60ch max for comprehension (B2B readability norms) */}
         <p
           className={cn(
-            "mx-auto mt-6 max-w-[640px] text-lg leading-relaxed text-charcoal/60 transition-all duration-700 delay-[0.2s]",
+            "mx-auto mt-6 max-w-[60ch] text-lg leading-relaxed text-charcoal/65 transition-all duration-700 delay-[0.2s] sm:text-[1.0625rem]",
             loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
           )}
         >
@@ -122,7 +125,7 @@ export function HeroSection() {
           <Button
             variant="primary"
             size="lg"
-            className="gap-2 rounded-full bg-teal px-8 text-white shadow-lg shadow-teal/20 hover:bg-teal-dark hover:shadow-teal/25"
+            className="h-12 min-h-[48px] gap-2 rounded-full border-0 bg-[#f16e2c] px-8 text-[15px] text-white shadow-lg shadow-[#f16e2c]/25 transition-colors hover:bg-[#e06222] focus-visible:ring-2 focus-visible:ring-[#f16e2c]/50 sm:h-12"
             asChild
           >
             <Link
@@ -139,7 +142,7 @@ export function HeroSection() {
           <Button
             variant="secondary"
             size="lg"
-            className="gap-2 rounded-full border-2 border-charcoal/15 bg-white px-8 text-charcoal shadow-sm hover:bg-charcoal/[0.03] hover:border-charcoal/25"
+            className="h-12 min-h-[48px] gap-2 rounded-full border-2 border-charcoal/15 bg-white px-8 text-[15px] text-charcoal shadow-sm hover:border-charcoal/30 hover:bg-charcoal/[0.04]"
             asChild
           >
             <Link
@@ -153,22 +156,59 @@ export function HeroSection() {
           </Button>
         </div>
 
+        <p
+          className={cn(
+            "mt-3 text-center text-sm text-charcoal/45 transition-all duration-700 delay-[0.35s]",
+            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2",
+          )}
+        >
+          {HERO_CONTENT.ctaRiskReducer}
+        </p>
+
+        {/* Comprehension chips — scannable “why us” before the fold (F-pattern) */}
+        <ul
+          className={cn(
+            "mx-auto mt-8 grid max-w-4xl grid-cols-1 gap-3 sm:mt-9 sm:grid-cols-3 sm:gap-4 transition-all duration-700 delay-[0.38s]",
+            loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
+          )}
+        >
+          {HERO_CONTENT.valuePills.map((item) => (
+            <li
+              key={item.label}
+              className="flex gap-2.5 rounded-2xl border border-charcoal/[0.08] bg-charcoal/[0.02] px-4 py-3 text-left sm:flex-col sm:px-3.5 sm:py-3.5"
+            >
+              <CheckCircle2
+                className="mt-0.5 h-4 w-4 shrink-0 text-[#f16e2c] sm:mt-0"
+                strokeWidth={2}
+                aria-hidden
+              />
+              <div>
+                <p className="text-sm font-semibold text-charcoal">{item.label}</p>
+                <p className="mt-0.5 text-xs leading-snug text-charcoal/50">{item.detail}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+
         {/* Star rating + social proof with icon */}
         <div
           className={cn(
-            "mt-6 flex items-center justify-center gap-3 transition-all duration-700 delay-[0.4s]",
+            "mt-8 flex flex-col items-center justify-center gap-2 sm:mt-9 sm:flex-row sm:gap-3 transition-all duration-700 delay-[0.42s]",
             loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
           )}
         >
           <div className="flex items-center gap-0.5 rounded-lg border border-charcoal/8 bg-white px-3 py-1.5 shadow-sm">
             <div className="flex gap-0.5" aria-hidden="true">
-              {[1, 2, 3, 4, 5].map((i) => (
+              {[1, 2, 3, 4].map((i) => (
                 <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
               ))}
+              <Star className="h-4 w-4 fill-amber-400/60 text-amber-400" />
             </div>
-            <span className="ml-1.5 text-sm font-semibold text-charcoal">5.0</span>
+            <span className="ml-1.5 text-sm font-semibold text-charcoal">4.8</span>
           </div>
-          <span className="text-sm text-charcoal/50">{HERO_CONTENT.socialProof}</span>
+          <span className="max-w-[20rem] text-center text-sm text-charcoal/50 sm:text-left">
+            {HERO_CONTENT.socialProof}
+          </span>
         </div>
 
         {/* Bento card grid */}
@@ -180,15 +220,17 @@ export function HeroSection() {
         >
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-12 lg:gap-4">
             {/* Card 1: Image — tall left */}
-            <div className="col-span-1 row-span-2 lg:col-span-3 overflow-hidden rounded-2xl border border-charcoal/10 shadow-lg min-h-[200px] sm:min-h-[260px]">
+            <div className="col-span-1 row-span-2 lg:col-span-3 relative min-h-[200px] overflow-hidden rounded-2xl border border-charcoal/10 shadow-lg sm:min-h-[260px]">
               <Image
-                src="/images/landing/hero-team.jpg"
+                src={MARKETING_IMAGES.heroTeam}
                 alt="Team collaborating on sprint planning"
-                width={400}
-                height={520}
+                width={800}
+                height={1040}
                 className="h-full w-full object-cover"
                 priority
+                sizes="(max-width: 1024px) 50vw, 25vw"
               />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-teal/[0.07]" />
             </div>
 
             {/* Card 2: Teal stat with icon */}
@@ -228,8 +270,8 @@ export function HeroSection() {
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
                 <Settings2 className="h-5 w-5 text-white/90" strokeWidth={1.5} />
               </span>
-              <p className="text-sm leading-snug text-white/90">
-                Achieve Optimal Efficiency and Boost Productivity
+              <p className="text-sm font-medium leading-snug text-white/95">
+                One plan the whole team can defend—EM, PM, and ICs aligned.
               </p>
             </div>
 

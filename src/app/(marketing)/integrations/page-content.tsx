@@ -467,7 +467,7 @@ export default function IntegrationsPage() {
       {/* ============================================================ */}
       <Section variant="white" className="pt-28 pb-12 sm:pt-36 sm:pb-16">
         <div className="mx-auto max-w-3xl text-center">
-          <Chip dotColor="#12FF80" className="mb-6">
+          <Chip dotColor="#0d9488" className="mb-6">
             Integrations
           </Chip>
 
@@ -577,7 +577,7 @@ export default function IntegrationsPage() {
       {/* ============================================================ */}
       <Section variant="violet" className="py-16 sm:py-24">
         <div className="mx-auto max-w-3xl text-center">
-          <Chip dotColor="#12FF80" className="mb-6">
+          <Chip dotColor="#0d9488" className="mb-6">
             How It Works
           </Chip>
           <h2 className="text-2xl font-semibold tracking-tight text-theme sm:text-heading-1">

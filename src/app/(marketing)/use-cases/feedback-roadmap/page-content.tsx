@@ -47,7 +47,7 @@ const INDIGO = "#6366F1";
 const INDIGO_LIGHT = "rgba(99, 102, 241, 0.12)";
 const INDIGO_GLOW = "rgba(99, 102, 241, 0.18)";
 const RED_BADGE = "#EF4444";
-const GREEN_ACCENT = "#12FF80";
+const GREEN_ACCENT = "#0d9488";
 
 /* ---------- animated entrance hook ---------- */
 function useReveal() {
