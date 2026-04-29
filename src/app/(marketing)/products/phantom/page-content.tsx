@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
 import { Chip } from "@/components/ui/chip";
 import Link from "next/link";
+import { buildProductCheckoutUrl } from "@/lib/product-purchase";
 import { PhantomIllustration } from "@/components/illustrations/product-illustrations";
 import {
   Radar,
@@ -31,7 +32,6 @@ import {
   Server,
   FileCode2,
   ChevronRight,
-  Mail,
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
@@ -687,7 +687,6 @@ function PhantomTrackVisual() {
 
 export default function PhantomPage() {
   const [devCount, setDevCount] = useState(25);
-  const [email, setEmail] = useState("");
   const [mounted, setMounted] = useState(false);
   const roiRef = useRef<HTMLDivElement>(null);
 
@@ -789,7 +788,7 @@ export default function PhantomPage() {
               dotColor={CYAN}
               className="border border-cyan-500/20 bg-cyan-950/30 backdrop-blur-sm"
             >
-              Coming Q3 2026
+              Add-on at checkout
             </Chip>
             <span className="enterprise-badge">
               <Shield className="h-3 w-3" />
@@ -847,16 +846,14 @@ export default function PhantomPage() {
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <Button
-              size="lg"
-              className="bg-cyan-500 text-black hover:bg-cyan-400"
-            >
-              <Mail className="h-4 w-4" />
-              Join the Waitlist
+            <Button size="lg" className="bg-cyan-500 text-black hover:bg-cyan-400" asChild>
+              <Link href={buildProductCheckoutUrl({ product: "phantom", plan: "pro" })} className="inline-flex items-center gap-2">
+                Start 14-day trial
+                <ArrowDownRight className="h-4 w-4" />
+              </Link>
             </Button>
-            <Button variant="ghost" size="lg">
-              Learn More
-              <ArrowDownRight className="h-4 w-4" />
+            <Button variant="secondary" size="lg" asChild>
+              <Link href="/pricing">View pricing</Link>
             </Button>
           </div>
         </div>
@@ -1642,38 +1639,31 @@ export default function PhantomPage() {
         <div className="max-w-2xl mx-auto text-center">
           <Ghost className="h-12 w-12 mx-auto mb-6" style={{ color: CYAN }} />
           <h2 className="text-heading-1 text-theme mb-4">
-            See the debt others can&apos;t
+            Quantify debt in dollars, on your timeline
           </h2>
           <p className="text-body-lg text-theme-s mb-8 max-w-lg mx-auto">
-            PHANTOM launches Q3 2026. Join the waitlist and be the first to
-            X-ray your codebase.
+            PHANTOM is a priced add-on to your Voatomy plan. Start a 14-day trial, configure seats
+            on checkout, and subscribe on-site.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center gap-3 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="you@company.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className={cn(
-                "flex-1 w-full h-12 rounded-xl px-4 text-sm bg-theme-input border border-theme",
-                "text-theme placeholder:text-theme-m",
-                "focus:outline-none focus:ring-2 focus:ring-cyan-500/40 focus:border-cyan-500/30",
-                "transition-all duration-200",
-              )}
-            />
-            <Button
-              size="lg"
-              className="w-full sm:w-auto bg-cyan-500 text-black hover:bg-cyan-400 shrink-0"
-            >
-              Join Waitlist
-              <ArrowRight className="h-4 w-4" />
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto">
+            <Button size="lg" className="w-full sm:w-auto bg-cyan-500 text-black hover:bg-cyan-400 shrink-0" asChild>
+              <Link href={buildProductCheckoutUrl({ product: "phantom", plan: "pro" })} className="inline-flex items-center gap-2">
+                Start 14-day trial
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="secondary" className="w-full sm:w-auto" asChild>
+              <Link href={buildProductCheckoutUrl({ product: "phantom", plan: "business" })}>Business checkout</Link>
             </Button>
           </div>
 
           <p className="text-xs text-theme-f mt-4">
-            No spam. We&apos;ll notify you when PHANTOM is ready for early
-            access.
+            Enterprise?{" "}
+            <Link href="/contact?plan=enterprise" className="text-brand underline-offset-2 hover:underline">
+              Contact sales
+            </Link>
+            .
           </p>
         </div>
       </Section>

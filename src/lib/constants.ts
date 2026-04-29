@@ -714,6 +714,17 @@ export const PRODUCT_ADD_ONS = [
     color: "#22D3EE",
     included: false,
   },
+  {
+    key: "nexus" as const,
+    name: "NEXUS",
+    tagline: "Organizational Nerve Center",
+    icon: "🧬",
+    monthlyPrice: 10,
+    annualPrice: 8,
+    note: "Per user / month · Unifies all products",
+    color: "#10B981",
+    included: false,
+  },
 ] as const;
 
 export const PRICING_FEATURE_GROUPS = [

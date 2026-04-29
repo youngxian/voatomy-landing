@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
 import { Chip } from "@/components/ui/chip";
-import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { buildProductCheckoutUrl } from "@/lib/product-purchase";
 import { NexusIllustration } from "@/components/illustrations/product-illustrations";
 import {
   Search,
@@ -38,7 +38,6 @@ import {
   Headphones,
   FileText,
   Building2,
-  Send,
 } from "lucide-react";
 
 /* ─────────────────────── constants ─────────────────────── */
@@ -935,11 +934,11 @@ export default function NexusProductPage() {
         >
           <div className="flex items-center justify-center gap-3 mb-8">
             <Chip dotColor="#10B981" className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 backdrop-blur-sm">
-              Coming 2027
+              Subscribe on-site
             </Chip>
             <span className="enterprise-badge text-emerald-300/60">
               <Shield className="h-3 w-3" />
-              Enterprise Only
+              Business + NEXUS add-on
             </span>
           </div>
 
@@ -964,8 +963,8 @@ export default function NexusProductPage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" className="bg-emerald-500 hover:bg-emerald-400 text-black font-semibold" asChild>
-              <Link href="#contact">
-                Talk to Our Team <ArrowRight className="ml-1 h-4 w-4" />
+              <Link href={buildProductCheckoutUrl({ product: "nexus", plan: "business" })}>
+                Start 14-day trial <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
             <Button variant="ghost" size="lg" className="text-white/60 hover:text-white hover:bg-white/5" asChild>
@@ -973,7 +972,18 @@ export default function NexusProductPage() {
                 Explore the Platform <ChevronRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
+            <Button
+              variant="secondary"
+              size="lg"
+              className="border border-white/20 bg-white/10 text-white hover:bg-white/15"
+              asChild
+            >
+              <Link href="/contact?plan=enterprise">Enterprise quote</Link>
+            </Button>
           </div>
+          <p className="mx-auto max-w-md pt-2 text-center text-xs text-white/40">
+            NEXUS is billed as an add-on. Trial starts on the Business plan with NEXUS pre-selected at checkout.
+          </p>
 
           {/* Decorative gradient bar */}
           <div className="mx-auto mt-16 h-px w-full max-w-lg bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent" />
@@ -1479,52 +1489,34 @@ export default function NexusProductPage() {
                   </div>
                   <h2 className="text-heading-1 text-white mb-3">Ready for NEXUS?</h2>
                   <p className="text-body-base text-white/40 max-w-md mx-auto">
-                    Join the early access list for the complete Voatomy platform. Our team will work with you to plan the rollout.
+                    Start a 14-day trial on the Business plan with the NEXUS add-on pre-selected, or talk to us for
+                    enterprise deployment and volume pricing.
                   </p>
                 </div>
 
-                <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Input
-                      id="name"
-                      label="Full Name"
-                      placeholder="Jane Smith"
-                      className="bg-white/[0.03] border-white/10 text-white placeholder:text-white/20"
-                    />
-                    <Input
-                      id="email"
-                      label="Work Email"
-                      type="email"
-                      placeholder="jane@company.com"
-                      className="bg-white/[0.03] border-white/10 text-white placeholder:text-white/20"
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Input
-                      id="company"
-                      label="Company"
-                      placeholder="Acme Inc"
-                      className="bg-white/[0.03] border-white/10 text-white placeholder:text-white/20"
-                    />
-                    <Input
-                      id="team-size"
-                      label="Team Size"
-                      placeholder="50-200"
-                      className="bg-white/[0.03] border-white/10 text-white placeholder:text-white/20"
-                    />
-                  </div>
-
+                <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+                  <Button size="lg" className="bg-emerald-500 hover:bg-emerald-400 text-black font-semibold" asChild>
+                    <Link href={buildProductCheckoutUrl({ product: "nexus", plan: "business" })}>
+                      Start 14-day trial
+                      <ArrowRight className="ml-2 h-4 w-4 inline" />
+                    </Link>
+                  </Button>
                   <Button
                     size="lg"
-                    className="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-semibold mt-2"
+                    variant="secondary"
+                    className="border border-white/15 bg-white/5 text-white hover:bg-white/10"
+                    asChild
                   >
-                    <Send className="mr-2 h-4 w-4" />
-                    Request Early Access
+                    <Link href="/contact?plan=enterprise">Enterprise &amp; VPC</Link>
                   </Button>
-                </form>
+                </div>
 
-                <p className="mt-6 text-center text-xs text-white/20">
-                  Enterprise custom pricing &middot; Dedicated onboarding &middot; Custom SLAs
+                <p className="mt-8 text-center text-xs text-white/20">
+                  Custom SLAs, SSO, and on-prem &mdash; use Enterprise quote. Base platform pricing at{" "}
+                  <Link href="/pricing" className="text-emerald-400/90 underline-offset-2 hover:underline">
+                    /pricing
+                  </Link>
+                  .
                 </p>
               </div>
             </div>

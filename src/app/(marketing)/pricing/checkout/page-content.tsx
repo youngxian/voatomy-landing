@@ -20,6 +20,7 @@ import {
   Building2,
 } from "lucide-react";
 import { usePricing } from "@/hooks/use-pricing";
+import { isPurchasableProductKey } from "@/lib/product-purchase";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_ONBOARDING_API_URL?.replace("/v1", "") ??
@@ -78,9 +79,43 @@ export default function CheckoutPage() {
   const [seats, setSeats] = React.useState(seatsParam ? Math.max(1, parseInt(seatsParam, 10) || 1) : 5);
   const [annual, setAnnual] = React.useState(true);
   const [selectedProducts, setSelectedProducts] = React.useState<Set<string>>(
-    new Set(["atlas"]),
+    () => {
+      const next = new Set<string>(["atlas"]);
+      const addonsParam = searchParams.get("addons");
+      const productParam = searchParams.get("product");
+      if (productParam && isPurchasableProductKey(productParam) && productParam !== "atlas") {
+        next.add(productParam);
+      }
+      if (addonsParam) {
+        for (const raw of addonsParam.split(",")) {
+          const k = raw.trim().toLowerCase();
+          if (isPurchasableProductKey(k) && k !== "atlas") {
+            next.add(k);
+          }
+        }
+      }
+      return next;
+    },
   );
   const [loading, setLoading] = React.useState(false);
+
+  const addonsKey = searchParams.get("addons");
+  const productKey = searchParams.get("product");
+  React.useEffect(() => {
+    const next = new Set<string>(["atlas"]);
+    if (productKey && isPurchasableProductKey(productKey) && productKey !== "atlas") {
+      next.add(productKey);
+    }
+    if (addonsKey) {
+      for (const raw of addonsKey.split(",")) {
+        const k = raw.trim().toLowerCase();
+        if (isPurchasableProductKey(k) && k !== "atlas") {
+          next.add(k);
+        }
+      }
+    }
+    setSelectedProducts(next);
+  }, [addonsKey, productKey]);
 
   const basePrice = annual ? planInfo.annualPrice : planInfo.monthlyPrice;
   const volumeTier = getVolumeDiscount(seats);

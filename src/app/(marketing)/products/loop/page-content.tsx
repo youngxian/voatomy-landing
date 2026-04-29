@@ -28,7 +28,6 @@ import {
   MessageSquare,
   Mic,
   Phone,
-  RefreshCcw,
   Repeat2,
   Send,
   Sparkles,
@@ -46,6 +45,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { usePricing } from "@/hooks/use-pricing";
+import { buildProductCheckoutUrl } from "@/lib/product-purchase";
 
 /* ================================================================
    LOOP — Revenue Feedback Engine
@@ -120,7 +120,7 @@ function HeroSection() {
               className="h-2 w-2 rounded-full animate-glow-pulse"
               style={{ background: LOOP_COLOR }}
             />
-            Coming Q3 2026
+            Available on Pro &amp; Business
           </span>
           <span className="enterprise-badge">
             <Shield className="h-3 w-3" />
@@ -165,25 +165,28 @@ function HeroSection() {
         {/* CTA */}
         <div
           className={cn(
-            "mx-auto mt-12 flex max-w-md flex-col items-center gap-3 sm:flex-row transition-all duration-700 delay-500",
+            "mx-auto mt-12 flex max-w-lg flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center transition-all duration-700 delay-500",
             loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
           )}
         >
-          <input
-            type="email"
-            placeholder="Enter your work email"
-            className="h-12 w-full flex-1 rounded-xl border border-theme bg-theme-subtle px-4 text-sm text-charcoal placeholder:text-charcoal/40 focus:outline-none focus:ring-2 transition-colors duration-300"
-            style={{
-              borderColor: "rgba(99,102,241,0.3)",
-            }}
-          />
           <Button
             size="lg"
-            className="w-full sm:w-auto gap-2 text-white"
+            className="w-full gap-2 text-white sm:w-auto"
             style={{ background: LOOP_COLOR }}
+            asChild
           >
-            Join Waitlist
-            <ArrowRight className="h-4 w-4" />
+            <Link href={buildProductCheckoutUrl({ product: "loop", plan: "pro" })}>
+              Start 14-day trial
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
+          <Button
+            size="lg"
+            variant="secondary"
+            className="w-full sm:w-auto"
+            asChild
+          >
+            <Link href="/pricing">View pricing</Link>
           </Button>
         </div>
 
@@ -199,9 +202,9 @@ function HeroSection() {
             PMs &middot; Sales &middot; Marketing &middot; CS
           </span>
           <span className="text-charcoal/40">|</span>
-          <span>From $39/user/mo</span>
+          <span>Add-on from $6/user/mo (billed annually)</span>
           <span className="text-charcoal/40">|</span>
-          <span>No credit card required</span>
+          <span>14-day trial, then subscribe on-site</span>
         </div>
       </div>
     </section>
@@ -1175,19 +1178,10 @@ function StatsSection() {
 }
 
 /* ================================================================
-   WAITLIST CTA
+   PURCHASE CTA
    ================================================================ */
 function WaitlistSection() {
   const { ref, inView } = useInView();
-  const [email, setEmail] = React.useState("");
-  const [joined, setJoined] = React.useState(false);
-
-  const handleJoin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email.includes("@")) {
-      setJoined(true);
-    }
-  };
 
   return (
     <Section variant="sky" className="py-24 sm:py-32">
@@ -1224,8 +1218,8 @@ function WaitlistSection() {
                 inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
               )}
             >
-              Join the{" "}
-              <span style={{ color: LOOP_COLOR }}>LOOP</span> waitlist
+              Add{" "}
+              <span style={{ color: LOOP_COLOR }}>LOOP</span> to your plan
             </h2>
 
             <p
@@ -1234,88 +1228,47 @@ function WaitlistSection() {
                 inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
               )}
             >
-              Be among the first to close the gap between what customers need and
-              what engineering delivers. Early access begins Q3 2026.
+              Close the loop between revenue signals and your backlog. Start a 14-day trial
+              and complete purchase on the next step—no sales call required for Pro or Business.
             </p>
 
-            {!joined ? (
-              <form
-                onSubmit={handleJoin}
-                className={cn(
-                  "mx-auto mt-8 flex max-w-md flex-col gap-3 sm:flex-row transition-all duration-700 delay-300",
-                  inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
-                )}
+            <div
+              className={cn(
+                "mx-auto mt-8 flex max-w-md flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center",
+                inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
+                "transition-all duration-700 delay-300",
+              )}
+            >
+              <Button
+                size="lg"
+                className="w-full gap-2 text-white sm:w-auto"
+                style={{ background: LOOP_COLOR }}
+                asChild
               >
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@company.com"
-                  required
-                  className="h-12 flex-1 rounded-xl border border-theme bg-theme-subtle px-4 text-sm text-charcoal placeholder:text-charcoal/45 focus:outline-none focus:ring-2 transition-colors duration-300"
-                  style={{ borderColor: "rgba(99,102,241,0.3)" }}
-                />
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="w-full sm:w-auto gap-2 text-white"
-                  style={{ background: LOOP_COLOR }}
-                >
-                  Get Early Access
+                <Link href={buildProductCheckoutUrl({ product: "loop", plan: "pro" })}>
+                  Start 14-day trial
                   <ArrowRight className="h-4 w-4" />
-                </Button>
-              </form>
-            ) : (
-              <div
-                className="mx-auto mt-8 flex max-w-md flex-col items-center gap-3 rounded-2xl border p-6"
-                style={{
-                  borderColor: "rgba(99,102,241,0.3)",
-                  background: LOOP_COLOR_LIGHT,
-                }}
-              >
-                <div
-                  className="grid h-12 w-12 place-items-center rounded-full"
-                  style={{ background: LOOP_COLOR }}
-                >
-                  <RefreshCcw className="h-6 w-6 text-white" />
-                </div>
-                <p className="text-lg font-semibold text-charcoal">
-                  You&apos;re in the loop!
-                </p>
-                <p className="text-sm text-charcoal/70">
-                  Position <span className="font-bold" style={{ color: LOOP_COLOR }}>#847</span> on
-                  the waitlist. We&apos;ll be in touch soon.
-                </p>
-              </div>
-            )}
+                </Link>
+              </Button>
+              <Button size="lg" variant="secondary" className="w-full sm:w-auto" asChild>
+                <Link href={buildProductCheckoutUrl({ product: "loop", plan: "business" })}>
+                  Business plan checkout
+                </Link>
+              </Button>
+            </div>
 
-            {/* Waitlist counter */}
-            {!joined && (
-              <div
-                className={cn(
-                  "mt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-charcoal/70 transition-all duration-700 delay-400",
-                  inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
-                )}
-              >
-                <span className="flex items-center gap-1.5">
-                  <span className="relative flex h-2 w-2">
-                    <span
-                      className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
-                      style={{ background: LOOP_COLOR }}
-                    />
-                    <span
-                      className="relative inline-flex h-2 w-2 rounded-full"
-                      style={{ background: LOOP_COLOR }}
-                    />
-                  </span>
-                  846 teams already waiting
-                </span>
-                <span className="text-charcoal/45">|</span>
-                <span>No credit card required</span>
-                <span className="text-charcoal/45">|</span>
-                <span>Free for early adopters</span>
-              </div>
-            )}
+            <p
+              className={cn(
+                "mt-6 text-xs text-charcoal/55",
+                inView ? "opacity-100" : "opacity-0",
+                "transition-all duration-700 delay-400",
+              )}
+            >
+              Need Enterprise (SSO, VPC)?{" "}
+              <Link href="/contact?plan=enterprise" className="font-medium underline-offset-2 hover:underline" style={{ color: LOOP_COLOR }}>
+                Contact sales
+              </Link>
+            </p>
           </div>
         </div>
 
@@ -1462,7 +1415,11 @@ function PricingPreviewSection() {
                     href={
                       isEnterprise
                         ? "/contact?plan=enterprise"
-                        : "/auth/signup"
+                        : tier.monthlyPrice === 0
+                          ? "/auth/signup"
+                          : tier.name === "Pro"
+                            ? buildProductCheckoutUrl({ product: "loop", plan: "pro" })
+                            : buildProductCheckoutUrl({ product: "loop", plan: "business" })
                     }
                   >
                     {isEnterprise ? "Contact Sales" : tier.cta}

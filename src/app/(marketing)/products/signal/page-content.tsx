@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { buildProductCheckoutUrl } from "@/lib/product-purchase";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
@@ -838,7 +839,7 @@ export default function SignalProductPage() {
           {/* Status badge */}
           <div className="flex items-center gap-3">
             <Chip dotColor={SIGNAL_RED} className="border border-red-500/20 bg-red-500/10 text-red-300 backdrop-blur-sm">
-              Coming 2027
+              Available now · add-on
             </Chip>
             <span className="enterprise-badge">
               <Shield className="h-3 w-3" />
@@ -886,14 +887,14 @@ export default function SignalProductPage() {
 
           {/* CTA */}
           <div className="flex flex-wrap items-center justify-center gap-4 mt-4">
-            <Button size="lg" className="bg-red-500 hover:bg-red-600 text-white border-0">
-              <Link href="/auth/signup" className="flex items-center gap-2">
-                Request Early Access <ArrowRight className="w-4 h-4" />
+            <Button size="lg" className="bg-red-500 hover:bg-red-600 text-white border-0" asChild>
+              <Link href={buildProductCheckoutUrl({ product: "signal", plan: "pro" })} className="flex items-center gap-2">
+                Start 14-day trial <ArrowRight className="w-4 h-4" />
               </Link>
             </Button>
-            <Button variant="secondary" size="lg">
-              <Link href="#how-it-works" className="flex items-center gap-2">
-                See How It Works <ChevronRight className="w-4 h-4" />
+            <Button variant="secondary" size="lg" asChild>
+              <Link href="/pricing" className="flex items-center gap-2">
+                View pricing <ChevronRight className="w-4 h-4" />
               </Link>
             </Button>
           </div>
@@ -1520,29 +1521,33 @@ export default function SignalProductPage() {
 
               <div>
                 <h2 className="text-heading-1 text-theme mb-3">
-                  Be first to know when incidents hit
+                  Add SIGNAL to your stack
                 </h2>
                 <p className="text-body-lg text-theme-s max-w-lg mx-auto">
-                  SIGNAL launches in 2027. Join the early access list and help shape the future
-                  of incident intelligence.
+                  Revenue-aware incident intelligence is available as a subscription add-on. Start
+                  a 14-day trial and check out on the next screen—same flow as the rest of Voatomy.
                 </p>
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-4 mt-2">
-                <Button size="lg" className="bg-red-500 hover:bg-red-600 text-white border-0">
-                  <Link href="/auth/signup" className="flex items-center gap-2">
-                    Request Early Access <ArrowRight className="w-4 h-4" />
+                <Button size="lg" className="bg-red-500 hover:bg-red-600 text-white border-0" asChild>
+                  <Link href={buildProductCheckoutUrl({ product: "signal", plan: "pro" })} className="flex items-center gap-2">
+                    Start 14-day trial <ArrowRight className="w-4 h-4" />
                   </Link>
                 </Button>
-                <Button variant="ghost" size="lg">
-                  <Link href="/" className="flex items-center gap-2">
-                    Back to Platform
+                <Button variant="ghost" size="lg" asChild>
+                  <Link href={buildProductCheckoutUrl({ product: "signal", plan: "business" })} className="flex items-center gap-2">
+                    Business checkout
                   </Link>
                 </Button>
               </div>
 
               <p className="text-xs text-theme-m mt-4">
-                No credit card required. Get notified when SIGNAL enters private beta.
+                Card collected after trial. Enterprise (SSO, dedicated support) via{" "}
+                <Link href="/contact?plan=enterprise" className="text-brand underline-offset-2 hover:underline">
+                  contact sales
+                </Link>
+                .
               </p>
             </div>
           </Card>

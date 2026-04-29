@@ -37,6 +37,7 @@ import {
 import { AtlasIllustration } from "@/components/illustrations/product-illustrations";
 import { BrandIcon } from "@/components/icons/brand-icons";
 import { usePricing } from "@/hooks/use-pricing";
+import { buildProductCheckoutUrl } from "@/lib/product-purchase";
 
 /* ─────────────────── Constants ─────────────────── */
 
@@ -990,12 +991,12 @@ export default function AtlasProductPage() {
                 )}
               >
                 <Button size="lg" asChild>
-                  <Link href="/auth/signup">
-                    Start Free <ArrowRight className="ml-1 h-4 w-4" />
+                  <Link href={buildProductCheckoutUrl({ product: "atlas", plan: "pro" })}>
+                    Start 14-day trial <ArrowRight className="ml-1 h-4 w-4" />
                   </Link>
                 </Button>
                 <Button variant="secondary" size="lg" asChild>
-                  <Link href="#how-it-works">See How It Works</Link>
+                  <Link href="/pricing">View pricing</Link>
                 </Button>
               </div>
 
@@ -1485,7 +1486,17 @@ export default function AtlasProductPage() {
                 ))}
               </ul>
               <Button variant={tier.highlighted ? "primary" : "secondary"} size="md" className="w-full" asChild>
-                <Link href={tier.name === "Business" ? "/contact" : "/auth/signup"}>{tier.cta}</Link>
+                <Link
+                  href={
+                    tier.name === "Free"
+                      ? "/auth/signup"
+                      : tier.name === "Pro"
+                        ? buildProductCheckoutUrl({ product: "atlas", plan: "pro" })
+                        : buildProductCheckoutUrl({ product: "atlas", plan: "business" })
+                  }
+                >
+                  {tier.cta}
+                </Link>
               </Button>
             </Card>
           ))}

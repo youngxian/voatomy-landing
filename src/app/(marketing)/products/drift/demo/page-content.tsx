@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { buildProductCheckoutUrl } from "@/lib/product-purchase";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -162,8 +163,8 @@ export default function DriftDemoPageContent() {
             )}
           >
             <Button variant="primary" size="lg" className="gap-2" asChild>
-              <Link href="/auth/signup">
-                Try Free
+              <Link href={buildProductCheckoutUrl({ product: "drift", plan: "pro" })}>
+                Start 14-day trial
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
@@ -321,8 +322,8 @@ export default function DriftDemoPageContent() {
 
           <div className="mx-auto mt-10 flex max-w-md flex-col items-center justify-center gap-3 sm:flex-row">
             <Button variant="primary" size="lg" className="gap-2" asChild>
-              <Link href="/auth/signup">
-                Try DRIFT Free
+              <Link href={buildProductCheckoutUrl({ product: "drift", plan: "pro" })}>
+                Start 14-day trial
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>

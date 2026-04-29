@@ -1,7 +1,9 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { buildProductCheckoutUrl } from "@/lib/product-purchase";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
@@ -692,7 +694,7 @@ export default function DriftPage() {
                 className="h-2 w-2 rounded-full animate-glow-pulse"
                 style={{ background: DRIFT_PURPLE }}
               />
-              Coming Q4 2026
+              Available on Pro &amp; Business
             </span>
             <span className="enterprise-badge">
               <ShieldCheck className="h-3 w-3" />
@@ -727,25 +729,18 @@ export default function DriftPage() {
           {/* CTA */}
           <div
             className={cn(
-              "mx-auto mt-10 flex max-w-md flex-col items-center gap-3 sm:flex-row transition-all duration-700 delay-300",
+              "mx-auto mt-10 flex max-w-lg flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center transition-all duration-700 delay-300",
               loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
             )}
           >
-            <input
-              type="email"
-              placeholder="your@email.com"
-              className="h-12 w-full flex-1 rounded-xl border border-theme bg-theme-subtle px-4 text-sm text-theme placeholder:text-theme-f focus:outline-none focus:ring-2 transition-colors duration-300"
-              style={{
-                borderColor: DRIFT_PURPLE_BORDER,
-              }}
-            />
-            <Button
-              size="lg"
-              className="w-full sm:w-auto gap-2"
-              style={{ background: DRIFT_PURPLE }}
-            >
-              Join Waitlist
-              <ArrowRight className="h-4 w-4" />
+            <Button size="lg" className="w-full gap-2 sm:w-auto" style={{ background: DRIFT_PURPLE }} asChild>
+              <Link href={buildProductCheckoutUrl({ product: "drift", plan: "pro" })}>
+                Start 14-day trial
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="secondary" className="w-full sm:w-auto" asChild>
+              <Link href="/pricing">View pricing</Link>
             </Button>
           </div>
 
@@ -761,9 +756,9 @@ export default function DriftPage() {
               Design &middot; Frontend &middot; Product
             </span>
             <span className="text-theme-f">|</span>
-            <span>From $19/user/mo</span>
+            <span>Add-on from $4/user/mo (annual)</span>
             <span className="text-theme-f">|</span>
-            <span>Figma &middot; GitHub &middot; Amplitude</span>
+            <span>Checkout on-site after trial</span>
           </div>
 
           {/* Split-screen visual: Figma vs Code */}
@@ -1771,41 +1766,38 @@ export default function DriftPage() {
             <span style={{ color: DRIFT_PURPLE }}>drifted designs</span>
           </h2>
           <p className="mt-4 text-body-lg text-theme-m max-w-[480px] mx-auto">
-            DRIFT launches Q4 2026. Join the waitlist to get early access and
-            help shape the future of design-code sync.
+            Subscribe to DRIFT as a Voatomy add-on. Use the same checkout as every other
+            product—Pro or Business, seats, 14-day trial, then pay on-site.
           </p>
 
-          <div className="mx-auto mt-8 flex max-w-md flex-col items-center gap-3 sm:flex-row">
-            <input
-              type="email"
-              placeholder="your@email.com"
-              className="h-12 w-full flex-1 rounded-xl border bg-theme-subtle px-4 text-sm text-theme placeholder:text-theme-f focus:outline-none focus:ring-2 transition-colors duration-300"
-              style={{ borderColor: DRIFT_PURPLE_BORDER }}
-            />
-            <Button
-              size="lg"
-              className="w-full sm:w-auto gap-2 text-white"
-              style={{ background: DRIFT_PURPLE }}
-            >
-              Join Waitlist
-              <ArrowRight className="h-4 w-4" />
+          <div className="mx-auto mt-8 flex max-w-md flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+            <Button size="lg" className="w-full gap-2 text-white sm:w-auto" style={{ background: DRIFT_PURPLE }} asChild>
+              <Link href={buildProductCheckoutUrl({ product: "drift", plan: "pro" })}>
+                Start 14-day trial
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="secondary" className="w-full sm:w-auto" asChild>
+              <Link href={buildProductCheckoutUrl({ product: "drift", plan: "business" })}>Business checkout</Link>
             </Button>
           </div>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-theme-m">
             <span className="flex items-center gap-1.5">
               <Heart className="h-3.5 w-3.5" style={{ color: DRIFT_PURPLE }} />
-              Free during beta
+              14-day trial included
             </span>
             <span className="text-theme-f">|</span>
             <span className="flex items-center gap-1.5">
               <Clock className="h-3.5 w-3.5" style={{ color: DRIFT_PURPLE }} />
-              From $19/user/mo after
+              Billed with your Voatomy plan
             </span>
             <span className="text-theme-f">|</span>
             <span className="flex items-center gap-1.5">
               <Users className="h-3.5 w-3.5" style={{ color: DRIFT_PURPLE }} />
-              1,200+ on the list
+              <Link href="/contact?plan=enterprise" className="hover:text-theme underline-offset-2 hover:underline">
+                Enterprise
+              </Link>
             </span>
           </div>
         </div>

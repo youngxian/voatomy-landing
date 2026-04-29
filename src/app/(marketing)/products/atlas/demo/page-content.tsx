@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { buildProductCheckoutUrl } from "@/lib/product-purchase";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -164,8 +165,8 @@ export default function AtlasDemoPageContent() {
             )}
           >
             <Button variant="primary" size="lg" className="gap-2" asChild>
-              <Link href="/auth/signup">
-                Try Free
+              <Link href={buildProductCheckoutUrl({ product: "atlas", plan: "pro" })}>
+                Start 14-day trial
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
@@ -317,14 +318,14 @@ export default function AtlasDemoPageContent() {
           </h2>
 
           <p className="mx-auto mt-5 max-w-[520px] text-lg leading-relaxed text-theme-m">
-            Connect your repo, import your backlog, and let ATLAS generate your
-            first AI-powered sprint plan. No credit card required.
+            Connect your repo, import your backlog, and start a 14-day trial. Add a card at
+            checkout when you&apos;re ready to subscribe.
           </p>
 
           <div className="mx-auto mt-10 flex max-w-md flex-col items-center justify-center gap-3 sm:flex-row">
             <Button variant="primary" size="lg" className="gap-2" asChild>
-              <Link href="/auth/signup">
-                Try ATLAS Free
+              <Link href={buildProductCheckoutUrl({ product: "atlas", plan: "pro" })}>
+                Start 14-day trial
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>

@@ -2,6 +2,7 @@
 
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { SERVICES_GRID } from "@/lib/constants";
+import { buildProductCheckoutUrl } from "@/lib/product-purchase";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
@@ -71,9 +72,17 @@ export function ServicesSection() {
                 <p className="mt-2 text-sm leading-relaxed text-charcoal/60">
                   {SERVICES_GRID[0].description}
                 </p>
-                <Link href="/products/atlas" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-teal hover:underline">
-                  Explore <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
+                <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+                  <Link
+                    href={buildProductCheckoutUrl({ product: "atlas", plan: "pro" })}
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand"
+                  >
+                    Start 14-day trial <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                  <Link href="/products/atlas" className="inline-flex items-center gap-1.5 text-sm font-semibold text-teal hover:underline">
+                    Explore ATLAS <ArrowUpRight className="h-3.5 w-3.5" />
+                  </Link>
+                </div>
                 {/* Dashboard mockup visual */}
                 <div className="mt-6 overflow-hidden rounded-xl border border-charcoal/10 bg-white shadow-md">
                   <div className="flex items-center gap-1.5 border-b border-charcoal/10 px-3 py-2">
