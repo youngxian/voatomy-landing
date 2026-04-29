@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
+import { CASE_STUDIES } from "@/lib/case-studies";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
@@ -28,75 +29,6 @@ const PRODUCT_COLORS: Record<string, string> = {
   PHANTOM: "#ef4444",
   DRIFT: "#fbbf24",
   NEXUS: "#12FF80",
-};
-
-const CASE_STUDIES: Record<string, {
-  company: string;
-  logo: string;
-  industry: string;
-  teamSize: string;
-  products: string[];
-  headline: string;
-  overview: string;
-  challenge: string[];
-  solution: string[];
-  results: { label: string; value: string; delta: string }[];
-  quote: { text: string; author: string; role: string };
-}> = {
-  "meridian-saas": {
-    company: "Meridian SaaS", logo: "MS", industry: "SaaS", teamSize: "120 engineers", products: ["ATLAS", "PHANTOM"],
-    headline: "87% sprint accuracy with AI-powered planning",
-    overview: "Meridian SaaS is a B2B collaboration platform serving 2,000+ companies. Their engineering organization grew from 40 to 120 engineers in 18 months, and sprint planning became their biggest bottleneck.",
-    challenge: ["Sprint completion rates had dropped to 52% as the team scaled.", "Story point estimates varied wildly between teams.", "Tech debt was accumulating without quantified impact."],
-    solution: ["ATLAS deployed across 12 squads for AI-powered complexity analysis.", "PHANTOM connected for real-time tech debt cost visibility.", "Within two sprints, ATLAS calibrated to each team's patterns."],
-    results: [{ label: "Sprint Accuracy", value: "87%", delta: "+35%" }, { label: "Tech Debt Reduced", value: "42%", delta: "-42%" }, { label: "Cycle Time", value: "3.2 days", delta: "-28%" }, { label: "Planning Time", value: "-70%", delta: "reduction" }],
-    quote: { text: "ATLAS didn't just improve our estimates — it changed how we think about planning.", author: "Sarah Kim", role: "VP Engineering, Meridian SaaS" },
-  },
-  "novaledge-fintech": {
-    company: "Novaledge Financial", logo: "NF", industry: "Fintech", teamSize: "85 engineers", products: ["SIGNAL", "LOOP"],
-    headline: "Revenue-aware incidents reduced MTTR by 60%",
-    overview: "Novaledge Financial is a payment processing platform handling $4B in annual transaction volume.",
-    challenge: ["MTTR was 30 minutes with no business impact visibility.", "Product team had no CRM-connected backlog view.", "On-call couldn't distinguish $10K from $1M incidents."],
-    solution: ["SIGNAL enriched every incident with revenue impact data.", "Smart routing escalated high-revenue incidents automatically.", "LOOP connected Salesforce pipeline to the product backlog."],
-    results: [{ label: "MTTR", value: "12 min", delta: "-60%" }, { label: "Revenue Saved", value: "$2.1M", delta: "annually" }, { label: "Escalation Accuracy", value: "94%", delta: "+38%" }, { label: "False Escalations", value: "-72%", delta: "reduction" }],
-    quote: { text: "Before SIGNAL, a P1 was a P1 regardless of impact. Now our engineers know instantly whether they're dealing with a $500 issue or a $500K one.", author: "Michael Torres", role: "CTO, Novaledge Financial" },
-  },
-  "cartflow-ecommerce": {
-    company: "CartFlow", logo: "CF", industry: "E-Commerce", teamSize: "200 engineers", products: ["ATLAS", "NEXUS", "LOOP"],
-    headline: "Cross-team dependencies cut in half",
-    overview: "CartFlow is an enterprise e-commerce platform with 14 engineering squads.",
-    challenge: ["42% of sprint failures caused by untracked dependencies.", "PMs spent 18+ hours/week in alignment meetings.", "Feature prioritization disconnected from revenue data."],
-    solution: ["NEXUS built a real-time dependency graph across 14 squads.", "ATLAS generated plans accounting for cross-team dependencies.", "LOOP connected HubSpot to Linear for revenue context."],
-    results: [{ label: "Dependency Blocks", value: "-51%", delta: "reduction" }, { label: "Feature Velocity", value: "+34%", delta: "increase" }, { label: "PM Hours Saved", value: "18h/wk", delta: "per PM" }, { label: "Revenue Alignment", value: "96%", delta: "of top items" }],
-    quote: { text: "NEXUS gave us something we'd never had: a live map of who depends on whom.", author: "Jennifer Liu", role: "Director of Engineering, CartFlow" },
-  },
-  "healthbridge-platform": {
-    company: "HealthBridge", logo: "HB", industry: "Healthcare", teamSize: "60 engineers", products: ["PHANTOM", "DRIFT"],
-    headline: "Design-code drift eliminated across 3 products",
-    overview: "HealthBridge builds a HIPAA-compliant patient engagement platform with three product lines sharing a design system.",
-    challenge: ["Design tokens drifting across products threatened HIPAA compliance.", "Design team spent 40% of time auditing code.", "Tech debt slowed delivery by ~2 weeks per quarter."],
-    solution: ["DRIFT connected to Figma for continuous design-code monitoring.", "PHANTOM translated tech debt into business cost.", "Automated Slack alerts caught deviations within hours."],
-    results: [{ label: "Design Drift", value: "0%", delta: "eliminated" }, { label: "Debt Visibility", value: "100%", delta: "full" }, { label: "Dev Satisfaction", value: "+27pts", delta: "NPS" }, { label: "Audit Time", value: "-85%", delta: "reduction" }],
-    quote: { text: "DRIFT turned design consistency from a manual audit into an automated guarantee.", author: "David Park", role: "Head of Design, HealthBridge" },
-  },
-  "stackwise-enterprise": {
-    company: "Stackwise", logo: "SW", industry: "Enterprise", teamSize: "500 engineers", products: ["ATLAS", "LOOP", "SIGNAL", "NEXUS"],
-    headline: "Full-stack product intelligence across 40 teams",
-    overview: "Stackwise is an enterprise infrastructure company with 500+ engineers across 40 teams in 5 time zones.",
-    challenge: ["No unified view of engineering health for leadership.", "Customer escalations took 4 days to reach the right team.", "Sprint planning consumed 200+ person-hours per sprint."],
-    solution: ["Full Voatomy suite deployed in phased rollout.", "Executive dashboards aggregated all products.", "LOOP + SIGNAL auto-routed escalations with full context."],
-    results: [{ label: "Planning Time", value: "-65%", delta: "reduction" }, { label: "Revenue Attribution", value: "100%", delta: "of backlog" }, { label: "Teams Onboarded", value: "40", delta: "in 6 weeks" }, { label: "Escalation Time", value: "-91%", delta: "4d → 9h" }],
-    quote: { text: "Voatomy gave us a unified picture of how engineering effort connects to business outcomes.", author: "Robert Chen", role: "CTO, Stackwise" },
-  },
-  "codestream-saas": {
-    company: "CodeStream AI", logo: "CA", industry: "SaaS", teamSize: "45 engineers", products: ["ATLAS", "LOOP"],
-    headline: "Revenue-weighted backlog increased close rate by 22%",
-    overview: "CodeStream AI builds developer productivity tools. A small team competing against well-funded incumbents.",
-    challenge: ["Product decisions driven by loudest stakeholder.", "Sprint accuracy below 60%.", "Engineering felt disconnected from business outcomes."],
-    solution: ["LOOP revealed 3 features accounted for 68% of blocked pipeline.", "ATLAS replaced estimation meetings with AI plans.", "Revenue context on every ticket transformed culture."],
-    results: [{ label: "Close Rate", value: "+22%", delta: "increase" }, { label: "Feature Alignment", value: "94%", delta: "to revenue" }, { label: "Sprint Accuracy", value: "81%", delta: "+29%" }, { label: "Sales Confidence", value: "NPS 72", delta: "+40pts" }],
-    quote: { text: "Once engineers could see that the feature they were building would directly unblock $400K in pipeline, everything changed.", author: "Alex Rivera", role: "CEO, CodeStream AI" },
-  },
 };
 
 const ALL_SLUGS = Object.keys(CASE_STUDIES);

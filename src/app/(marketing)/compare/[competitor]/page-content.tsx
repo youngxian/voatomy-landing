@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
+import { COMPETITORS } from "@/lib/compare-competitors";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
@@ -21,119 +22,6 @@ import {
 } from "lucide-react";
 
 const BRAND_GREEN = "#12FF80";
-
-const COMPETITORS: Record<string, {
-  name: string;
-  tagline: string;
-  description: string;
-  category: string;
-  comparison: { feature: string; voatomy: string | boolean; competitor: string | boolean }[];
-  differentiators: string[];
-  pricing: { voatomy: string; competitor: string };
-}> = {
-  jellyfish: {
-    name: "Jellyfish", tagline: "Engineering Management Intelligence", description: "See how Voatomy compares to Jellyfish for engineering intelligence.", category: "Engineering Intelligence",
-    comparison: [
-      { feature: "AI Sprint Planning", voatomy: true, competitor: false },
-      { feature: "Engineering Metrics Dashboard", voatomy: true, competitor: true },
-      { feature: "Revenue-Weighted Backlog", voatomy: true, competitor: false },
-      { feature: "Tech Debt Quantification ($)", voatomy: true, competitor: false },
-      { feature: "Cross-Team Dependency Mapping", voatomy: true, competitor: "Limited" },
-      { feature: "Incident Revenue Impact", voatomy: true, competitor: false },
-      { feature: "Design-Code Sync", voatomy: true, competitor: false },
-      { feature: "CRM Integration", voatomy: true, competitor: false },
-      { feature: "Git + Project Integration", voatomy: true, competitor: true },
-      { feature: "Custom Reporting", voatomy: true, competitor: true },
-    ],
-    differentiators: ["Generates sprint plans — not just reports on past performance", "Revenue intelligence connects customer signals to priorities", "Tech debt in dollars, not code metrics", "Six purpose-built products vs. one dashboard"],
-    pricing: { voatomy: "From $29/user/mo", competitor: "Custom (~$50K+/yr)" },
-  },
-  productboard: {
-    name: "Productboard", tagline: "Product Management Platform", description: "Compare Voatomy and Productboard for product-engineering alignment.", category: "Product Management",
-    comparison: [
-      { feature: "Customer Feedback Aggregation", voatomy: true, competitor: true },
-      { feature: "Revenue-Weighted Prioritization", voatomy: true, competitor: "Limited" },
-      { feature: "AI Sprint Planning", voatomy: true, competitor: false },
-      { feature: "Roadmap Visualization", voatomy: "Q2 2026", competitor: true },
-      { feature: "CRM Revenue Attribution", voatomy: true, competitor: "Limited" },
-      { feature: "Engineering Complexity Scoring", voatomy: true, competitor: false },
-      { feature: "Incident Business Impact", voatomy: true, competitor: false },
-      { feature: "Cross-Team Dependencies", voatomy: true, competitor: false },
-      { feature: "Design System Monitoring", voatomy: true, competitor: false },
-      { feature: "Jira/Linear/Asana Sync", voatomy: true, competitor: true },
-    ],
-    differentiators: ["Bridges product AND engineering workflows", "Revenue data from CRM, not manual input", "AI plans that account for code complexity", "Full incident intelligence layer"],
-    pricing: { voatomy: "From $29/user/mo", competitor: "From $20/maker/mo" },
-  },
-  pagerduty: {
-    name: "PagerDuty", tagline: "Incident Management Platform", description: "Compare Voatomy SIGNAL with PagerDuty for incident management.", category: "Incident Management",
-    comparison: [
-      { feature: "On-Call Scheduling", voatomy: "Via integration", competitor: true },
-      { feature: "Alert Routing & Escalation", voatomy: true, competitor: true },
-      { feature: "Revenue Impact per Incident", voatomy: true, competitor: false },
-      { feature: "Customer Identification", voatomy: true, competitor: false },
-      { feature: "SLA-Aware Escalation", voatomy: true, competitor: "Limited" },
-      { feature: "Post-Incident Cost Reporting", voatomy: true, competitor: false },
-      { feature: "AI Sprint Planning", voatomy: true, competitor: false },
-      { feature: "CRM Data Integration", voatomy: true, competitor: false },
-      { feature: "Monitoring Integrations", voatomy: true, competitor: true },
-      { feature: "Status Page", voatomy: false, competitor: true },
-    ],
-    differentiators: ["Business context PagerDuty can't provide — revenue, customers, SLA impact", "Complement: PagerDuty for on-call + SIGNAL for business intel", "Post-incident cost in dollars", "Incidents inform future sprint capacity"],
-    pricing: { voatomy: "From $29/user/mo", competitor: "From $21/user/mo" },
-  },
-  sonarqube: {
-    name: "SonarQube", tagline: "Code Quality & Security", description: "Compare Voatomy PHANTOM with SonarQube for tech debt management.", category: "Code Quality",
-    comparison: [
-      { feature: "Static Code Analysis", voatomy: "Via integration", competitor: true },
-      { feature: "Security Scanning", voatomy: false, competitor: true },
-      { feature: "Debt → Dollar Translation", voatomy: true, competitor: false },
-      { feature: "Debt Impact on Velocity", voatomy: true, competitor: false },
-      { feature: "Code Smell Detection", voatomy: "Via integration", competitor: true },
-      { feature: "Business Case Generation", voatomy: true, competitor: false },
-      { feature: "Sprint Planning Integration", voatomy: true, competitor: false },
-      { feature: "Revenue Prioritization", voatomy: true, competitor: false },
-      { feature: "Multi-Language Support", voatomy: true, competitor: true },
-      { feature: "CI/CD Integration", voatomy: true, competitor: true },
-    ],
-    differentiators: ["Answers 'how much is debt costing?' — SonarQube answers 'where is it?'", "SonarQube for detection, PHANTOM for prioritization", "Debt in velocity-days and dollar impact", "Automatic debt capacity in sprint plans"],
-    pricing: { voatomy: "From $29/user/mo", competitor: "Free / From $150/yr" },
-  },
-  gong: {
-    name: "Gong", tagline: "Revenue Intelligence Platform", description: "Compare Voatomy LOOP with Gong for revenue intelligence.", category: "Revenue Intelligence",
-    comparison: [
-      { feature: "Call Recording & Analysis", voatomy: "Via Gong integration", competitor: true },
-      { feature: "Feature Request Extraction", voatomy: true, competitor: "Limited" },
-      { feature: "CRM Revenue Attribution", voatomy: true, competitor: true },
-      { feature: "Backlog Revenue Weighting", voatomy: true, competitor: false },
-      { feature: "Sprint Integration", voatomy: true, competitor: false },
-      { feature: "Support Ticket Analysis", voatomy: true, competitor: false },
-      { feature: "Deal-to-Feature Mapping", voatomy: true, competitor: false },
-      { feature: "Competitive Intelligence", voatomy: false, competitor: true },
-      { feature: "Sales Coaching", voatomy: false, competitor: true },
-      { feature: "Product-Revenue Alignment", voatomy: true, competitor: "Limited" },
-    ],
-    differentiators: ["LOOP extends Gong intelligence to engineering backlogs", "Gong captures signals, LOOP translates to priorities", "Revenue weighting across ALL channels", "Direct sprint planning integration"],
-    pricing: { voatomy: "From $29/user/mo", competitor: "Custom (~$100+/user/mo)" },
-  },
-  "incident-io": {
-    name: "incident.io", tagline: "Modern Incident Management", description: "Compare Voatomy SIGNAL with incident.io for incident management.", category: "Incident Management",
-    comparison: [
-      { feature: "Slack-Native Management", voatomy: true, competitor: true },
-      { feature: "Automated Workflows", voatomy: true, competitor: true },
-      { feature: "Revenue Impact Scoring", voatomy: true, competitor: false },
-      { feature: "Customer Impact ID", voatomy: true, competitor: false },
-      { feature: "Post-Incident Reviews", voatomy: true, competitor: true },
-      { feature: "On-Call Management", voatomy: "Via integration", competitor: true },
-      { feature: "CRM Data Enrichment", voatomy: true, competitor: false },
-      { feature: "Sprint Planning Integration", voatomy: true, competitor: false },
-      { feature: "Status Page", voatomy: false, competitor: true },
-      { feature: "Service Catalog", voatomy: false, competitor: true },
-    ],
-    differentiators: ["'What's the business cost?' for every incident", "P1s defined by business impact, not severity", "Connected to full Voatomy suite for planning + product decisions", "Customer-level impact with CRM data"],
-    pricing: { voatomy: "From $29/user/mo", competitor: "Free / Custom (Pro)" },
-  },
-};
 
 const ALL_COMPETITORS = Object.keys(COMPETITORS);
 

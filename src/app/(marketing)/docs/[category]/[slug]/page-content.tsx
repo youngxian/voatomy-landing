@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
+import { DOCS_DATA, SIDEBAR_NAV } from "@/lib/docs-content";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Section } from "@/components/ui/section";
@@ -20,139 +21,6 @@ import {
 } from "lucide-react";
 
 const BRAND_GREEN = "#12FF80";
-
-const DOCS_DATA: Record<string, Record<string, { title: string; description: string; content: string[] }>> = {
-  "getting-started": {
-    "quickstart": {
-      title: "Quickstart Guide",
-      description: "Get up and running with Voatomy in under 5 minutes.",
-      content: [
-        "Welcome to Voatomy! This guide walks you through setting up your workspace from scratch. By the end, you'll have a fully configured environment ready for AI-powered sprint planning.",
-        "Step 1: Create your workspace. Sign up at app.voatomy.com and choose a workspace name. This will be your team's home base for all Voatomy products.",
-        "Step 2: Invite your team. Navigate to Settings → Team and send invitations via email. Team members can be assigned roles: Admin, Manager, or Member.",
-        "Step 3: Connect your first integration. Go to Settings → Integrations and connect GitHub, GitLab, or Jira. OAuth flows handle authentication automatically.",
-        "Step 4: Run your first analysis. Once connected, ATLAS will begin analyzing your repositories. Initial analysis takes 2-5 minutes depending on repo size.",
-      ],
-    },
-    "workspace-setup": {
-      title: "Workspace Setup",
-      description: "Configure your Voatomy workspace settings, team roles, and notification preferences.",
-      content: [
-        "Your workspace is the central hub for all Voatomy activity. This guide covers the key configuration options available to workspace administrators.",
-        "Workspace settings include general options (name, timezone, default sprint length), security settings (SSO, 2FA requirements), and notification preferences.",
-        "Team roles follow a hierarchical model: Owners have full access, Admins can manage integrations and team members, Managers can create and modify sprint plans, and Members have read access with limited write permissions.",
-        "Notification channels can be configured per-product. ATLAS notifications go to engineering channels, LOOP alerts go to product channels, and SIGNAL incidents go to on-call channels.",
-      ],
-    },
-  },
-  "products": {
-    "atlas-overview": {
-      title: "ATLAS Overview",
-      description: "AI-driven sprint plans with confidence scoring and risk analysis.",
-      content: [
-        "ATLAS is Voatomy's AI sprint planning engine. It analyzes code complexity, team capacity, historical velocity, and cross-team dependencies to generate sprint plans backed by data.",
-        "Key concepts: Complexity Score — a 0-100 metric derived from static analysis. Confidence Interval — the probability range for sprint completion. Risk Flags — automated alerts for dependency conflicts.",
-        "ATLAS integrates with GitHub, GitLab, Jira, Linear, and Asana to pull in real-time data. Sprint plans update dynamically as new commits, PRs, and ticket changes flow in.",
-        "Getting started with ATLAS requires connecting at least one code repository and one project management tool. The AI model calibrates to your team's patterns over 2-3 sprint cycles.",
-      ],
-    },
-    "loop-overview": {
-      title: "LOOP Overview",
-      description: "Customer feedback and CRM intelligence unified in one layer.",
-      content: [
-        "LOOP is the customer-product intelligence layer. It ingests signals from CRM systems, support tickets, sales calls, and NPS surveys to create a revenue-weighted view of your product backlog.",
-        "Core features: Revenue Attribution, Feedback Clustering, and Stakeholder Alerts. Each feature connects customer voice to engineering priorities.",
-        "LOOP integrates with Salesforce, HubSpot, Zendesk, Intercom, Gong, and Slack.",
-        "Setup requires connecting at least one CRM. LOOP begins surfacing insights within 24 hours of initial data sync.",
-      ],
-    },
-    "signal-overview": {
-      title: "SIGNAL Overview",
-      description: "Revenue-aware incident management with business context.",
-      content: [
-        "SIGNAL transforms incident management from reactive firefighting to proactive, revenue-aware response. Every incident is enriched with business context.",
-        "Key capabilities: Revenue Impact Scoring, Smart Routing, and Post-Incident Intelligence.",
-        "SIGNAL connects to PagerDuty, Datadog, Sentry, OpsGenie, and Grafana for monitoring data.",
-        "Initial setup involves connecting monitoring tools and configuring revenue mapping rules.",
-      ],
-    },
-  },
-  "integrations": {
-    "github-setup": {
-      title: "GitHub Integration Setup",
-      description: "Connect GitHub repos for code analysis and complexity scoring.",
-      content: [
-        "The GitHub integration enables ATLAS to analyze your codebase for complexity patterns, PHANTOM to track tech debt trends, and DRIFT to monitor design-code consistency.",
-        "Navigate to Settings → Integrations → GitHub. Click 'Connect' to initiate the OAuth flow. Select which repositories to analyze.",
-        "Permissions required: Repository read access (code, PRs, issues), Organization read access (team structure). Voatomy never writes to your repositories.",
-        "Once connected, initial analysis begins automatically. Large repositories (100K+ lines) may take up to 10 minutes for first analysis.",
-      ],
-    },
-    "jira-setup": {
-      title: "Jira Integration Setup",
-      description: "Sync Jira tickets and sprints with Voatomy's planning engine.",
-      content: [
-        "The Jira integration syncs your project structure, sprint data, and ticket details with ATLAS for AI-powered sprint planning.",
-        "Navigate to Settings → Integrations → Jira. Click 'Connect' to start the OAuth 2.0 PKCE flow.",
-        "Voatomy maps Jira concepts: Projects → Teams, Sprints → Sprint Plans, Issues → Work Items, Story Points → Complexity Inputs.",
-        "Bi-directional sync is optional. Sprint plans generated by ATLAS can be pushed back to Jira as draft sprints.",
-      ],
-    },
-    "slack-setup": {
-      title: "Slack Integration Setup",
-      description: "Real-time notifications in your Slack channels.",
-      content: [
-        "The Slack integration delivers real-time notifications for ATLAS sprint events, SIGNAL incidents, and LOOP customer feedback alerts.",
-        "Navigate to Settings → Integrations → Slack. Click 'Add to Slack' to install the Voatomy bot.",
-        "Channel mapping: Create dedicated channels or use existing ones. Each product's notifications can be routed independently.",
-        "Interactive features: React to notifications to acknowledge, snooze, or escalate directly from Slack.",
-      ],
-    },
-  },
-  "api": {
-    "authentication": {
-      title: "API Authentication",
-      description: "Authenticate with the Voatomy API using keys and OAuth.",
-      content: [
-        "The Voatomy API uses Bearer token authentication. All requests must include an Authorization header.",
-        "API keys can be generated in Settings → API → Keys. Each key is scoped to a workspace.",
-        "For OAuth integrations, use the standard OAuth 2.0 authorization code flow with PKCE.",
-        "Rate limits: Free — 100 req/min. Pro — 1,000 req/min. Enterprise — custom limits.",
-      ],
-    },
-    "webhooks": {
-      title: "Webhooks",
-      description: "Real-time event notifications from Voatomy.",
-      content: [
-        "Webhooks deliver real-time HTTP POST notifications when events occur. Configure endpoints in Settings → API → Webhooks.",
-        "Supported events: sprint.created, sprint.updated, sprint.completed, incident.opened, incident.resolved, feedback.received.",
-        "Payloads include a signature header (X-Voatomy-Signature) for HMAC-SHA256 verification.",
-        "Failed deliveries are retried 3 times with exponential backoff (1min, 5min, 30min).",
-      ],
-    },
-  },
-};
-
-const SIDEBAR_NAV = [
-  { category: "getting-started", label: "Getting Started", items: [
-    { slug: "quickstart", label: "Quickstart Guide" },
-    { slug: "workspace-setup", label: "Workspace Setup" },
-  ]},
-  { category: "products", label: "Products", items: [
-    { slug: "atlas-overview", label: "ATLAS Overview" },
-    { slug: "loop-overview", label: "LOOP Overview" },
-    { slug: "signal-overview", label: "SIGNAL Overview" },
-  ]},
-  { category: "integrations", label: "Integrations", items: [
-    { slug: "github-setup", label: "GitHub Setup" },
-    { slug: "jira-setup", label: "Jira Setup" },
-    { slug: "slack-setup", label: "Slack Setup" },
-  ]},
-  { category: "api", label: "API Reference", items: [
-    { slug: "authentication", label: "Authentication" },
-    { slug: "webhooks", label: "Webhooks" },
-  ]},
-];
 
 function getAllPages() {
   const pages: { category: string; slug: string; label: string }[] = [];

@@ -44,16 +44,26 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 const FEATURED_POST = {
   category: "Engineering",
-  title: "The Story Point Delusion: Why Sprint Estimates Are Statistically Meaningless",
+  title: "From Spec to Sprint: An End-to-End Example",
   excerpt:
-    "We analyzed 14,000 sprints across 340 engineering teams and found that story point estimates have virtually zero predictive power. Here's what actually works -- and why ATLAS was built on a fundamentally different approach to sprint planning.",
+    "A concrete walkthrough: connect a repo, sync your board, and generate your first ATLAS plan. Use it as a template for onboarding or as a model for your own blog posts about product execution.",
   author: "Voatomy Team",
-  date: "Jan 15, 2026",
-  readTime: "8 min read",
-  slug: "/blog/story-point-delusion",
+  date: "Apr 29, 2026",
+  readTime: "5 min read",
+  slug: "/blog/from-spec-to-sprint-example",
 };
 
 const RECENT_POSTS = [
+  {
+    category: "Engineering",
+    title: "The Story Point Delusion: Why Sprint Estimates Are Statistically Meaningless",
+    excerpt:
+      "We analyzed 14,000 sprints across 340 engineering teams and found that story point estimates have virtually zero predictive power. Here's what actually works — and why ATLAS was built on a fundamentally different approach to sprint planning.",
+    author: "Voatomy Team",
+    date: "Jan 15, 2026",
+    readTime: "8 min read",
+    slug: "/blog/story-point-delusion",
+  },
   {
     category: "Engineering",
     title: "How We Built ATLAS: From Prototype to Production",
