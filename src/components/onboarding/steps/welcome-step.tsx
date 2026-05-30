@@ -5,21 +5,47 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useOnboarding } from "../onboarding-context";
 import { ROLE_OPTIONS } from "@/lib/constants";
-import type { UserRole } from "@/types";
+import { useProductOnboarding } from "@/hooks/use-product-onboarding";
+import { getProductLabel } from "@/lib/product-onboarding-config";
+import type { StartupIdeaTemplate, UserRole } from "@/types";
 import { trackConversion, trackFormEvent } from "@/lib/analytics";
 
 export function WelcomeStep() {
-  const { goNext, updateFormData, formData, markStepComplete, startSession } = useOnboarding();
+  const { goNext, updateFormData, formData, markStepComplete, startSession, saveStep } = useOnboarding();
+  const {
+    availableTemplates,
+    singleProductMode,
+    primaryProduct,
+    licensedProducts,
+    subscriptionLoading,
+    primaryModule,
+  } = useProductOnboarding();
+
   const [selectedRole, setSelectedRole] = React.useState<UserRole | "">(formData.userRole);
+  const [selectedTemplate, setSelectedTemplate] = React.useState<StartupIdeaTemplate | "">(
+    formData.startupIdeaTemplate || (singleProductMode ? primaryProduct : ""),
+  );
   const [error, setError] = React.useState("");
   const [isSaving, setIsSaving] = React.useState(false);
 
-  const canContinue = selectedRole !== "" && !isSaving;
+  React.useEffect(() => {
+    if (singleProductMode && primaryProduct) {
+      setSelectedTemplate(primaryProduct);
+    }
+  }, [singleProductMode, primaryProduct]);
+
+  const effectiveTemplate = singleProductMode ? primaryProduct : selectedTemplate;
+  const canContinue = selectedRole !== "" && effectiveTemplate !== "" && !isSaving && !subscriptionLoading;
 
   const handleContinue = async () => {
     if (!selectedRole) {
       setError("Please select your role");
       trackFormEvent("welcome-form", "error", undefined, { errors: ["role"] });
+      return;
+    }
+    if (!effectiveTemplate) {
+      setError("Please select your primary product focus");
+      trackFormEvent("welcome-form", "error", undefined, { errors: ["template"] });
       return;
     }
 
@@ -31,9 +57,28 @@ export function WelcomeStep() {
         email: formData.email,
         role: selectedRole,
       });
-      trackFormEvent("welcome-form", "submit", undefined, { role: selectedRole });
-      trackConversion("email_captured", { source: "onboarding-welcome", role: selectedRole });
-      updateFormData({ userRole: selectedRole });
+      updateFormData({
+        userRole: selectedRole,
+        startupIdeaTemplate: effectiveTemplate,
+        primaryProduct: effectiveTemplate,
+        selectedProducts: licensedProducts,
+      });
+      await saveStep("welcome", {
+        userRole: selectedRole,
+        startupIdeaTemplate: effectiveTemplate,
+        primaryProduct: effectiveTemplate,
+        selectedProducts: licensedProducts,
+      });
+      trackFormEvent("welcome-form", "submit", undefined, {
+        role: selectedRole,
+        template: effectiveTemplate,
+        licensedProducts,
+      });
+      trackConversion("email_captured", {
+        source: "onboarding-welcome",
+        role: selectedRole,
+        template: effectiveTemplate,
+      });
       markStepComplete("welcome");
       goNext();
     } catch (err) {
@@ -48,7 +93,6 @@ export function WelcomeStep() {
 
   return (
     <div className="text-center">
-      {/* Animated wave */}
       <motion.div
         initial={{ scale: 0, rotate: -20 }}
         animate={{ scale: 1, rotate: 0 }}
@@ -79,8 +123,21 @@ export function WelcomeStep() {
         transition={{ delay: 0.3 }}
         className="mx-auto mb-10 max-w-[420px] text-[15px] leading-relaxed text-[#121312]/55"
       >
-        Let&apos;s set up your workspace in under 2 minutes. We&apos;ll personalize everything for your team.
+        {singleProductMode ? (
+          <>
+            Let&apos;s set up your workspace for{" "}
+            <strong className="text-[#121312]/75">{getProductLabel(primaryProduct)}</strong> in under 2 minutes.
+          </>
+        ) : (
+          <>Let&apos;s set up your workspace in under 2 minutes. We&apos;ll personalize for your licensed products.</>
+        )}
       </motion.p>
+
+      {subscriptionLoading && (
+        <div className="mb-6 flex justify-center">
+          <span className="block h-5 w-5 animate-spin rounded-full border-2 border-brand/30 border-t-brand" />
+        </div>
+      )}
 
       <motion.div
         initial={{ opacity: 0, y: 16 }}
@@ -88,13 +145,11 @@ export function WelcomeStep() {
         transition={{ delay: 0.4 }}
         className="space-y-5 text-left"
       >
-        {/* Role — visual grid */}
         <div>
           <label className="mb-1 block text-sm font-semibold text-[#121312]/80">
             What best describes your role?
           </label>
           <p className="mb-3 text-xs text-[#121312]/45">This helps us tailor your experience</p>
-          {error && <p className="mb-2 text-xs text-red-500">{error}</p>}
 
           <div className="grid grid-cols-3 gap-2">
             {ROLE_OPTIONS.map((role) => (
@@ -126,7 +181,58 @@ export function WelcomeStep() {
           </div>
         </div>
 
-        {/* Continue */}
+        {singleProductMode ? (
+          <div className="rounded-xl border border-brand/20 bg-brand/5 p-4 text-left">
+            <p className="text-[11px] font-bold uppercase tracking-wide text-brand-dark/70">Your product</p>
+            <p className="mt-1 text-sm font-semibold text-[#121312]">
+              {primaryModule.icon} {getProductLabel(primaryProduct)} — {primaryModule.tagline}
+            </p>
+            <p className="mt-1 text-xs text-[#121312]/50">{primaryModule.welcomeSummary}</p>
+            <p className="mt-2 text-[10px] text-[#121312]/40">
+              Product-specific setup continues after org onboarding, when you first open {getProductLabel(primaryProduct)}.
+            </p>
+          </div>
+        ) : (
+          <div>
+            <label className="mb-1 block text-sm font-semibold text-[#121312]/80">
+              Which product are you setting up first?
+            </label>
+            <p className="mb-3 text-xs text-[#121312]/45">
+              Based on your subscription — only showing products you have access to
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {availableTemplates.map((template) => (
+                <button
+                  key={template.key}
+                  type="button"
+                  onClick={() => {
+                    setSelectedTemplate(template.key);
+                    setError("");
+                  }}
+                  className={cn(
+                    "flex items-start gap-3 rounded-xl border p-3 text-left transition-all duration-200",
+                    selectedTemplate === template.key
+                      ? "border-brand bg-brand/8 shadow-sm ring-1 ring-brand/20"
+                      : "border-[#121312]/8 bg-white hover:border-[#121312]/15 hover:bg-[#121312]/[0.02]",
+                  )}
+                >
+                  <span className="text-xl shrink-0">{template.icon}</span>
+                  <div className="min-w-0">
+                    <span className="block text-[11px] font-bold uppercase tracking-wide text-brand-dark/70">
+                      {template.key}
+                    </span>
+                    <span className="block text-xs font-semibold text-[#121312]">{template.title}</span>
+                    <span className="block text-[10px] text-[#121312]/50 leading-snug mt-0.5">{template.summary}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {error && <p className="text-xs text-red-500 text-center">{error}</p>}
+
         <button
           type="button"
           onClick={handleContinue}
@@ -154,7 +260,6 @@ export function WelcomeStep() {
         </button>
       </motion.div>
 
-      {/* Trust note */}
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

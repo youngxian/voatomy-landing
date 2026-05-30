@@ -6,25 +6,25 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold tracking-tight transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-lime/40 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] cursor-pointer",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-semibold tracking-tight transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fynk-orange/30 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] cursor-pointer",
   {
     variants: {
       variant: {
         primary:
-          "bg-accent-lime text-teal shadow-sm hover:bg-accent-lime/90 hover:shadow-md hover:shadow-accent-lime/20",
+          "rounded-full bg-fynk-orange text-white shadow-sm shadow-fynk-orange/20 hover:bg-fynk-orange-hover hover:shadow-md hover:shadow-fynk-orange/25",
         secondary:
-          "border border-theme bg-theme-subtle text-theme hover:bg-theme-card hover:border-theme-h",
+          "rounded-full border border-fynk-border bg-white text-fynk-ink hover:border-fynk-border-hover hover:bg-fynk-surface-alt",
         ghost:
-          "bg-transparent text-theme-s hover:bg-theme-subtle hover:text-theme",
+          "rounded-xl bg-transparent text-fynk-body hover:bg-fynk-surface-alt hover:text-fynk-ink",
         dark:
-          "bg-theme-card text-theme border border-theme hover:bg-theme-s",
-        link: "text-theme-s underline-offset-4 hover:underline hover:text-theme border-0 bg-transparent",
+          "rounded-xl bg-fynk-ink text-white border border-fynk-ink hover:bg-fynk-body",
+        link: "text-fynk-body underline-offset-4 hover:underline hover:text-fynk-ink border-0 bg-transparent rounded-none",
       },
       size: {
-        sm: "h-9 px-4 text-xs rounded-lg",
-        md: "h-11 px-5 text-sm rounded-xl",
-        lg: "h-12 px-6 text-base rounded-xl",
-        icon: "h-10 w-10 rounded-xl",
+        sm: "h-9 px-4 text-xs",
+        md: "h-11 px-5 text-sm",
+        lg: "h-12 px-6 text-base",
+        icon: "h-10 w-10 rounded-full",
       },
     },
     defaultVariants: {

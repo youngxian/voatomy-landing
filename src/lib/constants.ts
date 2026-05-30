@@ -4,7 +4,7 @@ export const SITE_CONFIG = {
   name: "Voatomy",
   tagline: "The AI Product Operating System",
   description:
-    "Defensible sprint plans from code complexity, team capacity, tech-debt cost, and revenue weighting—so your team ships the right work, not the loudest work. ATLAS is the entry wedge into the full Voatomy platform.",
+    "Voatomy turns code complexity, team capacity, and revenue signals into sprint plans your company can defend — so you ship business impact, not planning theater.",
   url: "https://voatomy.global",
   ogImage: "/images/og.png",
 } as const;
@@ -291,22 +291,19 @@ export const NAV_LINKS = {
 // ---------- HERO ----------
 
 export const HERO_CONTENT = {
-  eyebrow: "ATLAS by Voatomy",
-  /** Benefit-led headline — outcome for ICP in one scan (B2B SaaS CRO pattern) */
-  headline: "Ship the right sprint—without the spreadsheet war.",
+  eyebrow: "Voatomy Platform",
+  headlinePrefix: "Where",
+  headlineBridge: "teams turn",
+  headlineSuffix: "sprints into shipped outcomes.",
+  headlineInline: "engineering",
   subheadline:
-    "Code-aware plans that blend complexity, team capacity, tech-debt cost, and revenue weighting so every sprint is defensible in standup and in the boardroom.",
-  ctaPrimary: "Get Early Access",
-  ctaSecondary: "Watch the 3-minute demo",
-  /** Risk reducers under primary CTA — friction reduction, common on high-converting B2B pages */
-  ctaRiskReducer: "No credit card · Join the waitlist in under a minute",
-  /** Three proof-oriented chips — “comprehension before scroll” (problem → solution narrative) */
-  valuePills: [
-    { label: "Repo-aware scope", detail: "AST and dependencies, not story points in a vacuum" },
-    { label: "Capacity you can trust", detail: "Velocity, PTO, and focus time in one model" },
-    { label: "Revenue-weighted tradeoffs", detail: "Tie work to what actually drives the business" },
-  ] as const,
-  socialProof: "1,200+ on the waitlist · 4.8/5 from beta teams",
+    "Stop debating story points in hour-long meetings. Voatomy reads your repos, capacity, and revenue signals — then builds sprint plans your exec team will actually trust.",
+  ctaPrimary: "Start free trial",
+  ctaSecondary: "Get a demo",
+  ctaRiskReducer: "No credit card · Setup in under 5 minutes",
+  socialProof: "Trusted by 1,200+ product and engineering teams shipping faster with Voatomy.",
+  ratingG2: "4.9",
+  ratingBeta: "4.8",
   statCards: [
     { type: "visual" as const, value: "", label: "" },
     { type: "teal" as const, value: "100+", label: "Integrations" },
@@ -315,6 +312,142 @@ export const HERO_CONTENT = {
     { type: "teal" as const, value: "60", label: "Teams" },
   ] as const,
 } as const;
+
+export const HERO_AVATARS = [
+  { label: "EM", color: "bg-teal", text: "text-white" },
+  { label: "PM", color: "bg-[#f16e2c]", text: "text-white" },
+  { label: "Eng", color: "bg-accent-lime", text: "text-teal" },
+] as const;
+
+export const WHY_VOATOMY = [
+  {
+    title: "One command center for every sprint.",
+    desc: "Capacity, backlog, code complexity, and revenue weight — unified in a workspace leaders actually open daily.",
+  },
+  {
+    title: "From backlog to committed sprint in minutes.",
+    desc: "Replace two-hour planning meetings with data-backed plans your team can commit to on the spot.",
+  },
+  {
+    title: "Alignment across engineering, product, and revenue.",
+    desc: "Everyone works from the same plan. No more Slack threads, spreadsheet forks, or lost context.",
+  },
+  {
+    title: "Pricing that scales with you — not against you.",
+    desc: "Start free. Upgrade when you're ready. No surprise fees, no seat minimums, no vendor lock-in.",
+  },
+  {
+    title: "Live in days, not quarters.",
+    desc: "Connect GitHub and your PM tools in minutes. Most teams run their first AI sprint plan the same day.",
+  },
+  {
+    title: "Built with engineering leaders, not around them.",
+    desc: "Fast support, weekly product updates, and a roadmap shaped by teams shipping in production.",
+  },
+] as const;
+
+export const WORKFLOW_STEPS = [
+  {
+    step: "01",
+    title: "Connect",
+    subtitle: "Plug in the tools you already pay for",
+    desc: "GitHub, Jira, Linear, Slack — Voatomy syncs your repos, tickets, and team capacity in one click.",
+  },
+  {
+    step: "02",
+    title: "Analyze",
+    subtitle: "AI reads what humans can't scan fast enough",
+    desc: "Code complexity, velocity trends, tech-debt cost, and revenue weight converge into one prioritized sprint.",
+  },
+  {
+    step: "03",
+    title: "Ship with confidence",
+    subtitle: "Commit once. Execute without surprises.",
+    desc: "Automated risk flags, dependency alerts, and accuracy tracking keep every sprint on track until release.",
+  },
+] as const;
+
+export const FEATURE_BUCKETS = [
+  {
+    key: "plan",
+    title: "Walk into planning with a plan already built.",
+    desc: "Capacity, complexity, and revenue weight baked in — so your team commits in minutes, not after a two-hour debate.",
+    features: ["AI sprint generation", "Capacity matching", "Confidence scoring"],
+    accent: "teal",
+  },
+  {
+    key: "organize",
+    title: "One backlog everyone actually trusts.",
+    desc: "Product, design, and engineering see the same scope, dependencies, and deadlines — before the sprint clock starts.",
+    features: ["Unified backlog", "Dependency mapping", "Tasks & reminders"],
+    accent: "sky",
+  },
+  {
+    key: "scale",
+    title: "Grow from one squad to the whole org.",
+    desc: "Add teams and tools without starting over. Dashboards, approvals, and 100+ integrations that keep up as you scale.",
+    features: ["Approval workflows", "100+ integrations", "Role-based access"],
+    accent: "violet",
+  },
+  {
+    key: "insights",
+    title: "Show leadership what's working — with proof.",
+    desc: "Accuracy trends, audit trails, and exec dashboards that turn sprint data into decisions your board will back.",
+    features: ["Executive dashboards", "Accuracy trends", "Full audit trail"],
+    accent: "coral",
+  },
+] as const;
+
+export const SOLUTIONS_TEAMS = [
+  {
+    key: "engineering",
+    title: "Engineering",
+    desc: "Stop defending estimates you made up on the spot. Get code-aware plans your team stands behind.",
+    href: "/products/atlas",
+  },
+  {
+    key: "product",
+    title: "Product",
+    desc: "See which priorities actually move revenue — before you burn a sprint on the wrong bet.",
+    href: "/products/loop",
+  },
+  {
+    key: "leadership",
+    title: "Leadership",
+    desc: "One honest view of what's shipping, when, and why — without another status meeting.",
+    href: "/products/nexus",
+  },
+  {
+    key: "operations",
+    title: "Operations",
+    desc: "Replace the spreadsheet maze with one hub your whole org can rely on.",
+    href: "/products/signal",
+  },
+  {
+    key: "design",
+    title: "Design",
+    desc: "Keep Figma and code in sync so scope surprises don't blow up your sprint.",
+    href: "/products/drift",
+  },
+  {
+    key: "finance",
+    title: "Finance",
+    desc: "Put a dollar figure on tech debt before it quietly eats your roadmap.",
+    href: "/products/phantom",
+  },
+] as const;
+
+export const LANDING_STATS = [
+  { value: "80%", label: "time saved on planning" },
+  { value: "87%", label: "estimation accuracy" },
+  { value: "33%", label: "faster to commit sprints" },
+] as const;
+
+export const CTA_TRUST_BADGES = [
+  { title: "No setup headaches", desc: "Go live in days, not quarters" },
+  { title: "No lock-in", desc: "Full export anytime" },
+  { title: "No hidden fees", desc: "Free tier included" },
+] as const;
 
 // ---------- BENEFITS (key benefits section) ----------
 
@@ -512,33 +645,33 @@ export const PRODUCT_DETAILS = {
 
 export const SECURITY_FEATURES = [
   {
-    title: "Never stores source code",
+    title: "Source code never leaves your repos",
     description:
-      "Read-only API access. Retains only structural metadata like file size, complexity scores, and dependency maps.",
+      "Read-only API access. We analyze structural metadata only — file size, complexity scores, dependency maps. Your IP stays yours.",
     icon: "🔒",
   },
   {
-    title: "Encrypted everywhere",
+    title: "Encrypted at every layer",
     description:
-      "TLS 1.3 in transit, AES-256 at rest. Your data is encrypted at every layer.",
+      "TLS 1.3 in transit, AES-256 at rest. Enterprise-grade encryption that security teams approve on first review.",
     icon: "🔐",
   },
   {
-    title: "Tenant isolation",
+    title: "Hard tenant isolation",
     description:
-      "PostgreSQL RLS, scoped queries, per-tenant AI context. Your data never leaks across organizations.",
+      "PostgreSQL RLS, scoped queries, per-tenant AI context. Your data never crosses organizational boundaries.",
     icon: "🛡",
   },
   {
-    title: "SOC 2 ready",
+    title: "SOC 2 aligned from day one",
     description:
-      "Audit logging, access controls, and compliance baseline from day one.",
+      "Audit logging, RBAC, and compliance controls built in — not bolted on after your procurement team asks.",
     icon: "✓",
   },
   {
     title: "Ticket Vulnerability Scanner",
     description:
-      "Like Snyk for your tickets. Automatically scans every ticket, description, and comment for PII, API keys, and sensitive data. AI classifies, suggests fixes, and executes remediation — toggle on per project.",
+      "Like Snyk for your backlog. Scans tickets, descriptions, and comments for PII, API keys, and secrets — then suggests and executes fixes.",
     icon: "🛡️",
   },
 ] as const;
@@ -862,19 +995,19 @@ export const AUDIENCES = [
 
 export const TESTIMONIALS = [
   {
-    text: "Sprint accuracy went from 42% to 87% in three sprints. The AI actually understands our codebase.",
+    text: "We went from 42% to 87% sprint accuracy in three sprints. For the first time, our estimates actually matched what we shipped.",
     author: "Sarah K.",
     role: "CTO, Series B SaaS",
     stars: 5,
   },
   {
-    text: "Finally a tool that gets it. Planning meetings went from 2 hours to 20 minutes.",
+    text: "Planning used to drain the whole team. Now it's twenty minutes, and we walk out aligned instead of exhausted.",
     author: "Marcus T.",
     role: "Engineering Manager",
     stars: 5,
   },
   {
-    text: "Cut our planning from 2 hours to 20 minutes. The team actually trusts the estimates now.",
+    text: "I stopped dreading sprint planning. The team trusts the numbers because they're grounded in our actual code.",
     author: "Priya S.",
     role: "Product Manager",
     stars: 5,
@@ -927,44 +1060,44 @@ export const TESTIMONIALS = [
 
 export const FAQ_ITEMS = [
   {
-    question: "How does ATLAS understand code complexity?",
+    question: "How does Voatomy understand our codebase?",
     answer:
-      "ATLAS connects to your Git repos via read-only API access and performs static analysis — mapping dependency graphs, measuring cyclomatic complexity, and tracking change frequency. It never stores your source code, only structural metadata.",
+      "We connect read-only to your repos and analyze structure — dependency graphs, complexity, change patterns. Your source code never leaves your environment. We only store metadata your security team can audit.",
   },
   {
-    question: "Does ATLAS replace sprint planning meetings?",
+    question: "Will this replace our sprint planning meetings?",
     answer:
-      "It replaces the estimation part. Your team still decides priorities and scope. Most teams cut planning meetings from 2 hours to 20 minutes because the estimation debates disappear.",
+      "It removes the painful parts — the estimation debates, the 'how long will this really take?' loops. Your team still owns priorities. Most teams cut meetings from two hours to twenty minutes and leave actually aligned.",
   },
   {
-    question: "What if we don't use story points?",
+    question: "We don't use story points. Will it still work?",
     answer:
-      "ATLAS works with story points, t-shirt sizes, time-based estimates, or no formal estimation system at all. It adapts to your team's workflow.",
+      "Yes. Voatomy adapts to story points, t-shirt sizes, time estimates, or no formal system at all. It learns how your team works — you don't have to change your process first.",
   },
   {
-    question: "How accurate are the AI estimates?",
+    question: "How accurate are the AI estimates, really?",
     answer:
-      "Within 15% of actual delivery time for 80% of tasks. Accuracy improves with each sprint cycle as ATLAS learns your team's velocity and codebase patterns.",
+      "Within 15% of actual delivery time for about 80% of tasks, and it gets smarter every sprint as it learns your velocity and codebase. Most teams see a meaningful jump by sprint three.",
   },
   {
-    question: "Is our code safe?",
+    question: "Is our code safe with you?",
     answer:
-      "ATLAS never stores source code. We use read-only API access and retain only structural metadata. All data is encrypted in transit (TLS 1.3) and at rest (AES-256). SOC 2 compliance is in progress.",
+      "Your code stays in your repos — always. Read-only access, metadata-only analysis, TLS 1.3 in transit, AES-256 at rest. Built for security reviews that pass on the first try, not the fifth.",
   },
   {
-    question: "What's the ATLAS to NEXUS product journey?",
+    question: "Do we have to buy everything at once?",
     answer:
-      "ATLAS is your entry point. As your needs grow, add LOOP (revenue feedback), SIGNAL (incident intelligence), DRIFT (design sync), or PHANTOM (tech debt). Each product layers on seamlessly — no rip-and-replace. Eventually, NEXUS unifies everything into one organizational nerve center.",
+      "Not at all. Start with ATLAS for sprint planning. Add LOOP, SIGNAL, DRIFT, or PHANTOM when you need them. NEXUS ties it together when you're ready — no rip-and-replace.",
   },
   {
-    question: "How much does it cost?",
+    question: "What does it cost to get started?",
     answer:
-      "ATLAS is free to start with 1 team, 1 repo, and 2 AI sprint plans per month. Pro starts at $14/user/month (or $11/user/month billed annually) with unlimited teams and repos. Volume discounts kick in at 26+ users. You can customize your plan by adding products like LOOP, SIGNAL, DRIFT, and PHANTOM as needed.",
+      "Free: one team, one repo, two AI sprint plans per month. Pro starts at $14/user/month ($11 billed annually) with unlimited teams and repos. You can prove value before you pay a dime.",
   },
   {
-    question: "When does ATLAS launch?",
+    question: "When can we actually use ATLAS?",
     answer:
-      "Early access opens in Q2 2026. Waitlist members get priority access by signup date. Join now to secure your spot.",
+      "Early access opens Q2 2026. Join the waitlist now — priority goes by signup date, and waitlist members help shape what we build next.",
   },
 ] as const;
 
@@ -1241,7 +1374,6 @@ export const ONBOARDING_STEPS = [
   { key: "workspace" as const, label: "Workspace", icon: "🏢" },
   { key: "connect" as const, label: "Connect", icon: "🔗" },
   { key: "team" as const, label: "Team", icon: "👥" },
-  { key: "products" as const, label: "Products", icon: "📦" },
   { key: "customize" as const, label: "Notify", icon: "🔔" },
   { key: "launch" as const, label: "Launch", icon: "🚀" },
 ] as const;

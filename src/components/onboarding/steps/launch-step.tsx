@@ -6,9 +6,11 @@ import { cn } from "@/lib/utils";
 import { useOnboarding } from "../onboarding-context";
 import { PRODUCT_CARDS, LOADING_TIPS } from "@/lib/constants";
 import { trackConversion, trackEvent } from "@/lib/analytics";
-import { useSubscriptionProducts } from "@/hooks/use-subscription-products";
-import { provisionProducts, getProducts, getSprintStatus } from "@/lib/api";
-import type { CrossProductIds, SprintStatusResponse } from "@/types";
+import { useProductOnboarding } from "@/hooks/use-product-onboarding";
+import { provisionProducts, getProducts, getSprintStatus, setProducts } from "@/lib/api";
+import { getProductLabel } from "@/lib/product-onboarding-config";
+import { productSessionHandoffUrl } from "@/lib/auth-redirect";
+import type { CrossProductIds, ProductKey, SprintStatusResponse } from "@/types";
 
 type Phase = "analyzing" | "ready";
 
@@ -24,7 +26,7 @@ const ANALYSIS_STEPS = [
 
 export function LaunchStep() {
   const { goBack, updateFormData, formData, markStepComplete, finishOnboarding } = useOnboarding();
-  const { products: subscribedProducts, primaryProduct: derivedPrimaryProduct } = useSubscriptionProducts();
+  const { licensedProducts, primaryProduct, primaryModule } = useProductOnboarding();
   const [phase, setPhase] = React.useState<Phase>("analyzing");
   const [currentAnalysisStep, setCurrentAnalysisStep] = React.useState(0);
   const [progress, setProgress] = React.useState(0);
@@ -63,6 +65,10 @@ export function LaunchStep() {
         setProgress(40);
         setCurrentAnalysisStep(2);
 
+        await setProducts({
+          products: licensedProducts,
+          primary_product: primaryProduct,
+        });
         await provisionProducts();
         setProgress(60);
         setCurrentAnalysisStep(4);
@@ -105,7 +111,7 @@ export function LaunchStep() {
           industry: formData.industry,
           companySize: formData.companySize,
           region: formData.region,
-          productsCount: subscribedProducts.length,
+          productsCount: licensedProducts.length,
           integrationsCount: formData.connectedIntegrations.length,
           teamsCount: formData.teams.length,
           inviteesCount: formData.invitees.length,
@@ -130,9 +136,9 @@ export function LaunchStep() {
     return () => clearInterval(interval);
   }, [phase]);
 
-  // Poll sprint status from atlas-service once provisioning is done
+  // Poll sprint status from atlas-service when Atlas is primary
   React.useEffect(() => {
-    if (phase !== "ready" || !formData.selectedBoardProject || !formData.crossProductIds.atlasWorkspaceId) return;
+    if (phase !== "ready" || primaryProduct !== "atlas" || !formData.selectedBoardProject || !formData.crossProductIds.atlasWorkspaceId) return;
     let cancelled = false;
     const orgId = formData.crossProductIds.atlasWorkspaceId;
     const poll = async () => {
@@ -149,25 +155,51 @@ export function LaunchStep() {
     };
     poll();
     return () => { cancelled = true; };
-  }, [phase, formData.selectedBoardProject, formData.crossProductIds.atlasWorkspaceId]);
+  }, [phase, primaryProduct, formData.selectedBoardProject, formData.crossProductIds.atlasWorkspaceId]);
 
-  const selectedProductCards = subscribedProducts
+  const selectedProductCards = licensedProducts
     .map((key) => PRODUCT_CARDS.find((p) => p.key === key))
     .filter(Boolean);
 
+  const getSessionToken = () => {
+    const match = document.cookie.match(/(?:^|; )session=([^;]*)/);
+    return match ? decodeURIComponent(match[1]) : undefined;
+  };
+
   const getDashboardUrl = () => {
-    const base = (() => {
-      switch (derivedPrimaryProduct) {
-        case "atlas": return "http://localhost:3000/dashboard";
-        case "loop": return "http://localhost:3001/dashboard";
-        case "signal": return "http://localhost:3002/dashboard";
-        default: return "http://localhost:3000/dashboard";
-      }
-    })();
-    if (derivedPrimaryProduct === "atlas") {
-      return `${base}?from=onboarding`;
+    const product = primaryProduct;
+    const token = getSessionToken();
+    const nextPath = product === "atlas" ? "/dashboard?from=onboarding" : "/dashboard";
+    if (token) {
+      return productSessionHandoffUrl(token, product, nextPath);
     }
-    return base;
+    const fallbacks: Record<ProductKey, string> = {
+      atlas: process.env.NEXT_PUBLIC_DASHBOARD_URL ?? "http://localhost:3000",
+      loop: process.env.NEXT_PUBLIC_LOOP_APP_URL ?? "http://localhost:3001",
+      signal: process.env.NEXT_PUBLIC_SIGNAL_APP_URL ?? "http://localhost:3002",
+      drift: "#",
+      phantom: "#",
+      nexus: "#",
+    };
+    const base = (fallbacks[product] ?? fallbacks.atlas).replace(/\/$/, "");
+    return `${base}${nextPath.startsWith("/") ? nextPath : `/${nextPath}`}`;
+  };
+
+  const getProductDashboardUrl = (productKey: ProductKey) => {
+    const token = getSessionToken();
+    if (token) {
+      return productSessionHandoffUrl(token, productKey, "/dashboard");
+    }
+    const fallbacks: Record<ProductKey, string> = {
+      atlas: process.env.NEXT_PUBLIC_DASHBOARD_URL ?? "http://localhost:3000",
+      loop: process.env.NEXT_PUBLIC_LOOP_APP_URL ?? "http://localhost:3001",
+      signal: process.env.NEXT_PUBLIC_SIGNAL_APP_URL ?? "http://localhost:3002",
+      drift: "#",
+      phantom: "#",
+      nexus: "#",
+    };
+    const base = (fallbacks[productKey] ?? "#").replace(/\/$/, "");
+    return base === "#" ? "#" : `${base}/dashboard`;
   };
 
   // ── Analyzing Phase ──
@@ -319,7 +351,10 @@ export function LaunchStep() {
         transition={{ delay: 0.3 }}
         className="mx-auto mb-8 max-w-[400px] text-sm text-[#121312]/50"
       >
-        Your <strong className="text-[#121312]/70">{formData.workspaceName}</strong> workspace is ready.
+        Your <strong className="text-[#121312]/70">{formData.workspaceName}</strong> workspace is ready
+        {primaryProduct && (
+          <> — opening <strong className="text-[#121312]/70">{getProductLabel(primaryProduct)}</strong></>
+        )}.
         {formData.invitees.length > 0 && ` We've sent invitations to ${formData.invitees.length} teammate${formData.invitees.length !== 1 ? "s" : ""}.`}
       </motion.p>
 
@@ -537,7 +572,7 @@ export function LaunchStep() {
                 </div>
               )}
               <a
-                href="http://localhost:3000/dashboard?from=onboarding"
+                href={getDashboardUrl()}
                 className="mt-3 inline-flex items-center gap-1 text-[10px] font-semibold text-blue-600 hover:text-blue-700"
               >
                 Review full plan in Atlas
@@ -573,11 +608,11 @@ export function LaunchStep() {
           onClick={() => {
             trackEvent("navigation", "dashboard_launch", "Go to Dashboard", undefined, {
               destination: getDashboardUrl(),
-              primaryProduct: derivedPrimaryProduct,
+              primaryProduct: primaryProduct,
             });
           }}
         >
-          Go to Dashboard
+          Go to {primaryModule.launchCta.replace("Open ", "")}
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="9 18 15 12 9 6" />
           </svg>
@@ -587,13 +622,8 @@ export function LaunchStep() {
         {selectedProductCards.length > 1 && (
           <div className="flex justify-center gap-2 flex-wrap">
             {selectedProductCards.map((p) => {
-              const href = p!.key === "atlas"
-                ? "http://localhost:3000/dashboard"
-                : p!.key === "loop"
-                  ? "http://localhost:3001/dashboard"
-                  : p!.key === "signal"
-                    ? "http://localhost:3002/dashboard"
-                    : "#";
+              const href = getProductDashboardUrl(p!.key as ProductKey);
+              if (href === "#") return null;
               return (
                 <a
                   key={p!.key}

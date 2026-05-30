@@ -4,6 +4,7 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "../auth-page";
 import { SocialButtons } from "../social-buttons";
@@ -42,23 +43,30 @@ export function SignupStep() {
   const onSubmit = async (data: SignupValues) => {
     setSubmitError(null);
     try {
-      await signupWithMagicLink({
+      const result = await signupWithMagicLink({
         first_name: data.firstName,
         last_name: data.lastName,
         email: data.email,
       });
       updateFormData(data);
+      if (result.dev_magic_link_url) {
+        sessionStorage.setItem("voatomy_dev_magic_link", result.dev_magic_link_url);
+      } else {
+        sessionStorage.removeItem("voatomy_dev_magic_link");
+      }
       setStep("verify-email");
     } catch (err) {
-      if (err instanceof APIError && err.code === "conflict") {
-        updateFormData({ email: data.email });
-        setStep("login");
-        return;
-      }
       if (err instanceof APIError) {
+        if (err.code === "conflict") {
+          updateFormData({ email: data.email });
+          setStep("login");
+          return;
+        }
         setSubmitError(err.message);
       } else {
-        setSubmitError("Something went wrong. Please try again.");
+        setSubmitError(
+          "Could not reach the server. Is the onboarding API running on port 8081?",
+        );
       }
     }
   };
@@ -116,11 +124,18 @@ export function SignupStep() {
           disabled={isSubmitting}
           className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#121312] text-sm font-semibold text-white transition-all duration-200 hover:bg-[#121312]/90 active:scale-[0.98] disabled:opacity-50"
         >
-          {isSubmitting ? "Sending link…" : "Send sign-in link"}
-          {!isSubmitting && (
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
+          {isSubmitting ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Sending link…
+            </>
+          ) : (
+            <>
+              Send sign-in link
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </>
           )}
         </button>
       </form>

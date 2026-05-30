@@ -41,7 +41,7 @@ export function FAQAccordion({
             >
               <span
                 className={cn(
-                  "text-sm font-medium transition-colors",
+                  "text-base font-medium transition-colors",
                   isOpen ? "text-teal" : "text-charcoal",
                 )}
               >
@@ -56,7 +56,7 @@ export function FAQAccordion({
             </button>
             {isOpen && (
               <div className="border-t border-charcoal/10 px-5 pb-4 pt-3">
-                <p className="text-sm leading-relaxed text-charcoal/60">
+                <p className="text-base leading-relaxed text-charcoal/60">
                   {item.answer}
                 </p>
               </div>

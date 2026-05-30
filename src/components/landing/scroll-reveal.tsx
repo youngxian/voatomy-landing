@@ -1,26 +1,33 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import {
+  useScrollAnimation,
+  type ScrollAnimationDirection,
+} from "@/hooks/use-scroll-animation";
 
 export function ScrollReveal({
   children,
   className,
+  direction = "up",
+  delayMs = 0,
 }: {
   children: React.ReactNode;
   className?: string;
+  direction?: ScrollAnimationDirection;
+  delayMs?: number;
 }) {
-  const { ref, isVisible } = useScrollAnimation();
+  const { ref, animationClass } = useScrollAnimation(0.12, direction);
 
   return (
     <div
       ref={ref}
-      data-visible={isVisible}
       className={cn(
-        "group/reveal transition-all duration-700",
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
+        "transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
+        animationClass,
         className,
       )}
+      style={delayMs ? { transitionDelay: `${delayMs}ms` } : undefined}
     >
       {children}
     </div>

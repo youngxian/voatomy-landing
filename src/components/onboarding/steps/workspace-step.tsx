@@ -11,8 +11,10 @@ import {
   ROLE_PURPOSE_MAP,
   REGIONS,
 } from "@/lib/constants";
-import type { Industry, CompanySize, Region, Purpose } from "@/types";
+import type { Industry, CompanySize, Region, Purpose, ProductKey } from "@/types";
 import { checkSlugAvailability } from "@/lib/api";
+import { useProductOnboarding } from "@/hooks/use-product-onboarding";
+import { purposesForLicensedProducts } from "@/lib/product-onboarding-config";
 
 function generateSlug(name: string): string {
   return name
@@ -26,6 +28,7 @@ function generateSlug(name: string): string {
 
 export function WorkspaceStep() {
   const { goNext, goBack, updateFormData, formData, markStepComplete, saveStep } = useOnboarding();
+  const { licensedProducts, primaryModule } = useProductOnboarding();
   const [workspaceName, setWorkspaceName] = React.useState(formData.workspaceName);
   const [workspaceSlug, setWorkspaceSlug] = React.useState(formData.workspaceSlug);
   const [industry, setIndustry] = React.useState<Industry | "">(formData.industry);
@@ -69,8 +72,21 @@ export function WorkspaceStep() {
     };
   }, [workspaceSlug]);
 
-  const relevantPurposes = ROLE_PURPOSE_MAP[formData.userRole] ?? PURPOSE_OPTIONS.map((o) => o.value);
-  const filteredPurposes = PURPOSE_OPTIONS.filter((opt) => relevantPurposes.includes(opt.value));
+  const licensedPurposes = React.useMemo(
+    () => purposesForLicensedProducts(licensedProducts),
+    [licensedProducts],
+  );
+
+  const relevantPurposes = React.useMemo(() => {
+    const byRole = ROLE_PURPOSE_MAP[formData.userRole] ?? PURPOSE_OPTIONS.map((o) => o.value);
+    return byRole.filter((p) => licensedPurposes.includes(p));
+  }, [formData.userRole, licensedPurposes]);
+
+  const filteredPurposes = PURPOSE_OPTIONS.filter(
+    (opt) =>
+      relevantPurposes.includes(opt.value) &&
+      opt.products.some((p) => licensedProducts.includes(p as ProductKey)),
+  );
 
   // Sync region from geo detection if user hasn't picked one yet
   React.useEffect(() => {
@@ -86,6 +102,13 @@ export function WorkspaceStep() {
       return valid.length !== prev.length ? valid : prev;
     });
   }, [formData.userRole]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Auto-select purpose when only one option for licensed products
+  React.useEffect(() => {
+    if (filteredPurposes.length === 1 && !purposes.includes(filteredPurposes[0].value)) {
+      setPurposes([filteredPurposes[0].value]);
+    }
+  }, [filteredPurposes]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const togglePurpose = (p: Purpose) => {
     setPurposes((prev) => (prev.includes(p) ? prev.filter((x) => x !== p) : [...prev, p]));
@@ -134,7 +157,9 @@ export function WorkspaceStep() {
           <span className="text-2xl">🏢</span>
         </div>
         <h1 className="text-[28px] font-bold tracking-tight text-[#121312]">Set up your workspace</h1>
-        <p className="mt-1.5 text-sm text-[#121312]/50">Tell us about your team so we can personalize everything</p>
+        <p className="mt-1.5 text-sm text-[#121312]/50">
+          Org-wide settings for {primaryModule.label} and your team — product-specific setup comes later
+        </p>
       </motion.div>
 
       <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="space-y-6 text-left">

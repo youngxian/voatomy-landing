@@ -2,7 +2,9 @@
 
 import * as React from "react";
 import { useParams, useRouter } from "next/navigation";
-import { verifyMagicLink, APIError } from "@/lib/api";
+import { APIError } from "@/lib/api";
+import { resolvePostAuthDestinationAsync } from "@/lib/auth-redirect";
+import { verifyMagicLinkOnce } from "@/lib/verify-magic-link-once";
 import { AUTH_REDIRECT_KEY } from "@/components/auth/auth-page";
 
 const API_BASE =
@@ -37,26 +39,28 @@ export default function VerifyMagicLinkPage() {
   const [status, setStatus] = React.useState<Status>("loading");
   const [email, setEmail] = React.useState("");
   const [errorMsg, setErrorMsg] = React.useState("");
-  const verifiedRef = React.useRef(false);
+
+  const completeLogin = React.useCallback(async (sessionToken?: string) => {
+    await startTrialIfPending();
+    setStatus("success");
+    const storedRedirect = localStorage.getItem(AUTH_REDIRECT_KEY);
+    if (storedRedirect) localStorage.removeItem(AUTH_REDIRECT_KEY);
+    const destination = await resolvePostAuthDestinationAsync(sessionToken, storedRedirect);
+    setTimeout(() => {
+      window.location.href = destination;
+    }, 1500);
+  }, []);
 
   React.useEffect(() => {
-    if (!token || verifiedRef.current) return;
-    verifiedRef.current = true;
+    if (!token) return;
 
-    verifyMagicLink(token)
+    let cancelled = false;
+
+    verifyMagicLinkOnce(token)
       .then(async (result) => {
+        if (cancelled) return;
         if (result.valid) {
-          if (result.session_token) {
-            document.cookie = `session=${result.session_token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
-          }
-          await startTrialIfPending();
-          setStatus("success");
-          const storedRedirect = localStorage.getItem(AUTH_REDIRECT_KEY);
-          const destination = storedRedirect || "http://localhost:3000/dashboard";
-          if (storedRedirect) localStorage.removeItem(AUTH_REDIRECT_KEY);
-          setTimeout(() => {
-            window.location.href = destination;
-          }, 1500);
+          await completeLogin(result.session_token);
         } else if (result.expired) {
           setEmail(result.email ?? "");
           setStatus("expired");
@@ -65,22 +69,30 @@ export default function VerifyMagicLinkPage() {
         }
       })
       .catch((err) => {
+        if (cancelled) return;
         if (err instanceof APIError) {
           if (err.code === "magic_link_expired") {
             setStatus("expired");
           } else if (err.code === "token_used") {
             setErrorMsg("This link has already been used. Please request a new one.");
             setStatus("error");
+          } else if (err.code === "not_found") {
+            setErrorMsg("This sign-in link is invalid. Request a new link from the sign-in page.");
+            setStatus("error");
           } else {
             setErrorMsg(err.message);
             setStatus("error");
           }
         } else {
-          setErrorMsg("Something went wrong.");
+          setErrorMsg("Could not reach the server. Make sure the onboarding API is running on port 8081.");
           setStatus("error");
         }
       });
-  }, [token, router]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [token, completeLogin]);
 
   if (status === "loading") {
     return (

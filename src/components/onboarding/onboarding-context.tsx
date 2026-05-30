@@ -12,6 +12,7 @@ import {
   completeOnboarding,
   APIError,
 } from "@/lib/api";
+import { dashboardSessionHandoffUrl } from "@/lib/auth-redirect";
 
 // ── Step Order ──
 
@@ -20,7 +21,6 @@ const STEP_ORDER: OnboardingStep[] = [
   "workspace",
   "connect",
   "team",
-  "products",
   "customize",
   "launch",
 ];
@@ -32,6 +32,7 @@ const DEFAULT_FORM_DATA: OnboardingFormData = {
   fullName: "",
   email: "",
   userRole: "",
+  startupIdeaTemplate: "",
 
   // Workspace
   workspaceName: "",
@@ -204,6 +205,16 @@ export function OnboardingProvider({ children, initialStep = "welcome", userData
       .then((status) => {
         if (cancelled) return;
         const { session } = status;
+        if (session.completed_at) {
+          const match = document.cookie.match(/(?:^|; )session=([^;]*)/);
+          const token = match ? decodeURIComponent(match[1]) : undefined;
+          if (token) {
+            window.location.href = dashboardSessionHandoffUrl(token, "/dashboard");
+          } else {
+            window.location.href = "/auth/login?redirect=/dashboard";
+          }
+          return;
+        }
         setSessionId(session.id);
         setUserId(session.user_id);
         setOrgId(session.org_id);

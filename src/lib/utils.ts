@@ -1,5 +1,35 @@
 import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { extendTailwindMerge } from "tailwind-merge";
+
+/** Arbitrary Tailwind font sizes (e.g. text-[2.75rem]) — must not collide with text-fynk-ink. */
+const isFontSizeArbitrary = (value: string) =>
+  /^\[\d+(\.\d+)?(rem|px|em|vw|vh)\]$/.test(value);
+
+/** Custom typography tokens must stay in the font-size group so `text-fynk-ink` is not dropped. */
+const twMerge = extendTailwindMerge({
+  override: {
+    classGroups: {
+      "font-size": [
+        {
+          text: [
+            "display-1",
+            "display-2",
+            "heading-1",
+            "heading-2",
+            "heading-3",
+            "heading-4",
+            "heading-5",
+            "body-xl",
+            "body-lg",
+            "body-base",
+            "body-sm",
+            isFontSizeArbitrary,
+          ],
+        },
+      ],
+    },
+  },
+});
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

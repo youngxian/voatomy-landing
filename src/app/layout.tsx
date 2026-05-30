@@ -1,17 +1,11 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import localFont from "next/font/local";
 import { SITE_CONFIG } from "@/lib/constants";
+import { fontVariables } from "@/lib/fonts";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AnalyticsProvider } from "@/components/analytics-provider";
 import { JsonLd, organizationJsonLd, webSiteJsonLd } from "@/components/json-ld";
 import "./globals.css";
-
-const aspekta = localFont({
-  src: "../../public/fonts/AspektaVF.woff2",
-  variable: "--font-aspekta",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: {
@@ -39,8 +33,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={aspekta.variable} suppressHydrationWarning>
-      <body className="font-sans">
+    <html lang="en" className={fontVariables} suppressHydrationWarning>
+      <body className="font-sans antialiased">
         <JsonLd data={organizationJsonLd()} />
         <JsonLd data={webSiteJsonLd()} />
         <ThemeProvider>

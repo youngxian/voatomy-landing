@@ -4,7 +4,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 interface SectionOwnProps {
-  variant?: "default" | "white" | "dark" | "premium" | "glass" | "coral" | "amber" | "violet" | "sky" | "rose" | "mint";
+  variant?: "default" | "white" | "dark" | "premium" | "glass" | "coral" | "amber" | "violet" | "sky" | "rose" | "mint" | "fynk" | "fynk-alt";
   container?: boolean;
   withGrid?: boolean;
   withNoise?: boolean;
@@ -14,7 +14,10 @@ type SectionProps = SectionOwnProps &
   Omit<React.HTMLAttributes<HTMLElement>, keyof SectionOwnProps>;
 
 const LIGHT_SURFACE_VARIANTS = new Set([
+  "default",
   "white",
+  "fynk",
+  "fynk-alt",
   "amber",
   "coral",
   "violet",
@@ -39,9 +42,11 @@ export function Section({
       className={cn(
         "relative flex flex-col items-center justify-center px-4 py-16 sm:py-24 transition-[background-color,color,border-color] duration-300 ease-out",
         lightTypography && "light-surface-typography",
-        variant === "default" && "bg-theme",
+        variant === "default" && "bg-white",
         variant === "white" && "bg-white",
-        variant === "dark" && "bg-theme-s text-theme",
+        variant === "fynk" && "bg-white",
+        variant === "fynk-alt" && "bg-fynk-surface-alt",
+        variant === "dark" && "bg-fynk-ink text-white",
         variant === "premium" && "bg-theme overflow-hidden",
         variant === "glass" && "glass overflow-hidden",
         variant === "coral" && "bg-coral-light",

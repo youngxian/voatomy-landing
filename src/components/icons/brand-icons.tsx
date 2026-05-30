@@ -1,4 +1,9 @@
 import { cn } from "@/lib/utils";
+import {
+  getBrandHexFromRegistry,
+  getSimpleBrandMeta,
+  getSimpleIconCdnUrl,
+} from "@/lib/brand-registry";
 
 interface BrandIconProps {
   className?: string;
@@ -253,24 +258,56 @@ export function BrandIcon({
   colored?: boolean;
 }) {
   const IconComponent = ICON_MAP[name];
-  const color = colored ? BRAND_COLOR_MAP[name] : undefined;
+  const color = colored ? (BRAND_COLOR_MAP[name] ?? getBrandHexFromRegistry(name)) : undefined;
 
-  if (!IconComponent) {
+  if (IconComponent) {
     return (
       <span
-        className={cn(
-          "inline-flex items-center justify-center text-xs font-bold",
-          className,
-        )}
+        className={cn("inline-flex shrink-0 items-center justify-center", className)}
+        style={color ? { color } : undefined}
       >
-        {name.slice(0, 2).toUpperCase()}
+        <IconComponent size={size} />
       </span>
     );
   }
 
-  return <IconComponent className={className} size={size} />;
+  const cdnUrl = getSimpleIconCdnUrl(name);
+  const meta = getSimpleBrandMeta(name);
+
+  if (cdnUrl && meta) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- Simple Icons CDN serves official brand SVGs
+      <img
+        src={cdnUrl}
+        alt={meta.title}
+        width={size}
+        height={size}
+        className={cn("shrink-0 object-contain", className)}
+        loading="lazy"
+        decoding="async"
+      />
+    );
+  }
+
+  return (
+    <span
+      className={cn(
+        "inline-flex shrink-0 items-center justify-center rounded-md text-xs font-bold",
+        className,
+      )}
+      style={{
+        color: colored ? getBrandHexFromRegistry(name) : undefined,
+        backgroundColor: colored ? `${getBrandHexFromRegistry(name)}18` : undefined,
+        width: size,
+        height: size,
+      }}
+    >
+      {name.slice(0, 2).toUpperCase()}
+    </span>
+  );
 }
 
 export function getBrandColor(name: string): string {
-  return BRAND_COLOR_MAP[name] ?? "#888888";
+  if (BRAND_COLOR_MAP[name]) return BRAND_COLOR_MAP[name];
+  return getBrandHexFromRegistry(name);
 }

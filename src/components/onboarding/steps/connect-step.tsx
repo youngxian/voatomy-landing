@@ -14,6 +14,8 @@ import {
   APIError,
 } from "@/lib/api";
 import { useSubscriptionProducts } from "@/hooks/use-subscription-products";
+import { useProductOnboarding } from "@/hooks/use-product-onboarding";
+import { getRecommendedIntegrationKeys, getPrimaryProductLabel } from "@/lib/integration-recommendations";
 import type { IntegrationKey, ConnectedIntegration, AuthMethod, ProductKey, BoardProject } from "@/types";
 
 type CatalogEntry = (typeof INTEGRATION_CATALOG)[number];
@@ -21,6 +23,7 @@ type CatalogEntry = (typeof INTEGRATION_CATALOG)[number];
 export function ConnectStep() {
   const { goNext, goBack, updateFormData, formData, markStepComplete, markStepSkipped, saveStep, skipStepOnServer } = useOnboarding();
   const { products: subscribedProducts, loading: productsLoading } = useSubscriptionProducts();
+  const { primaryProduct, primaryModule, licensedProducts, showBoardPicker: enableBoardPicker } = useProductOnboarding();
   const [connected, setConnected] = React.useState<ConnectedIntegration[]>(formData.connectedIntegrations);
   const [connecting, setConnecting] = React.useState<IntegrationKey | null>(null);
   const [activeCategory, setActiveCategory] = React.useState<string>("all");
@@ -53,6 +56,25 @@ export function ConnectStep() {
   const filteredIntegrations = activeCategory === "all"
     ? relevantIntegrations
     : relevantIntegrations.filter((i) => i.category === activeCategory);
+
+  const recommendedKeys = React.useMemo(
+    () => getRecommendedIntegrationKeys(formData.startupIdeaTemplate, primaryProduct, licensedProducts),
+    [formData.startupIdeaTemplate, primaryProduct, licensedProducts],
+  );
+
+  const recommendedIntegrations = React.useMemo(() => {
+    if (recommendedKeys.length === 0) return filteredIntegrations.slice(0, 2);
+    return filteredIntegrations.filter((i) => recommendedKeys.includes(i.key));
+  }, [filteredIntegrations, recommendedKeys]);
+
+  const deferredIntegrations = React.useMemo(() => {
+    const recommendedSet = new Set(recommendedIntegrations.map((i) => i.key));
+    return filteredIntegrations.filter((i) => !recommendedSet.has(i.key));
+  }, [filteredIntegrations, recommendedIntegrations]);
+
+  const displayIntegrations = recommendedIntegrations.length > 0
+    ? recommendedIntegrations
+    : filteredIntegrations.slice(0, 2);
 
   const isConnected = (key: IntegrationKey) => connected.some((c) => c.key === key);
 
@@ -112,7 +134,7 @@ export function ConnectStep() {
       setConnected((prev) => [...prev, newConnection]);
 
       const boardProviders: IntegrationKey[] = ["jira", "linear", "clickup", "github"];
-      if (boardProviders.includes(integ.key)) {
+      if (enableBoardPicker && boardProviders.includes(integ.key)) {
         setBoardProjectsLoading(true);
         try {
           const projects = await fetchBoardProjects(integ.key);
@@ -261,7 +283,8 @@ export function ConnectStep() {
         </div>
         <h1 className="text-[28px] font-bold tracking-tight text-[#121312]">Connect your tools</h1>
         <p className="mt-1.5 text-sm text-[#121312]/50">
-          Connect your project board, Slack or Teams for notifications, and other team apps. We&apos;ll sync data securely.
+          {primaryModule.connectBlurb}
+          {" "}Other tools for your other products can wait until you open them.
         </p>
       </motion.div>
 
@@ -296,7 +319,8 @@ export function ConnectStep() {
         )}
       </AnimatePresence>
 
-      {/* Category tabs */}
+      {/* Category tabs — hidden in slim mode; recommended list is short */}
+      {displayIntegrations.length > 3 && (
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
@@ -319,6 +343,7 @@ export function ConnectStep() {
           </button>
         ))}
       </motion.div>
+      )}
 
       {/* Connected count */}
       {connected.length > 0 && (
@@ -570,7 +595,7 @@ export function ConnectStep() {
         className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6"
       >
         <AnimatePresence mode="popLayout">
-          {filteredIntegrations.map((integ, index) => {
+          {displayIntegrations.map((integ, index) => {
             const intConnected = isConnected(integ.key);
             const isLoading = connecting === integ.key;
             const productBadges = getProductBadges(integ.products);
@@ -656,6 +681,24 @@ export function ConnectStep() {
           })}
         </AnimatePresence>
       </motion.div>
+
+      {deferredIntegrations.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.25 }}
+          className="mb-6 rounded-xl border border-dashed border-[#121312]/12 bg-[#121312]/[0.02] p-4 text-left"
+        >
+          <p className="text-xs font-semibold text-[#121312]/60">
+            {deferredIntegrations.length} more integration{deferredIntegrations.length !== 1 ? "s" : ""} available later
+          </p>
+          <p className="mt-1 text-[11px] text-[#121312]/45">
+            Set up {deferredIntegrations.slice(0, 4).map((i) => i.name).join(", ")}
+            {deferredIntegrations.length > 4 ? " and more" : ""} when you open{" "}
+            {primaryProduct ? getPrimaryProductLabel(primaryProduct) : "each product"}.
+          </p>
+        </motion.div>
+      )}
 
       {/* Navigation */}
       <div className="flex gap-3">

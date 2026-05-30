@@ -13,7 +13,6 @@ import { WelcomeStep } from "./steps/welcome-step";
 import { WorkspaceStep } from "./steps/workspace-step";
 import { ConnectStep } from "./steps/connect-step";
 import { TeamStep } from "./steps/team-step";
-import { ProductsStep } from "./steps/products-step";
 import { CustomizeStep } from "./steps/customize-step";
 import { LaunchStep } from "./steps/launch-step";
 import { PasswordPrompt } from "./password-prompt";
@@ -40,7 +39,6 @@ function OnboardingStepRenderer() {
         {step === "workspace" && <WorkspaceStep />}
         {step === "connect" && <ConnectStep />}
         {step === "team" && <TeamStep />}
-        {step === "products" && <ProductsStep />}
         {step === "customize" && <CustomizeStep />}
         {step === "launch" && <LaunchStep />}
       </motion.div>

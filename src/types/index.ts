@@ -85,6 +85,8 @@ export type CompanySize = "solo" | "2-10" | "11-50" | "51-200" | "201-1000" | "1
 
 export type ProductKey = "atlas" | "loop" | "signal" | "drift" | "phantom" | "nexus";
 
+export type StartupIdeaTemplate = ProductKey;
+
 export type Purpose =
   | "sprint-planning"
   | "revenue-intelligence"
@@ -258,6 +260,7 @@ export interface OnboardingFormData {
   fullName: string;
   email: string;
   userRole: UserRole | "";
+  startupIdeaTemplate: StartupIdeaTemplate | "";
 
   // Step 2 — Workspace
   workspaceName: string;
@@ -376,6 +379,7 @@ export interface OnboardingSession {
   version: number;
   started_at: string;
   updated_at: string;
+  completed_at?: string | null;
 }
 
 export interface OnboardingStatusResponse {
@@ -421,7 +425,7 @@ export interface BackendTeam {
 // ══════════════════════════════════════════════════════════════════
 
 export interface ProductSelection {
-  selected_products: ProductKey[];
+  products: ProductKey[];
   primary_product: ProductKey;
 }
 

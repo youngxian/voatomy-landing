@@ -8,6 +8,7 @@ import {
   APIError,
   type InvitationDetails,
 } from "@/lib/api";
+import { resolvePostAuthDestinationAsync } from "@/lib/auth-redirect";
 
 type Status = "loading" | "ready" | "accepting" | "success" | "expired" | "already_accepted" | "error";
 
@@ -53,19 +54,14 @@ export default function InviteAcceptPage() {
     setStatus("accepting");
     try {
       const result = await acceptInvitation(token);
-      if (result.session_token) {
-        document.cookie = `session=${result.session_token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
-      }
       setStatus("success");
-      const ATLAS_APP_URL = process.env.NEXT_PUBLIC_ATLAS_APP_URL || "http://localhost:3000";
-      setTimeout(() => {
+      setTimeout(async () => {
         const dest = result.redirect_url || (result.is_new_user ? "/onboard" : "/dashboard");
-        if (dest.startsWith("http")) {
-          window.location.href = dest;
-        } else if (dest === "/onboard") {
-          router.push(dest);
+        const destination = await resolvePostAuthDestinationAsync(result.session_token, dest);
+        if (destination.startsWith("http")) {
+          window.location.href = destination;
         } else {
-          window.location.href = `${ATLAS_APP_URL}${dest}`;
+          router.push(destination);
         }
       }, 1500);
     } catch (err) {

@@ -1,131 +1,164 @@
 "use client";
 
+import * as React from "react";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import { BENEFITS_LIST } from "@/lib/constants";
+import { useDictionary } from "@/i18n/locale-provider";
 import { cn } from "@/lib/utils";
-import { Check, TrendingUp, Users, Zap, ArrowRight } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { SectionBackgroundDecor } from "@/components/marketing/section-background-decor";
-import { FloatingPictureFrame } from "@/components/marketing/floating-picture-frame";
-import { MARKETING_IMAGES } from "@/lib/marketing-images";
+import {
+  FynkDisplayHeading,
+  FynkGradientBackdrop,
+  FynkHeadingUnderlineAccent,
+  FynkReveal,
+  FynkSubheading,
+} from "@/components/marketing/fynk-primitives";
+
+/* ── Themed mini-mock illustrations (one per benefit) ─────────────── */
+/** Renders a small inline SVG mock that sits at the top of each card. */
+function BenefitVisual({ index }: { index: number }) {
+  const visuals = [
+    // 0 — One hub: tilted browser window mock
+    <svg key={0} viewBox="0 0 240 140" fill="none" className="h-full w-full">
+      <g transform="translate(28 22) rotate(-3)">
+        <rect x="0" y="0" width="184" height="108" rx="8" fill="#1f2937" />
+        <rect x="0" y="0" width="184" height="18" rx="8" fill="#1f2937" />
+        <circle cx="10" cy="9" r="2" fill="#F87171" />
+        <circle cx="18" cy="9" r="2" fill="#FBBF24" />
+        <circle cx="26" cy="9" r="2" fill="#34D399" />
+        <rect x="0" y="18" width="184" height="90" fill="#FFFFFF" />
+        <rect x="12" y="30" width="14" height="14" rx="3" fill="#F05A28" />
+        <text x="30" y="42" fill="#111827" fontSize="9" fontWeight="700">voatomy</text>
+        <rect x="12" y="56" width="100" height="6" rx="3" fill="#E5E7EB" />
+        <rect x="12" y="68" width="80" height="6" rx="3" fill="#E5E7EB" />
+        <rect x="12" y="82" width="120" height="6" rx="3" fill="#F3F4F6" />
+      </g>
+      {/* sticky-note accent */}
+      <g transform="translate(174 18) rotate(8)">
+        <rect width="32" height="32" rx="2" fill="#FBBF24" />
+        <path d="M 0 0 L 6 8 L -2 8 Z" fill="#F59E0B" />
+      </g>
+    </svg>,
+    // 1 — Faster from plan to ship: timeline progress steps
+    <svg key={1} viewBox="0 0 240 140" fill="none" className="h-full w-full">
+      <g transform="translate(46 28)">
+        <rect width="160" height="84" rx="8" fill="#FFFFFF" stroke="#E5E7EB" strokeWidth="1.5" />
+        {/* progress steps */}
+        <circle cx="20" cy="22" r="6" fill="#3B82F6" />
+        <text x="34" y="26" fill="#111827" fontSize="9" fontWeight="700">Draft</text>
+        <text x="120" y="26" fill="#9CA3AF" fontSize="7">Jan 8</text>
+        <line x1="20" y1="28" x2="20" y2="42" stroke="#3B82F6" strokeWidth="1.5" />
+        <circle cx="20" cy="42" r="5" fill="#FFFFFF" stroke="#3B82F6" strokeWidth="1.5" />
+        <text x="34" y="46" fill="#6B7280" fontSize="8">Review</text>
+        <line x1="20" y1="48" x2="20" y2="60" stroke="#E5E7EB" strokeWidth="1.5" />
+        <circle cx="20" cy="60" r="5" fill="#FFFFFF" stroke="#E5E7EB" strokeWidth="1.5" />
+        <text x="34" y="64" fill="#9CA3AF" fontSize="8">Signing</text>
+        <line x1="20" y1="66" x2="20" y2="76" stroke="#E5E7EB" strokeWidth="1.5" />
+        <circle cx="20" cy="76" r="5" fill="#FFFFFF" stroke="#E5E7EB" strokeWidth="1.5" />
+        <text x="34" y="80" fill="#9CA3AF" fontSize="8">Done</text>
+      </g>
+    </svg>,
+    // 2 — Clarity across teams: doc with role tag
+    <svg key={2} viewBox="0 0 240 140" fill="none" className="h-full w-full">
+      <g transform="translate(78 18)">
+        <rect width="80" height="104" rx="4" fill="#FFFFFF" stroke="#E5E7EB" strokeWidth="1.5" />
+        <rect x="10" y="14" width="50" height="4" rx="2" fill="#E5E7EB" />
+        <rect x="10" y="22" width="60" height="3" rx="1.5" fill="#F3F4F6" />
+        <rect x="10" y="28" width="40" height="3" rx="1.5" fill="#F3F4F6" />
+        <rect x="10" y="38" width="60" height="3" rx="1.5" fill="#F3F4F6" />
+        <rect x="10" y="44" width="55" height="3" rx="1.5" fill="#F3F4F6" />
+        <rect x="10" y="50" width="50" height="3" rx="1.5" fill="#F3F4F6" />
+      </g>
+      {/* role tag */}
+      <g transform="translate(70 14)">
+        <rect width="40" height="18" rx="4" fill="#3B82F6" />
+        <text x="20" y="12" textAnchor="middle" fill="#FFFFFF" fontSize="9" fontWeight="700">Eng</text>
+        <path d="M 4 18 L 0 22 L 8 22 Z" fill="#3B82F6" />
+      </g>
+    </svg>,
+    // 3 — Transparent by design: price tag
+    <svg key={3} viewBox="0 0 240 140" fill="none" className="h-full w-full">
+      <g transform="translate(76 28)">
+        <rect width="88" height="80" rx="8" fill="#FFFFFF" stroke="#E5E7EB" strokeWidth="1.5" />
+        <text x="44" y="36" textAnchor="middle" fill="#111827" fontSize="22" fontWeight="700">$29</text>
+        <text x="44" y="50" textAnchor="middle" fill="#6B7280" fontSize="8">per user / mo</text>
+        <rect x="14" y="58" width="60" height="10" rx="5" fill="#F05A28" />
+        <text x="44" y="65" textAnchor="middle" fill="#FFFFFF" fontSize="6" fontWeight="700">START FREE</text>
+      </g>
+    </svg>,
+    // 4 — Works from day one: lightning bolt
+    <svg key={4} viewBox="0 0 240 140" fill="none" className="h-full w-full">
+      <g transform="translate(96 24)">
+        <path
+          d="M 28 0 L 4 56 L 22 56 L 16 92 L 44 30 L 26 30 Z"
+          fill="#FBBF24"
+          stroke="#111827"
+          strokeWidth="2"
+          strokeLinejoin="round"
+        />
+      </g>
+      <text x="120" y="124" textAnchor="middle" fill="#9CA3AF" fontSize="9" fontWeight="600">SETUP · 0 MIN</text>
+    </svg>,
+    // 5 — Human support: chat bubbles
+    <svg key={5} viewBox="0 0 240 140" fill="none" className="h-full w-full">
+      <g transform="translate(56 22)">
+        <rect width="80" height="40" rx="10" fill="#3B82F6" />
+        <rect x="12" y="14" width="56" height="4" rx="2" fill="#FFFFFF" opacity="0.85" />
+        <rect x="12" y="22" width="40" height="4" rx="2" fill="#FFFFFF" opacity="0.7" />
+        <path d="M 12 40 L 16 50 L 24 40 Z" fill="#3B82F6" />
+      </g>
+      <g transform="translate(76 70)">
+        <rect width="92" height="46" rx="10" fill="#F3F4F6" />
+        <rect x="12" y="16" width="64" height="4" rx="2" fill="#9CA3AF" />
+        <rect x="12" y="24" width="50" height="4" rx="2" fill="#9CA3AF" />
+        <rect x="12" y="32" width="56" height="4" rx="2" fill="#9CA3AF" />
+        <path d="M 80 46 L 76 56 L 68 46 Z" fill="#F3F4F6" />
+      </g>
+    </svg>,
+  ];
+  return visuals[index % visuals.length];
+}
 
 export function BenefitsSection() {
   const { ref, isVisible } = useScrollAnimation();
+  const t = useDictionary().why;
 
   return (
-    <section className="relative overflow-hidden bg-white px-4 py-16 sm:py-24 transition-colors duration-300">
-      <SectionBackgroundDecor tone="white" />
-      <div
-        ref={ref}
-        className="relative z-[1] mx-auto grid max-w-container gap-12 lg:grid-cols-2 lg:items-center lg:gap-20"
-      >
-        {/* Left: Visual bento with real image + dashboard */}
-        <div
-          className={cn(
-            "relative order-2 lg:order-1 transition-all duration-700",
-            isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8",
-          )}
-        >
-          <div className="grid grid-cols-5 gap-3">
-            {/* Real workspace image — spans 3 cols */}
-            <FloatingPictureFrame className="col-span-3" delay={0.08}>
-              <div className="overflow-hidden rounded-2xl border border-charcoal/10 shadow-md">
-                <Image
-                  src={MARKETING_IMAGES.collaboration}
-                  alt="Team collaboration in product review"
-                  width={960}
-                  height={720}
-                  className="h-full w-full object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-              </div>
-            </FloatingPictureFrame>
+    <section className="light-surface-typography relative overflow-hidden bg-white px-4 py-20 sm:py-28">
+      <FynkGradientBackdrop intensity="soft" />
 
-            {/* Stacked stat cards — spans 2 cols */}
-            <div className="col-span-2 flex flex-col gap-3">
-              <div className="flex-1 rounded-2xl border border-charcoal/10 bg-white p-4 shadow-sm">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-teal/10">
-                    <Zap className="h-3.5 w-3.5 text-teal" />
-                  </span>
-                </div>
-                <div className="mt-2 text-xl font-bold text-teal">1,951+</div>
-                <div className="text-[10px] text-charcoal/50">Tickets Planned</div>
-              </div>
-              <div className="flex-1 rounded-2xl border border-accent-lime/30 bg-accent-lime/15 p-4">
-                <div className="flex items-center gap-2">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-teal/10">
-                    <Users className="h-3.5 w-3.5 text-teal" />
-                  </span>
-                </div>
-                <div className="mt-2 text-xl font-bold text-teal">78%</div>
-                <div className="text-[10px] text-charcoal/50">Team Capacity</div>
-                <div className="mt-1.5 flex h-1.5 overflow-hidden rounded-full bg-teal/10">
-                  <div className="w-[78%] rounded-full bg-teal/50" />
-                </div>
-              </div>
-            </div>
+      <div ref={ref} className="relative z-[1] mx-auto max-w-container">
+        <FynkReveal visible={isVisible} className="mx-auto max-w-5xl text-center lg:max-w-6xl">
+          <FynkDisplayHeading align="center" className="max-w-6xl">
+            {t.titleLine1}
+            <br />
+            <FynkHeadingUnderlineAccent>{t.titleLine2}</FynkHeadingUnderlineAccent>
+          </FynkDisplayHeading>
+          <FynkSubheading className="mt-5">{t.subtitle}</FynkSubheading>
+        </FynkReveal>
 
-            {/* Bottom chart card — spans all 5 */}
-            <div className="col-span-5 rounded-2xl border border-charcoal/10 bg-white p-4 shadow-sm">
-              <div className="mb-2 flex items-center justify-between">
-                <span className="text-xs font-semibold text-charcoal">Sprint Overview</span>
-                <span className="rounded-full bg-accent-lime/20 px-2 py-0.5 text-[10px] font-semibold text-teal">
-                  <TrendingUp className="mr-0.5 inline h-2.5 w-2.5" />
-                  +12%
-                </span>
-              </div>
-              <div className="flex h-16 items-end justify-between gap-1">
-                {[55, 70, 45, 85, 60, 90, 50, 75, 65, 80, 55, 70].map((h, i) => (
-                  <div
-                    key={i}
-                    className="flex-1 rounded-t bg-teal/25 transition-all hover:bg-teal/45"
-                    style={{ height: `${h}%`, minHeight: "8px" }}
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right: Benefits list */}
-        <div
-          className={cn(
-            "order-1 lg:order-2 transition-all duration-700 delay-150",
-            isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8",
-          )}
-        >
-          <span className="inline-flex items-center gap-2 rounded-full border border-teal/15 bg-teal/5 px-3 py-1 text-xs font-bold uppercase tracking-widest text-teal">
-            Key Benefits
-          </span>
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-charcoal sm:text-heading-1">
-            Key Benefits for Your Engineering Workflow
-          </h2>
-          <p className="mt-3 text-body-lg text-charcoal/60">
-            Data-driven sprint planning that connects capacity, priority, and code complexity in one place.
-          </p>
-          <ul className="mt-8 space-y-5">
-            {BENEFITS_LIST.map((benefit) => (
-              <li key={benefit.title} className="flex items-start gap-4">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-teal text-white shadow-sm">
-                  <Check className="h-4 w-4" strokeWidth={2.5} />
-                </span>
-                <div>
-                  <div className="font-semibold text-charcoal">{benefit.title}</div>
-                  <div className="mt-0.5 text-sm text-charcoal/60">{benefit.desc}</div>
+        <ul className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+          {t.items.map((item, i) => (
+            <li
+              key={item.title}
+              className={cn(
+                "transition-all duration-500",
+                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
+              )}
+              style={{ transitionDelay: `${i * 80}ms` }}
+            >
+              <article className="group flex h-full flex-col rounded-3xl border border-fynk-border bg-fynk-surface-alt p-5 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-lg sm:p-6">
+                {/* Visual mock area */}
+                <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-fynk-border bg-white">
+                  <BenefitVisual index={i} />
                 </div>
-              </li>
-            ))}
-          </ul>
-          <Link
-            href="/products/atlas"
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-teal px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-teal-dark"
-          >
-            Learn more
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
+
+                <div className="mt-6 px-1 pb-1">
+                  <h3 className="text-lg font-bold text-fynk-ink">{item.title}</h3>
+                  <p className="mt-2.5 text-base leading-relaxed text-fynk-muted">{item.desc}</p>
+                </div>
+              </article>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

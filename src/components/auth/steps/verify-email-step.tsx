@@ -9,6 +9,12 @@ export function VerifyEmailStep() {
   const [resendTimer, setResendTimer] = React.useState(60);
   const [resendDisabled, setResendDisabled] = React.useState(true);
   const [resendMessage, setResendMessage] = React.useState<string | null>(null);
+  const [devLink, setDevLink] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    const link = sessionStorage.getItem("voatomy_dev_magic_link");
+    setDevLink(link);
+  }, []);
 
   React.useEffect(() => {
     if (resendTimer <= 0) {
@@ -24,7 +30,11 @@ export function VerifyEmailStep() {
     setResendTimer(60);
     setResendMessage(null);
     try {
-      await resendMagicLink(formData.email);
+      const result = await resendMagicLink(formData.email);
+      if (result.dev_magic_link_url) {
+        sessionStorage.setItem("voatomy_dev_magic_link", result.dev_magic_link_url);
+        setDevLink(result.dev_magic_link_url);
+      }
       setResendMessage("New link sent!");
     } catch (err) {
       const msg = err instanceof APIError ? err.message : "Failed to resend";
@@ -69,6 +79,21 @@ export function VerifyEmailStep() {
           Click the link in your email to sign in and start setting up your workspace. No password needed.
         </p>
       </div>
+
+      {devLink && (
+        <div className="mx-auto mt-4 max-w-[360px] rounded-xl border border-amber-200 bg-amber-50 p-4 text-left">
+          <p className="text-xs font-semibold uppercase tracking-wide text-amber-800">Dev mode</p>
+          <p className="mt-1 text-sm text-amber-900/80">
+            Email may not arrive locally. Use this link instead:
+          </p>
+          <a
+            href={devLink}
+            className="mt-2 block break-all text-sm font-medium text-brand underline"
+          >
+            {devLink}
+          </a>
+        </div>
+      )}
 
       {resendMessage && (
         <p className="mt-4 text-sm text-emerald-600">{resendMessage}</p>

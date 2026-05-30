@@ -14,8 +14,17 @@ import type {
   SprintStatusResponse,
 } from "@/types";
 
-const API_BASE = process.env.NEXT_PUBLIC_ONBOARDING_API_URL ?? "http://localhost:8081/v1";
-const PUBLIC_API = process.env.NEXT_PUBLIC_ONBOARDING_API_URL?.replace("/v1", "/public") ?? "http://localhost:8081/public";
+/** Origin only — public routes live at `/public`, not `/v1/public`. */
+function onboardingApiOrigin(): string {
+  const raw = (process.env.NEXT_PUBLIC_ONBOARDING_API_URL ?? "http://localhost:8081/v1").trim();
+  return raw
+    .replace(/\/v1(\/public)?\/?$/i, "")
+    .replace(/\/public\/?$/i, "")
+    .replace(/\/$/, "");
+}
+
+const API_BASE = `${onboardingApiOrigin()}/v1`;
+const PUBLIC_API = `${onboardingApiOrigin()}/public`;
 const ATLAS_API_BASE = process.env.NEXT_PUBLIC_ATLAS_API_URL ?? "http://localhost:3010/v1";
 
 async function request<T>(path: string, opts?: RequestInit): Promise<T> {
@@ -125,11 +134,16 @@ export async function fetchPricingCatalog(): Promise<APIPricingCatalog | null> {
 
 // ── Auth (public — no JWT required) ──
 
+export interface SignupWithMagicLinkResult {
+  message: string;
+  dev_magic_link_url?: string;
+}
+
 export async function signupWithMagicLink(input: {
   first_name: string;
   last_name: string;
   email: string;
-}): Promise<{ message: string }> {
+}): Promise<SignupWithMagicLinkResult> {
   const res = await fetch(`${PUBLIC_API}/auth/signup`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -137,9 +151,11 @@ export async function signupWithMagicLink(input: {
   });
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
-    throw new APIError(res.status, body.error?.code ?? "unknown", body.error?.message ?? res.statusText);
+    const err = body.error ?? body;
+    throw new APIError(res.status, err?.code ?? "unknown", err?.message ?? res.statusText);
   }
-  return (await res.json()).data;
+  const json = await res.json();
+  return (json.data ?? json) as SignupWithMagicLinkResult;
 }
 
 export interface VerifyMagicLinkResult {
@@ -151,7 +167,7 @@ export interface VerifyMagicLinkResult {
 }
 
 export async function verifyMagicLink(token: string): Promise<VerifyMagicLinkResult> {
-  const res = await fetch(`${PUBLIC_API}/auth/verify/${token}`);
+  const res = await fetch(`${PUBLIC_API}/auth/verify/${encodeURIComponent(token)}`);
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
     throw new APIError(res.status, body.error?.code ?? "unknown", body.error?.message ?? "Verification failed");
@@ -159,7 +175,12 @@ export async function verifyMagicLink(token: string): Promise<VerifyMagicLinkRes
   return (await res.json()).data;
 }
 
-export async function resendMagicLink(email: string): Promise<{ message: string }> {
+export interface ResendMagicLinkResult {
+  message: string;
+  dev_magic_link_url?: string;
+}
+
+export async function resendMagicLink(email: string): Promise<ResendMagicLinkResult> {
   const res = await fetch(`${PUBLIC_API}/auth/resend`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -167,9 +188,11 @@ export async function resendMagicLink(email: string): Promise<{ message: string 
   });
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
-    throw new APIError(res.status, body.error?.code ?? "unknown", body.error?.message ?? res.statusText);
+    const err = body.error ?? body;
+    throw new APIError(res.status, err?.code ?? "unknown", err?.message ?? res.statusText);
   }
-  return (await res.json()).data;
+  const json = await res.json();
+  return (json.data ?? json) as ResendMagicLinkResult;
 }
 
 // ── Password Reset (public — no JWT required) ──
@@ -573,9 +596,12 @@ export async function provisionProducts(): Promise<ProvisionResult> {
   });
 }
 
-export async function startTrial(): Promise<{ message: string; trial_ends_at: string }> {
+export async function startTrial(
+  planTier: "pro" | "business" = "pro",
+): Promise<{ message: string; trial_ends_at: string }> {
   return request<{ message: string; trial_ends_at: string }>("/billing/start-trial", {
     method: "POST",
+    body: JSON.stringify({ plan_tier: planTier }),
   });
 }
 

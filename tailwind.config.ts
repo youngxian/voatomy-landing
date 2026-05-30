@@ -11,16 +11,28 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: [
-          "var(--font-aspekta)",
-          "Aspekta",
+          "var(--font-inter)",
+          "Inter",
           "ui-sans-serif",
           "system-ui",
           "-apple-system",
+          "BlinkMacSystemFont",
           "Segoe UI",
-          "Roboto",
-          "Helvetica",
-          "Arial",
           "sans-serif",
+        ],
+        heading: [
+          "var(--font-heading)",
+          "Labil Grotesk",
+          "var(--font-inter)",
+          "Inter",
+          "ui-sans-serif",
+          "system-ui",
+          "sans-serif",
+        ],
+        handwriting: [
+          "var(--font-handwriting)",
+          "Caveat",
+          "cursive",
         ],
       },
       colors: {
@@ -69,6 +81,23 @@ const config: Config = {
         charcoal: "#333F3C",
         "heading-dark": "#073127",
         "body-dark": "#333F3C",
+        fynk: {
+          orange: "#F05A28",
+          "orange-hover": "#E04E1E",
+          "orange-light": "#FFF4EF",
+          blue: "#3B82F6",
+          "blue-light": "#EFF6FF",
+          yellow: "#FBBF24",
+          ink: "#111827",
+          body: "#374151",
+          muted: "#6B7280",
+          faint: "#9CA3AF",
+          border: "rgba(17, 24, 39, 0.08)",
+          "border-hover": "rgba(17, 24, 39, 0.14)",
+          surface: "#FFFFFF",
+          "surface-alt": "#F9FAFB",
+          "surface-warm": "#FFFBF7",
+        },
         "accent-lime": "#E2FB6C",
         coral: { DEFAULT: "#F97316", light: "#FFF7ED", dark: "#EA580C" },
         violet: { DEFAULT: "#8B5CF6", light: "#F5F3FF", dark: "#6D28D9" },
@@ -77,33 +106,51 @@ const config: Config = {
         rose: { DEFAULT: "#F43F5E", light: "#FFF1F2", dark: "#E11D48" },
       },
       fontSize: {
+        /* fynk.com text-heading-* scale (Labil Grotesk, weight 500) */
         "display-1": [
-          "80px",
-          { lineHeight: "1.05", letterSpacing: "-2.58px", fontWeight: "600" },
+          "90px",
+          { lineHeight: "0.9", letterSpacing: "-1.62px", fontWeight: "700" },
         ],
         "display-2": [
-          "56px",
-          { lineHeight: "1.05", letterSpacing: "-1.74px", fontWeight: "600" },
+          "64px",
+          { lineHeight: "1.1", letterSpacing: "-1.28px", fontWeight: "700" },
         ],
         "heading-1": [
-          "40px",
-          { lineHeight: "1.15", letterSpacing: "-1.2px", fontWeight: "600" },
+          "54px",
+          { lineHeight: "1.1", letterSpacing: "-1.08px", fontWeight: "700" },
         ],
         "heading-2": [
-          "28px",
-          { lineHeight: "1.2", letterSpacing: "-0.5px", fontWeight: "600" },
+          "42px",
+          { lineHeight: "1.1", letterSpacing: "-0.84px", fontWeight: "700" },
         ],
         "heading-3": [
-          "20px",
-          { lineHeight: "1.3", fontWeight: "600" },
+          "32px",
+          { lineHeight: "1.1", letterSpacing: "-0.64px", fontWeight: "700" },
+        ],
+        "heading-4": [
+          "28px",
+          { lineHeight: "1.1", letterSpacing: "-0.56px", fontWeight: "700" },
+        ],
+        "heading-5": [
+          "22px",
+          { lineHeight: "1.2", letterSpacing: "-0.44px", fontWeight: "700" },
+        ],
+        /* fynk.com text-body-* scale (Inter, weight 400) */
+        "body-xl": [
+          "22px",
+          { lineHeight: "1.5", letterSpacing: "-0.22px" },
         ],
         "body-lg": [
-          "18px",
-          { lineHeight: "28px", letterSpacing: "-0.18px" },
+          "20px",
+          { lineHeight: "1.4444", letterSpacing: "-0.2px" },
         ],
         "body-base": [
-          "16px",
-          { lineHeight: "24px" },
+          "18px",
+          { lineHeight: "1.5", letterSpacing: "-0.18px" },
+        ],
+        "body-sm": [
+          "15px",
+          { lineHeight: "1.42857", letterSpacing: "-0.15px" },
         ],
       },
       borderRadius: {
@@ -114,7 +161,7 @@ const config: Config = {
         "section-element": "64px",
       },
       maxWidth: {
-        container: "1280px",
+        container: "1600px",
       },
       keyframes: {
         "fade-in-up": {
@@ -155,6 +202,22 @@ const config: Config = {
         },
         "menu-in": {
           from: { opacity: "0", transform: "translateY(-8px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        "nav-drop-in": {
+          from: { opacity: "0", transform: "translateY(-10px) scale(0.98)" },
+          to: { opacity: "1", transform: "translateY(0) scale(1)" },
+        },
+        "nav-slide-down": {
+          from: { opacity: "0", transform: "translateY(-16px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        "hero-scale-in": {
+          from: { opacity: "0", transform: "translateY(32px) scale(0.96)" },
+          to: { opacity: "1", transform: "translateY(0) scale(1)" },
+        },
+        "hero-fade-up": {
+          from: { opacity: "0", transform: "translateY(20px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
         "trust-dot": {
@@ -217,6 +280,63 @@ const config: Config = {
           "0%, 100%": { transform: "translateY(0) rotate(0deg)" },
           "50%": { transform: "translateY(-5px) rotate(0.3deg)" },
         },
+        /* fynk.com rotating-word hero — swap-in / swap-out */
+        "word-swap-in": {
+          "0%": { opacity: "0", transform: "translateY(14px) scale(0.92)", filter: "blur(4px)" },
+          "55%": { opacity: "1", transform: "translateY(0) scale(1.02)", filter: "blur(0)" },
+          "100%": { transform: "translateY(0) scale(1)" },
+        },
+        "word-swap-out": {
+          "0%": { opacity: "1", transform: "translateY(0) scale(1)", filter: "blur(0)" },
+          "100%": { opacity: "0", transform: "translateY(-14px) scale(0.92)", filter: "blur(4px)" },
+        },
+        /* fynk.com card-stack drift (3-step "How it works" illustrations) */
+        "fynk-card-drift": {
+          "0%, 100%": { transform: "translate(0, 0) rotate(-1.2deg)" },
+          "50%": { transform: "translate(0.6%, -1.2%) rotate(-0.6deg)" },
+        },
+        "fynk-card-drift-alt": {
+          "0%, 100%": { transform: "translate(0, 0) rotate(1.5deg)" },
+          "50%": { transform: "translate(-0.4%, -1.6%) rotate(0.8deg)" },
+        },
+        /* fynk.com soft ambient breathing */
+        "fynk-ambient": {
+          "0%, 100%": { opacity: "0.55", transform: "translate(0,0) scale(1)" },
+          "50%": { opacity: "0.75", transform: "translate(2%, -3%) scale(1.04)" },
+        },
+        "logo-drift-a": {
+          "0%, 100%": { transform: "translate(0, 0) rotate(0deg)" },
+          "33%": { transform: "translate(6px, -12px) rotate(2.5deg)" },
+          "66%": { transform: "translate(-5px, 8px) rotate(-2deg)" },
+        },
+        "logo-drift-b": {
+          "0%, 100%": { transform: "translate(0, 0) rotate(0deg)" },
+          "50%": { transform: "translate(-10px, -14px) rotate(-3deg)" },
+        },
+        "logo-drift-c": {
+          "0%, 100%": { transform: "translate(0, 0) scale(1)" },
+          "50%": { transform: "translate(8px, 10px) scale(1.04)" },
+        },
+        "logo-pop-in": {
+          from: { opacity: "0", transform: "scale(0.55) translateY(24px)" },
+          to: { opacity: "1", transform: "scale(1) translateY(0)" },
+        },
+        "marquee-scroll": {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
+        },
+        "hub-pulse": {
+          "0%, 100%": { transform: "scale(1)", opacity: "0.85" },
+          "50%": { transform: "scale(1.06)", opacity: "1" },
+        },
+        "ring-expand": {
+          "0%": { transform: "scale(0.85)", opacity: "0.55" },
+          "100%": { transform: "scale(1.55)", opacity: "0" },
+        },
+        "dash-flow": {
+          "0%": { strokeDashoffset: "24" },
+          "100%": { strokeDashoffset: "0" },
+        },
       },
       animation: {
         "fade-in-up": "fade-in-up 600ms cubic-bezier(0.16, 1, 0.3, 1) both",
@@ -229,6 +349,10 @@ const config: Config = {
         "float-slow": "float-slow 9.5s ease-in-out infinite",
         "chip-float": "chip-float 4s ease-in-out infinite",
         "menu-in": "menu-in 200ms ease-out both",
+        "nav-drop-in": "nav-drop-in 240ms cubic-bezier(0.16, 1, 0.3, 1) both",
+        "nav-slide-down": "nav-slide-down 500ms cubic-bezier(0.16, 1, 0.3, 1) both",
+        "hero-scale-in": "hero-scale-in 900ms cubic-bezier(0.16, 1, 0.3, 1) both",
+        "hero-fade-up": "hero-fade-up 700ms cubic-bezier(0.16, 1, 0.3, 1) both",
         "trust-dot": "trust-dot 2.8s ease-in-out infinite",
         "glow-pulse": "glow-pulse 3s ease-in-out infinite",
         shimmer: "shimmer 2s linear infinite",
@@ -243,6 +367,19 @@ const config: Config = {
         "orb-drift-1": "orb-drift-1 16s ease-in-out infinite",
         "orb-drift-2": "orb-drift-2 20s ease-in-out infinite 2s",
         "picture-float": "picture-float 6s ease-in-out infinite",
+        "word-swap-in": "word-swap-in 480ms cubic-bezier(0.22, 1, 0.36, 1) both",
+        "word-swap-out": "word-swap-out 360ms cubic-bezier(0.4, 0, 1, 1) both",
+        "fynk-card-drift": "fynk-card-drift 9s ease-in-out infinite",
+        "fynk-card-drift-alt": "fynk-card-drift-alt 11s ease-in-out infinite 1.5s",
+        "fynk-ambient": "fynk-ambient 14s ease-in-out infinite",
+        "logo-drift-a": "logo-drift-a 8s ease-in-out infinite",
+        "logo-drift-b": "logo-drift-b 10s ease-in-out infinite",
+        "logo-drift-c": "logo-drift-c 9s ease-in-out infinite",
+        "logo-pop-in": "logo-pop-in 800ms cubic-bezier(0.16, 1, 0.3, 1) both",
+        "marquee-scroll": "marquee-scroll 40s linear infinite",
+        "hub-pulse": "hub-pulse 3.2s ease-in-out infinite",
+        "ring-expand": "ring-expand 2.8s ease-out infinite",
+        "dash-flow": "dash-flow 1.8s linear infinite",
       },
       backgroundImage: {
         "green-glow":
@@ -253,6 +390,15 @@ const config: Config = {
           "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.06) 1px, transparent 0)",
         "dot-grid-light":
           "radial-gradient(circle at 1px 1px, rgba(0,72,56,0.06) 1px, transparent 0)",
+        /* fynk.com signature gradient washes (orange-left, blue-right) */
+        "fynk-orange-wash":
+          "radial-gradient(60% 50% at 15% 30%, rgba(240,90,40,0.16), transparent 70%)",
+        "fynk-blue-wash":
+          "radial-gradient(50% 45% at 85% 20%, rgba(59,130,246,0.14), transparent 70%)",
+        "fynk-warm-floor":
+          "linear-gradient(180deg, #FFFBF7 0%, #FFFFFF 50%, #F9FAFB 100%)",
+        "fynk-cta-glow":
+          "radial-gradient(80% 60% at 50% 0%, rgba(240,90,40,0.18), transparent 65%)",
       },
     },
   },

@@ -6,11 +6,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 import { useAuth } from "../auth-page";
 import { SocialButtons } from "../social-buttons";
 import { OrDivider } from "../or-divider";
 import { initSSO, loginWithPassword, verifyLoginOTP, resendMagicLink, APIError } from "@/lib/api";
 import { AUTH_REDIRECT_KEY } from "../auth-page";
+import { resolvePostAuthDestinationAsync } from "@/lib/auth-redirect";
 
 const emailSchema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -125,13 +127,13 @@ export function LoginStep() {
     setApiError("");
     try {
       const result = await verifyLoginOTP(loginToken, data.code);
-      document.cookie = `session=${result.session_token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
-      const redirect = localStorage.getItem(AUTH_REDIRECT_KEY) || "/onboard";
+      const storedRedirect = localStorage.getItem(AUTH_REDIRECT_KEY);
       localStorage.removeItem(AUTH_REDIRECT_KEY);
-      if (redirect.startsWith("http")) {
-        window.location.href = redirect;
+      const destination = await resolvePostAuthDestinationAsync(result.session_token, storedRedirect);
+      if (destination.startsWith("http")) {
+        window.location.href = destination;
       } else {
-        router.push(redirect);
+        router.push(destination);
       }
     } catch (err) {
       if (err instanceof APIError) {
@@ -477,40 +479,68 @@ export function LoginStep() {
               disabled={passwordForm.formState.isSubmitting}
               className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#121312] text-sm font-semibold text-white transition-all duration-200 hover:bg-[#121312]/90 active:scale-[0.98] disabled:opacity-50"
             >
-              {passwordForm.formState.isSubmitting ? "Signing in\u2026" : "Log in"}
+              {passwordForm.formState.isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Signing in\u2026
+                </>
+              ) : (
+                "Log in"
+              )}
             </button>
           </form>
 
           <button
             type="button"
             onClick={async () => {
+              if (!email?.trim()) {
+                setApiError("Enter your email first.");
+                return;
+              }
               setSendingMagicLink(true);
               setApiError("");
               try {
-                await resendMagicLink(email);
-                updateFormData({ email });
+                const result = await resendMagicLink(email.trim());
+                updateFormData({ email: email.trim() });
+                if (result.dev_magic_link_url) {
+                  sessionStorage.setItem("voatomy_dev_magic_link", result.dev_magic_link_url);
+                } else {
+                  sessionStorage.removeItem("voatomy_dev_magic_link");
+                }
                 setStep("verify-email");
               } catch (err) {
-                if (err instanceof APIError && err.code === "not_found") {
-                  setApiError("No account found with this email. Please sign up first.");
+                if (err instanceof APIError) {
+                  if (err.code === "not_found") {
+                    setApiError("No account found with this email. Please sign up first.");
+                  } else {
+                    setApiError(err.message);
+                  }
                 } else {
                   setApiError(
-                    err instanceof APIError
-                      ? err.message
-                      : "Failed to send sign-in link. Please try again.",
+                    "Could not reach the server. Is the onboarding API running on port 8081?",
                   );
                 }
+              } finally {
                 setSendingMagicLink(false);
               }
             }}
             disabled={sendingMagicLink}
             className="mt-3 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-[#121312]/15 bg-white text-sm font-semibold text-[#121312] transition-all duration-200 hover:bg-[#121312]/5 active:scale-[0.98] disabled:opacity-50 cursor-pointer"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="2" y="4" width="20" height="16" rx="2" />
-              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-            </svg>
-            {sendingMagicLink ? "Sending\u2026" : "Email sign-in link"}
+            {sendingMagicLink ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Sending\u2026
+              </>
+            ) : (
+              <>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="4" width="20" height="16" rx="2" />
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                </svg>
+                Email sign-in link
+              </>
+            )}
           </button>
 
           <div className="mt-3 text-right">
@@ -612,7 +642,14 @@ export function LoginStep() {
               disabled={otpForm.formState.isSubmitting || otpForm.watch("code").length < 6}
               className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#121312] text-sm font-semibold text-white transition-all duration-200 hover:bg-[#121312]/90 active:scale-[0.98] disabled:opacity-50"
             >
-              {otpForm.formState.isSubmitting ? "Verifying\u2026" : "Verify"}
+              {otpForm.formState.isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Verifying\u2026
+                </>
+              ) : (
+                "Verify"
+              )}
             </button>
           </form>
 
@@ -621,8 +658,9 @@ export function LoginStep() {
               type="button"
               onClick={handleResend}
               disabled={resending}
-              className="font-medium text-[#121312]/50 hover:text-[#121312] transition-colors cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 font-medium text-[#121312]/50 hover:text-[#121312] transition-colors cursor-pointer disabled:opacity-50"
             >
+              {resending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
               {resending ? "Sending\u2026" : "Resend code"}
             </button>
             <span className="h-3 w-px bg-[#121312]/15" />
@@ -636,33 +674,6 @@ export function LoginStep() {
             >
               Back
             </button>
-            <span className="h-3 w-px bg-[#121312]/15" />
-            <button
-              type="button"
-              onClick={() => {
-                if (email && !ssoEmail) setSsoEmail(email);
-                setPhase("email");
-                setMode("sso");
-              }}
-              className="inline-flex items-center gap-1.5 font-medium text-[#121312]/50 hover:text-[#121312] transition-colors cursor-pointer"
-            >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                <path d="M7 11V7a5 5 0 0110 0v4" />
-              </svg>
-              SSO
-            </button>
-            <span className="h-3 w-px bg-[#121312]/15" />
-            <Link
-              href="/demo"
-              className="inline-flex items-center gap-1.5 font-medium text-[#121312]/50 hover:text-[#121312] transition-colors"
-            >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <polygon points="10 8 16 12 10 16 10 8" />
-              </svg>
-              Demo
-            </Link>
           </div>
         </>
       )}

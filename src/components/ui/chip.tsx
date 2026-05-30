@@ -11,14 +11,14 @@ export function Chip({ children, dotColor, className, ...props }: ChipProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border border-theme/60 bg-theme-subtle px-2.5 py-1 text-sm text-theme transition-[color,background-color,border-color,box-shadow] duration-200 ease-out",
+        "inline-flex items-center gap-1.5 rounded-full border border-fynk-border bg-fynk-surface-alt px-3 py-1 text-sm font-medium text-fynk-body",
         className,
       )}
       {...props}
     >
       {dotColor && (
         <span
-          className="h-2.5 w-2.5 shrink-0 rounded-full ring-1 ring-black/[0.06] dark:ring-white/10"
+          className="h-2 w-2 shrink-0 rounded-full"
           style={{ background: dotColor }}
           aria-hidden="true"
         />

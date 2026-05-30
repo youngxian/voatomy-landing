@@ -1,159 +1,173 @@
 "use client";
 
+import * as React from "react";
+import Link from "next/link";
+import { ChevronLeft, ChevronRight, ArrowRight, Pause } from "lucide-react";
 import { TESTIMONIALS } from "@/lib/constants";
-import { ScrollReveal } from "./scroll-reveal";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { Quote } from "lucide-react";
-import { SectionBackgroundDecor } from "@/components/marketing/section-background-decor";
-import { FloatingPictureFrame } from "@/components/marketing/floating-picture-frame";
-import { MARKETING_IMAGES } from "@/lib/marketing-images";
+import {
+  FynkDisplayHeading,
+  FynkHeadingUnderlineAccent,
+  FynkRatingBadge,
+  FynkReveal,
+} from "@/components/marketing/fynk-primitives";
+import { useDictionary, useLocale } from "@/i18n/locale-provider";
 
 function avatarUrl(seed: string) {
   return `https://api.dicebear.com/9.x/notionists/svg?seed=${encodeURIComponent(seed)}&backgroundColor=transparent`;
 }
 
 export function TestimonialsSection() {
-  const featured = TESTIMONIALS[0];
-  const rest = TESTIMONIALS.slice(1, 7);
-  const { ref: statsRef, isVisible: statsVisible } = useScrollAnimation();
+  const { ref, isVisible } = useScrollAnimation();
+  const t = useDictionary().customers;
+  const { localizedPath } = useLocale();
+
+  const featured = TESTIMONIALS.slice(0, Math.min(TESTIMONIALS.length, 4));
+  const [active, setActive] = React.useState(0);
+  const current = featured[active];
+
+  const next = () => setActive((i) => (i + 1) % featured.length);
+  const prev = () => setActive((i) => (i - 1 + featured.length) % featured.length);
 
   return (
-    <section className="light-surface-typography relative overflow-hidden bg-rose-light px-4 py-16 sm:py-24 transition-colors duration-300">
-      <SectionBackgroundDecor tone="rose" />
-      <div className="relative z-[1] mx-auto max-w-container">
-        <ScrollReveal>
-          <div className="text-center">
-            <span className="inline-flex items-center gap-2 rounded-full bg-rose/10 px-3 py-1 text-sm font-semibold text-rose">
-                <span
-                className="h-2 w-2 rounded-full bg-rose"
-                aria-hidden="true"
-              />
-              Proof it Works
-            </span>
-            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-charcoal sm:text-heading-1">
-              Don&apos;t just take our word for it.
-            </h2>
-            <p className="mx-auto mt-2 max-w-[600px] text-body-lg text-charcoal/60">
-              Teams are already seeing{" "}
-              <span className="font-semibold text-teal">
-                87% estimation accuracy
-              </span>{" "}
-              and{" "}
-              <span className="font-semibold text-teal">
-                80% faster planning
-              </span>
-              .
-            </p>
-          </div>
+    <section className="light-surface-typography relative overflow-hidden bg-fynk-surface-alt px-4 py-20 sm:py-28">
+      <div ref={ref} className="relative mx-auto max-w-container">
+        <FynkReveal visible={isVisible} className="text-center">
+          <FynkDisplayHeading align="center">
+            {t.resultsTitleLead}
+            <br />
+            <FynkHeadingUnderlineAccent variant="rose">{t.resultsTitleAccent}</FynkHeadingUnderlineAccent>
+          </FynkDisplayHeading>
+          <p className="mx-auto mt-4 max-w-2xl text-body-lg text-fynk-muted">{t.resultsSubtitle}</p>
+        </FynkReveal>
 
-          {/* Big impact number + image side by side */}
+        {/* Browse customer stories pill button */}
+        <div className="mt-7 flex justify-center">
+          <Link
+            href={localizedPath("/customers")}
+            className="group inline-flex items-center gap-2 rounded-full border border-fynk-border bg-white px-5 py-2.5 text-sm font-semibold text-fynk-ink shadow-sm transition-all hover:border-fynk-border-hover hover:bg-fynk-surface-alt"
+          >
+            Browse all customer stories
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        </div>
+
+        {/* Stats row with soft gradient blur behind */}
+        <div className="relative mt-14">
           <div
-            ref={statsRef}
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-1/2 h-[300px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+            style={{
+              background:
+                "radial-gradient(closest-side, rgba(240,90,40,0.25), transparent), radial-gradient(closest-side at 80% 50%, rgba(59,130,246,0.22), transparent)",
+            }}
+          />
+          <dl className="relative grid grid-cols-3 gap-6">
+            {t.stats.map((s) => (
+              <div key={s.label} className="text-center">
+                <dt className="sr-only">{s.label}</dt>
+                <dd className="text-[clamp(2.5rem,5vw,3.75rem)] font-semibold leading-none tracking-[-0.04em] text-fynk-ink">
+                  {s.value}
+                </dd>
+                <p className="mt-2 text-xs text-fynk-muted sm:text-sm">{s.label}</p>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        {/* Stacked testimonial card — front + 2 ghost cards behind */}
+        <div className="relative mx-auto mt-12 max-w-3xl sm:mt-16">
+          {/* Ghost stack underneath */}
+          <div
+            aria-hidden
+            className="absolute inset-x-6 -bottom-3 h-full rounded-3xl border border-fynk-border bg-white opacity-60 shadow-sm"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-x-12 -bottom-6 h-full rounded-3xl border border-fynk-border bg-white opacity-30 shadow-sm"
+          />
+
+          {/* Active card */}
+          <figure
+            key={current.author}
             className={cn(
-              "mt-12 grid gap-4 sm:grid-cols-2 transition-all duration-700",
-              statsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
+              "relative rounded-3xl border border-fynk-border bg-white p-8 shadow-md transition-all duration-500 sm:p-12",
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
             )}
           >
-            {/* Left: Big number */}
-            <div className="rounded-2xl border border-charcoal/10 bg-white p-8 sm:p-10">
-              <p className="text-xs font-bold uppercase tracking-widest text-charcoal/40">Sprint points planned</p>
-              <div className="mt-3 text-5xl font-bold tracking-tight text-charcoal sm:text-6xl lg:text-7xl">
-                26,900+
+            <span
+              aria-hidden
+              className="absolute left-8 top-8 select-none text-7xl font-serif leading-none text-rose-400"
+              style={{ fontFamily: "Georgia, serif" }}
+            >
+              &ldquo;
+            </span>
+            <blockquote className="relative pl-14 text-xl leading-relaxed text-fynk-ink sm:text-2xl sm:leading-snug">
+              {current.text}
+            </blockquote>
+            <figcaption className="mt-10 flex items-center gap-4">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={avatarUrl(current.author)}
+                alt=""
+                width={48}
+                height={48}
+                className="h-12 w-12 shrink-0 rounded-full bg-fynk-surface-alt ring-2 ring-white"
+                loading="lazy"
+              />
+              <div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-fynk-ink">
+                  {current.author}
+                </p>
+                <p className="text-base text-fynk-muted">{current.role}</p>
               </div>
-              <div className="mt-6 grid grid-cols-3 gap-3 border-t border-charcoal/8 pt-5">
-                {[
-                  { value: "1,200+", label: "Teams on waitlist" },
-                  { value: "87%", label: "Estimation accuracy" },
-                  { value: "3 min", label: "Average setup time" },
-                ].map((item) => (
-                  <div key={item.label}>
-                    <div className="text-xl font-bold text-teal sm:text-2xl">{item.value}</div>
-                    <div className="mt-0.5 text-[11px] text-charcoal/50">{item.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            </figcaption>
+          </figure>
+        </div>
 
-            {/* Right: Image + featured quote overlay */}
-            <FloatingPictureFrame delay={0.12} className="h-full min-h-[220px]">
-              <div className="relative h-full min-h-[220px] overflow-hidden rounded-2xl border border-charcoal/10">
-                <Image
-                  src={MARKETING_IMAGES.meeting}
-                  alt="Engineering team in sprint planning session"
-                  width={1200}
-                  height={800}
-                  className="h-full w-full min-h-[220px] object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/20 to-transparent" />
-                {featured && (
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <Quote className="h-6 w-6 text-accent-lime/80" />
-                    <p className="mt-2 text-sm leading-relaxed text-white/90 line-clamp-3">
-                      {featured.text}
-                    </p>
-                    <div className="mt-3 flex items-center gap-2">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={avatarUrl(featured.author)}
-                        alt=""
-                        width={32}
-                        height={32}
-                        className="h-8 w-8 rounded-full bg-white/20 ring-1 ring-white/30"
-                        loading="lazy"
-                      />
-                      <div>
-                        <span className="text-xs font-semibold text-white">{featured.author}</span>
-                        <span className="ml-1.5 text-[10px] text-white/60">{featured.role}</span>
-                      </div>
-                    </div>
-                  </div>
+        {/* Carousel controls */}
+        <div className="mx-auto mt-10 flex max-w-3xl items-center justify-center gap-2">
+          <button
+            type="button"
+            onClick={prev}
+            className="grid h-9 w-9 place-items-center rounded-full border border-fynk-border bg-white text-fynk-muted shadow-sm transition-all hover:bg-fynk-surface-alt hover:text-fynk-ink"
+            aria-label="Previous testimonial"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+
+          <div className="mx-2 flex items-center gap-1.5 rounded-full border border-fynk-border bg-white px-3 py-2 shadow-sm">
+            <Pause className="h-3 w-3 text-fynk-muted" />
+            {featured.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setActive(i)}
+                className={cn(
+                  "h-1.5 rounded-full transition-all",
+                  active === i ? "w-6 bg-fynk-ink" : "w-1.5 bg-fynk-border-hover",
                 )}
-              </div>
-            </FloatingPictureFrame>
-          </div>
-
-          {/* Testimonial grid */}
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {rest.map((review, i) => (
-              <article
-                key={review.author}
-                className="rounded-2xl border border-charcoal/10 bg-white p-6 transition-all duration-500 hover:shadow-md opacity-0 translate-y-6 group-data-[visible=true]/reveal:opacity-100 group-data-[visible=true]/reveal:translate-y-0"
-                style={{
-                  transitionDelay: `${i * 60}ms`,
-                }}
-              >
-                <div className="flex gap-0.5 text-amber-400">
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <span key={s}>&#9733;</span>
-                  ))}
-                </div>
-                <p className="mt-4 text-sm leading-relaxed text-charcoal/70">{review.text}</p>
-                <div className="mt-5 flex items-center gap-3 border-t border-charcoal/5 pt-4">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={avatarUrl(review.author)}
-                    alt=""
-                    width={36}
-                    height={36}
-                    className="h-9 w-9 rounded-full bg-teal/10"
-                    loading="lazy"
-                  />
-                  <div>
-                    <span className="text-sm font-semibold text-charcoal">
-                      {review.author}
-                    </span>
-                    <div className="text-xs text-charcoal/50">
-                      {review.role}
-                    </div>
-                  </div>
-                </div>
-              </article>
+                aria-label={`Show testimonial ${i + 1}`}
+              />
             ))}
           </div>
-        </ScrollReveal>
+
+          <button
+            type="button"
+            onClick={next}
+            className="grid h-9 w-9 place-items-center rounded-full border border-fynk-border bg-white text-fynk-muted shadow-sm transition-all hover:bg-fynk-surface-alt hover:text-fynk-ink"
+            aria-label="Next testimonial"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+
+        {/* Rating chips at bottom */}
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <FynkRatingBadge score={t.g2Rating} label={t.g2Label} />
+          <FynkRatingBadge score={t.betaRating} label={t.betaLabel} />
+        </div>
       </div>
     </section>
   );

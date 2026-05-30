@@ -48,8 +48,8 @@ function BillingToggle({
         className={cn(
           "rounded-full px-4 py-1.5 text-sm font-medium transition-all",
           !annual
-            ? "bg-accent-lime text-teal"
-            : "text-theme-m hover:text-theme-s",
+            ? "bg-fynk-orange text-white"
+            : "text-fynk-muted hover:text-fynk-body",
         )}
       >
         Monthly
@@ -63,8 +63,8 @@ function BillingToggle({
         className={cn(
           "rounded-full px-4 py-1.5 text-sm font-medium transition-all",
           annual
-            ? "bg-accent-lime text-teal"
-            : "text-theme-m hover:text-theme-s",
+            ? "bg-fynk-orange text-white"
+            : "text-fynk-muted hover:text-fynk-body",
         )}
       >
         Annual{" "}
@@ -429,7 +429,7 @@ function ImpactSection({ isVisible }: { isVisible: boolean }) {
 
 function FeatureComparisonTable({ isVisible }: { isVisible: boolean }) {
   const [expandedGroups, setExpandedGroups] = React.useState<Set<string>>(
-    new Set(),
+    () => new Set(PRICING_FEATURE_GROUPS.length > 0 ? [PRICING_FEATURE_GROUPS[0].group] : []),
   );
   const [showAll, setShowAll] = React.useState(false);
 

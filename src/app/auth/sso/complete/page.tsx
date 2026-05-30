@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { AUTH_REDIRECT_KEY } from "@/components/auth/auth-page";
+import { resolvePostAuthDestinationAsync } from "@/lib/auth-redirect";
 
 type Status = "loading" | "success" | "error";
 
@@ -21,15 +22,16 @@ export default function SSOCompletePage() {
       return;
     }
 
-    document.cookie = `session=${token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
     setStatus("success");
 
-    const storedRedirect = localStorage.getItem(AUTH_REDIRECT_KEY);
-    if (storedRedirect) localStorage.removeItem(AUTH_REDIRECT_KEY);
-    const destination = storedRedirect || "http://localhost:3000/dashboard";
-    setTimeout(() => {
-      window.location.href = destination;
-    }, 1500);
+    void (async () => {
+      const storedRedirect = localStorage.getItem(AUTH_REDIRECT_KEY);
+      if (storedRedirect) localStorage.removeItem(AUTH_REDIRECT_KEY);
+      const destination = await resolvePostAuthDestinationAsync(token, storedRedirect);
+      setTimeout(() => {
+        window.location.href = destination;
+      }, 1500);
+    })();
   }, [token]);
 
   if (status === "loading") {

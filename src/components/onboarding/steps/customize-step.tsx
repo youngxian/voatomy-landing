@@ -18,6 +18,7 @@ import type {
   NotificationPrefs,
   AIPreferences,
 } from "@/types";
+import { useProductOnboarding } from "@/hooks/use-product-onboarding";
 
 function ToggleSwitch({
   label,
@@ -61,6 +62,8 @@ function ToggleSwitch({
 
 export function CustomizeStep() {
   const { goNext, goBack, updateFormData, formData, markStepComplete, saveStep } = useOnboarding();
+  const { primaryModule, showSprintSettings, primaryProduct } = useProductOnboarding();
+  const isAtlasPrimary = primaryProduct === "atlas";
   const [isSaving, setIsSaving] = React.useState(false);
 
   const [dashboardLayout, setDashboardLayout] = React.useState<DashboardLayout>(formData.dashboardLayout);
@@ -131,7 +134,7 @@ export function CustomizeStep() {
         </div>
         <h1 className="text-[28px] font-bold tracking-tight text-[#121312]">Notifications & alerts</h1>
         <p className="mt-1.5 text-sm text-[#121312]/50">
-          Choose where to receive sprint updates, AI insights, and team alerts
+          {primaryModule.notificationBlurb}
         </p>
       </motion.div>
 
@@ -141,7 +144,7 @@ export function CustomizeStep() {
         <div className="rounded-xl border border-[#121312]/8 bg-white p-4">
           <label className="mb-3 block text-sm font-semibold text-[#121312]/80">Where should we notify you?</label>
           <p className="mb-4 text-[11px] text-[#121312]/40">
-            Connect your team apps in the previous step, then choose where to receive sprint alerts, AI insights, and standup reminders.
+            {primaryModule.customizeBlurb}
           </p>
           <div className="space-y-2 mb-4">
             <ToggleSwitch
@@ -270,7 +273,8 @@ export function CustomizeStep() {
           </div>
         </div>
 
-        {/* Sprint cadence */}
+        {/* Sprint cadence — Atlas only */}
+        {showSprintSettings && (
         <div>
           <label className="mb-2 block text-sm font-semibold text-[#121312]/80">Sprint cadence</label>
           <div className="flex gap-2 flex-wrap">
@@ -291,8 +295,10 @@ export function CustomizeStep() {
             ))}
           </div>
         </div>
+        )}
 
-        {/* AI Preferences */}
+        {/* AI Preferences — Atlas-primary workflows */}
+        {isAtlasPrimary && (
         <div className="rounded-xl border border-[#121312]/8 bg-white p-4">
           <label className="mb-1 block text-sm font-semibold text-[#121312]/80">AI assistant mode</label>
           <p className="mb-3 text-xs text-[#121312]/40">How active should AI be in your workflow?</p>
@@ -347,6 +353,7 @@ export function CustomizeStep() {
             </p>
           </div>
         </div>
+        )}
 
         {/* Navigation */}
         <div className="flex gap-3 pt-1">
