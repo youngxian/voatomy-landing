@@ -67,7 +67,7 @@ export function TestimonialsSection() {
             {t.stats.map((s) => (
               <div key={s.label} className="text-center">
                 <dt className="sr-only">{s.label}</dt>
-                <dd className="text-[clamp(2.5rem,5vw,3.75rem)] font-semibold leading-none tracking-[-0.04em] text-fynk-ink">
+                <dd className="text-[clamp(2.125rem,4.5vw,3.25rem)] font-semibold leading-none tracking-[-0.04em] text-fynk-ink">
                   {s.value}
                 </dd>
                 <p className="mt-2 text-xs text-fynk-muted sm:text-sm">{s.label}</p>
@@ -103,7 +103,7 @@ export function TestimonialsSection() {
             >
               &ldquo;
             </span>
-            <blockquote className="relative pl-14 text-xl leading-relaxed text-fynk-ink sm:text-2xl sm:leading-snug">
+            <blockquote className="relative pl-14 text-lg leading-relaxed text-fynk-ink sm:text-xl sm:leading-snug">
               {current.text}
             </blockquote>
             <figcaption className="mt-10 flex items-center gap-4">

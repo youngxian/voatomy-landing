@@ -286,7 +286,7 @@ export function Header() {
         {/* -- Product Mega Menu -- */}
         {activeMega === "product" && (
           <div
-            className="absolute left-0 right-0 top-[calc(100%+8px)] z-40 animate-nav-drop-in"
+            className="absolute left-1/2 top-[calc(100%+8px)] z-40 w-full max-w-3xl -translate-x-1/2 animate-nav-drop-in px-2 sm:px-0"
             onMouseEnter={() => openMega("product")}
             onMouseLeave={closeMega}
             role="menu"
@@ -299,7 +299,7 @@ export function Header() {
         {/* -- Solutions Mega Menu -- */}
         {activeMega === "solutions" && (
           <div
-            className="absolute left-0 right-0 top-[calc(100%+8px)] z-40 animate-nav-drop-in"
+            className="absolute left-1/2 top-[calc(100%+8px)] z-40 w-full max-w-2xl -translate-x-1/2 animate-nav-drop-in px-2 sm:px-0"
             onMouseEnter={() => openMega("solutions")}
             onMouseLeave={closeMega}
             role="menu"
@@ -312,7 +312,7 @@ export function Header() {
         {/* -- Resources Mega Menu -- */}
         {activeMega === "resources" && (
           <div
-            className="absolute left-0 right-0 top-[calc(100%+8px)] z-40 animate-nav-drop-in"
+            className="absolute left-1/2 top-[calc(100%+8px)] z-40 w-full max-w-xl -translate-x-1/2 animate-nav-drop-in px-2 sm:px-0"
             onMouseEnter={() => openMega("resources")}
             onMouseLeave={closeMega}
             role="menu"

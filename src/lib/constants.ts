@@ -1369,8 +1369,9 @@ export const REGION_PROVIDER_RECOMMENDATIONS: Record<string, string[]> = {
 
 // ---------- ONBOARDING (new 7-step flow) ----------
 
+// Legacy static list — used only as a fallback. Shell now uses STEP_META + dynamic stepOrder.
 export const ONBOARDING_STEPS = [
-  { key: "welcome" as const, label: "Welcome", icon: "👋" },
+  { key: "welcome" as const, label: "Profile", icon: "👋" },
   { key: "workspace" as const, label: "Workspace", icon: "🏢" },
   { key: "connect" as const, label: "Connect", icon: "🔗" },
   { key: "team" as const, label: "Team", icon: "👥" },
@@ -1378,9 +1379,41 @@ export const ONBOARDING_STEPS = [
   { key: "launch" as const, label: "Launch", icon: "🚀" },
 ] as const;
 
-// Backward compat
 export const ONBOARDING_STEPS_BASE = ONBOARDING_STEPS;
 export const ONBOARDING_STEPS_ALL_PRODUCTS = ONBOARDING_STEPS;
+
+/** Metadata for every possible onboarding step key — used by the dynamic shell progress bar. */
+export const STEP_META: Record<string, { label: string; icon: string }> = {
+  // Universal
+  welcome:          { label: "Profile",    icon: "👋" },
+  workspace:        { label: "Workspace",  icon: "🏢" },
+  team:             { label: "Team",       icon: "👥" },
+  customize:        { label: "Notify",     icon: "🔔" },
+  launch:           { label: "Launch",     icon: "🚀" },
+  // Legacy
+  connect:          { label: "Connect",    icon: "🔗" },
+  products:         { label: "Products",   icon: "📦" },
+  // Atlas
+  "atlas-connect":  { label: "Connect",   icon: "🔗" },
+  "atlas-board":    { label: "Board",     icon: "📋" },
+  "atlas-sprint":   { label: "Sprint",    icon: "⚡" },
+  // Loop
+  "loop-connect":   { label: "Connect",   icon: "🔗" },
+  "loop-signals":   { label: "Signals",   icon: "📊" },
+  // Signal
+  "signal-connect": { label: "Connect",   icon: "🔗" },
+  "signal-catalog": { label: "Services",  icon: "📡" },
+  "signal-routing": { label: "Routing",   icon: "🚨" },
+  // Drift
+  "drift-connect":  { label: "Connect",   icon: "🔗" },
+  "drift-config":   { label: "Config",    icon: "🎨" },
+  // Phantom
+  "phantom-connect":{ label: "Connect",   icon: "🔗" },
+  "phantom-config": { label: "Config",    icon: "👻" },
+  // Nexus
+  "nexus-connect":  { label: "Connect",   icon: "🔗" },
+  "nexus-products": { label: "Products",  icon: "⚡" },
+};
 
 export const ROLE_OPTIONS = [
   { value: "engineering-manager" as const, label: "Engineering Manager", icon: "👨‍💼" },

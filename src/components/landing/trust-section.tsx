@@ -29,7 +29,7 @@ export function TrustSection() {
           isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
         )}
       >
-        <p className="mb-10 text-center text-body-lg text-fynk-body sm:text-body-xl">
+        <p className="mb-10 text-center text-body-base text-fynk-body sm:text-body-lg">
           {t.socialProof}
         </p>
 

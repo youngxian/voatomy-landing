@@ -8,11 +8,20 @@ import {
   localeShortLabels,
   localeLabels,
   stripLocaleFromPathname,
+  isNonLocalizedPath,
   type Locale,
 } from "@/i18n/config";
+import { useOptionalLocale } from "@/i18n/locale-provider";
 import { ChevronDown } from "lucide-react";
 import * as React from "react";
 import { LocaleFlag } from "@/components/i18n/locale-flag";
+
+const LOCALE_COOKIE = "NEXT_LOCALE";
+const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+
+function setLocaleCookie(locale: Locale) {
+  document.cookie = `${LOCALE_COOKIE}=${locale}; path=/; max-age=${LOCALE_COOKIE_MAX_AGE}; SameSite=Lax`;
+}
 
 export function LanguageSwitcher({
   className,
@@ -24,14 +33,16 @@ export function LanguageSwitcher({
   compact?: boolean;
 }) {
   const pathname = usePathname();
+  const localeContext = useOptionalLocale();
   const [open, setOpen] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
 
-  const currentLocale = (locales.find(
-    (l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`),
-  ) ?? "en") as Locale;
+  const currentLocale = (localeContext?.locale ??
+    locales.find((l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`)) ??
+    "en") as Locale;
 
   const pathWithoutLocale = stripLocaleFromPathname(pathname);
+  const nonLocalized = isNonLocalizedPath(pathWithoutLocale);
 
   React.useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -80,6 +91,30 @@ export function LanguageSwitcher({
                 ? `/${locale}`
                 : `/${locale}${pathWithoutLocale}`;
             const active = locale === currentLocale;
+
+            if (nonLocalized) {
+              return (
+                <li key={locale} role="option" aria-selected={active}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLocaleCookie(locale);
+                      setOpen(false);
+                      window.location.reload();
+                    }}
+                    className={cn(
+                      "flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm transition-colors",
+                      active
+                        ? "bg-fynk-orange-light font-semibold text-fynk-orange"
+                        : "text-fynk-body hover:bg-fynk-surface-alt hover:text-fynk-ink",
+                    )}
+                  >
+                    <LocaleFlag locale={locale} size={18} />
+                    {localeLabels[locale]}
+                  </button>
+                </li>
+              );
+            }
 
             return (
               <li key={locale} role="option" aria-selected={active}>

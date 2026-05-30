@@ -45,3 +45,8 @@ export function useLocale() {
 export function useDictionary() {
   return useLocale().dictionary;
 }
+
+/** Returns locale context when inside LocaleProvider, otherwise null. */
+export function useOptionalLocale() {
+  return React.useContext(LocaleContext);
+}

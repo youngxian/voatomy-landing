@@ -212,7 +212,7 @@ export function SecuritySection() {
               <p className="text-xs font-bold uppercase tracking-[0.14em] text-fynk-muted">
                 Trusted frameworks
               </p>
-              <p className="mt-2 font-heading text-xl font-bold text-fynk-ink sm:text-2xl">
+              <p className="mt-2 font-heading text-lg font-bold text-fynk-ink sm:text-xl">
                 Compliance your procurement team expects.
               </p>
             </div>

@@ -15,13 +15,63 @@ import { ConnectStep } from "./steps/connect-step";
 import { TeamStep } from "./steps/team-step";
 import { CustomizeStep } from "./steps/customize-step";
 import { LaunchStep } from "./steps/launch-step";
+// Atlas
+import { AtlasConnectStep } from "./steps/atlas/atlas-connect-step";
+import { AtlasBoardStep } from "./steps/atlas/atlas-board-step";
+import { AtlasSprintStep } from "./steps/atlas/atlas-sprint-step";
+// Loop
+import { LoopConnectStep } from "./steps/loop/loop-connect-step";
+import { LoopSignalsStep } from "./steps/loop/loop-signals-step";
+// Signal
+import { SignalConnectStep } from "./steps/signal/signal-connect-step";
+import { SignalCatalogStep } from "./steps/signal/signal-catalog-step";
+import { SignalRoutingStep } from "./steps/signal/signal-routing-step";
+// Drift
+import { DriftConnectStep } from "./steps/drift/drift-connect-step";
+import { DriftConfigStep } from "./steps/drift/drift-config-step";
+// Phantom
+import { PhantomConnectStep } from "./steps/phantom/phantom-connect-step";
+import { PhantomConfigStep } from "./steps/phantom/phantom-config-step";
+// Nexus
+import { NexusConnectStep } from "./steps/nexus/nexus-connect-step";
+import { NexusProductsStep } from "./steps/nexus/nexus-products-step";
 import { PasswordPrompt } from "./password-prompt";
 import { SetPasswordPopup } from "./set-password-popup";
 import { getPasswordStatus } from "@/lib/api";
 import type { OnboardingStep } from "@/types";
 
+const STEP_COMPONENTS: Partial<Record<OnboardingStep, React.ComponentType>> = {
+  welcome:          WelcomeStep,
+  workspace:        WorkspaceStep,
+  connect:          ConnectStep,
+  team:             TeamStep,
+  customize:        CustomizeStep,
+  launch:           LaunchStep,
+  // Atlas
+  "atlas-connect":  AtlasConnectStep,
+  "atlas-board":    AtlasBoardStep,
+  "atlas-sprint":   AtlasSprintStep,
+  // Loop
+  "loop-connect":   LoopConnectStep,
+  "loop-signals":   LoopSignalsStep,
+  // Signal
+  "signal-connect": SignalConnectStep,
+  "signal-catalog": SignalCatalogStep,
+  "signal-routing": SignalRoutingStep,
+  // Drift
+  "drift-connect":  DriftConnectStep,
+  "drift-config":   DriftConfigStep,
+  // Phantom
+  "phantom-connect":PhantomConnectStep,
+  "phantom-config": PhantomConfigStep,
+  // Nexus
+  "nexus-connect":  NexusConnectStep,
+  "nexus-products": NexusProductsStep,
+};
+
 function OnboardingStepRenderer() {
   const { step, direction } = useOnboarding();
+  const StepComponent = STEP_COMPONENTS[step];
 
   return (
     <AnimatePresence mode="wait" custom={direction}>
@@ -35,12 +85,7 @@ function OnboardingStepRenderer() {
         transition={slideTransition}
         className="pb-8"
       >
-        {step === "welcome" && <WelcomeStep />}
-        {step === "workspace" && <WorkspaceStep />}
-        {step === "connect" && <ConnectStep />}
-        {step === "team" && <TeamStep />}
-        {step === "customize" && <CustomizeStep />}
-        {step === "launch" && <LaunchStep />}
+        {StepComponent ? <StepComponent /> : null}
       </motion.div>
     </AnimatePresence>
   );

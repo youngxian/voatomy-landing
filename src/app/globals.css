@@ -142,6 +142,62 @@
     --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05);
   }
 
+  /* Landing page — ~12% smaller type scale (scoped to homepage sections) */
+  .landing-page .text-body-xl {
+    font-size: 19px;
+    line-height: 1.5;
+    letter-spacing: -0.19px;
+  }
+  .landing-page .text-body-lg {
+    font-size: 17px;
+    line-height: 1.45;
+    letter-spacing: -0.17px;
+  }
+  .landing-page .text-body-base {
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: -0.16px;
+  }
+  .landing-page .text-body-sm {
+    font-size: 13px;
+    line-height: 1.43;
+    letter-spacing: -0.13px;
+  }
+  .landing-page .text-heading-1 {
+    font-size: 46px;
+    line-height: 1.1;
+    letter-spacing: -0.92px;
+  }
+  .landing-page .text-heading-2 {
+    font-size: 36px;
+    line-height: 1.1;
+    letter-spacing: -0.72px;
+  }
+  .landing-page .text-heading-3 {
+    font-size: 27px;
+    line-height: 1.12;
+    letter-spacing: -0.54px;
+  }
+  .landing-page .text-heading-4 {
+    font-size: 24px;
+    line-height: 1.15;
+    letter-spacing: -0.48px;
+  }
+  .landing-page .text-heading-5 {
+    font-size: 19px;
+    line-height: 1.2;
+    letter-spacing: -0.38px;
+  }
+  .landing-page .text-xs { font-size: 0.6875rem; line-height: 1rem; }
+  .landing-page .text-sm { font-size: 0.8125rem; line-height: 1.25rem; }
+  .landing-page .text-base { font-size: 0.9375rem; line-height: 1.5rem; }
+  .landing-page .text-lg { font-size: 1.0625rem; line-height: 1.625rem; }
+  .landing-page .text-xl { font-size: 1.1875rem; line-height: 1.625rem; }
+  .landing-page .text-2xl { font-size: 1.3125rem; line-height: 1.75rem; }
+  .landing-page .text-3xl { font-size: 1.625rem; line-height: 2rem; }
+  .landing-page .text-4xl { font-size: 2rem; line-height: 2.25rem; }
+  .landing-page .text-5xl { font-size: 2.625rem; line-height: 1.1; }
+
   .divider-green {
     height: 1px;
     background: linear-gradient(to right, rgba(226,251,108,0.1) 50%, transparent 50%);
@@ -441,5 +497,13 @@
   }
   html.dark .dashboard-mock::after {
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  }
+
+  /* Onboarding flow — compact, consistent typography & colors */
+  .onboarding-flow {
+    color: var(--fynk-ink);
+  }
+  .onboarding-flow ::selection {
+    background: rgba(240, 90, 40, 0.18);
   }
 }

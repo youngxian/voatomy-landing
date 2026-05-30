@@ -88,7 +88,7 @@ export function HeroSection() {
           </HeroReveal>
 
           <HeroReveal loaded={loaded} delayMs={80} className="mt-8 sm:mt-10">
-            <h1 className="font-heading text-balance text-[3.375rem] font-bold leading-[1.04] tracking-[-0.045em] text-fynk-ink sm:text-[4.5rem] md:text-[5.25rem] md:leading-[1.02] lg:text-[6rem] lg:leading-[0.98]">
+            <h1 className="font-heading text-balance text-[2.875rem] font-bold leading-[1.04] tracking-[-0.045em] text-fynk-ink sm:text-[3.875rem] md:text-[4.5rem] md:leading-[1.02] lg:text-[5.125rem] lg:leading-[0.98]">
               <span className="inline">
                 {t.headlinePrefix}{" "}
                 <FynkInlineAvatarCluster seeds={AVATAR_SEEDS} size="lg" /> {t.headlineBridge}{" "}
@@ -99,7 +99,7 @@ export function HeroSection() {
           </HeroReveal>
 
           <HeroReveal loaded={loaded} delayMs={160} className="mt-7 sm:mt-8">
-            <p className="mx-auto max-w-[56ch] text-body-lg text-fynk-muted sm:text-body-xl lg:text-[1.5rem] lg:leading-[1.55]">
+            <p className="mx-auto max-w-[56ch] text-body-base text-fynk-muted sm:text-body-lg lg:text-[1.3125rem] lg:leading-[1.55]">
               {t.subheadline}
             </p>
           </HeroReveal>

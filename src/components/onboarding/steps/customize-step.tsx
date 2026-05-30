@@ -3,6 +3,8 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { StepHeader } from "./_shared";
+import { ob } from "../onboarding-primitives";
 import { useOnboarding } from "../onboarding-context";
 import {
   DASHBOARD_LAYOUT_OPTIONS,
@@ -128,17 +130,15 @@ export function CustomizeStep() {
 
   return (
     <div>
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8 text-center">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/12">
-          <span className="text-2xl">🔔</span>
-        </div>
-        <h1 className="text-[28px] font-bold tracking-tight text-[#121312]">Notifications & alerts</h1>
-        <p className="mt-1.5 text-sm text-[#121312]/50">
-          {primaryModule.notificationBlurb}
-        </p>
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+        <StepHeader
+          stepKey="customize"
+          title="Notifications & alerts"
+          subtitle={primaryModule.notificationBlurb}
+        />
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="space-y-6 text-left">
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className={cn(ob.section, "text-left")}>
 
         {/* Notifications — Slack, Teams, Email (primary focus for this step) */}
         <div className="rounded-xl border border-[#121312]/8 bg-white p-4">

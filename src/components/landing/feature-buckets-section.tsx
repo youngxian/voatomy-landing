@@ -132,7 +132,7 @@ function SprintInsightCard({
         <span className="inline-flex w-fit border border-white/50 px-2.5 py-1 text-xs font-bold uppercase tracking-[0.12em] text-white sm:text-[13px]">
           {type}
         </span>
-        <h3 className="mt-5 font-heading text-xl font-bold leading-[1.3] tracking-[-0.02em] text-white sm:text-2xl lg:text-[1.625rem]">
+        <h3 className="mt-5 font-heading text-lg font-bold leading-[1.3] tracking-[-0.02em] text-white sm:text-xl lg:text-[1.4375rem]">
           {title}
         </h3>
         <Link
@@ -398,7 +398,7 @@ export function FeatureBucketsSection() {
                 before it costs you a release.
               </FynkHeadingUnderlineAccent>
             </FynkDisplayHeading>
-            <p className="mt-5 max-w-4xl text-xl font-normal leading-relaxed text-fynk-body sm:text-2xl">
+            <p className="mt-5 max-w-4xl text-lg font-normal leading-relaxed text-fynk-body sm:text-xl">
               Your backlog, repos, and team capacity already tell the story. Voatomy reads them
               together and surfaces what matters — so you fix problems on Monday, not the night
               before launch.

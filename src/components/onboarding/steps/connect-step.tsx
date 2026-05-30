@@ -2,7 +2,9 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Lock, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { StepHeader } from "./_shared";
 import { useOnboarding } from "../onboarding-context";
 import { INTEGRATION_CATALOG, PRODUCT_CARDS } from "@/lib/constants";
 import {
@@ -277,15 +279,12 @@ export function ConnectStep() {
 
   return (
     <div>
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-6 text-center">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/12">
-          <span className="text-2xl">🔗</span>
-        </div>
-        <h1 className="text-[28px] font-bold tracking-tight text-[#121312]">Connect your tools</h1>
-        <p className="mt-1.5 text-sm text-[#121312]/50">
-          {primaryModule.connectBlurb}
-          {" "}Other tools for your other products can wait until you open them.
-        </p>
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+        <StepHeader
+          stepKey="connect"
+          title="Connect your tools"
+          subtitle={`${primaryModule.connectBlurb} Other tools for your other products can wait until you open them.`}
+        />
       </motion.div>
 
       {/* Trust badges */}
@@ -295,9 +294,9 @@ export function ConnectStep() {
         transition={{ delay: 0.1 }}
         className="mb-5 flex items-center justify-center gap-4 text-[10px] text-[#121312]/40"
       >
-        <span className="flex items-center gap-1">🔒 Read-only access</span>
-        <span className="flex items-center gap-1">🛡 No source code stored</span>
-        <span className="flex items-center gap-1">🔐 Encrypted in transit</span>
+        <span className="flex items-center gap-1"><Lock className="h-3 w-3" /> Read-only access</span>
+        <span className="flex items-center gap-1"><ShieldCheck className="h-3 w-3" /> No source code stored</span>
+        <span className="flex items-center gap-1"><Lock className="h-3 w-3" /> Encrypted in transit</span>
       </motion.div>
 
       {/* Global error banner */}

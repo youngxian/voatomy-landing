@@ -2,7 +2,9 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Building2, UserPlus, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { StepHeader } from "./_shared";
 import { useOnboarding } from "../onboarding-context";
 import {
   INVITEE_ROLE_OPTIONS,
@@ -1107,10 +1109,10 @@ export function TeamStep() {
     goNext();
   };
 
-  const subSteps: { key: SubStep; label: string; icon: string }[] = [
-    { key: "structure", label: "Structure", icon: "🏗️" },
-    { key: "departments", label: "Departments", icon: "🏢" },
-    { key: "invite", label: "Invite", icon: "👤" },
+  const subSteps: { key: SubStep; label: string; icon: React.ReactNode }[] = [
+    { key: "structure", label: "Structure", icon: <Building2 className="h-3.5 w-3.5" strokeWidth={2.25} /> },
+    { key: "departments", label: "Departments", icon: <Users className="h-3.5 w-3.5" strokeWidth={2.25} /> },
+    { key: "invite", label: "Invite", icon: <UserPlus className="h-3.5 w-3.5" strokeWidth={2.25} /> },
   ];
 
   const currentSubIndex = subSteps.findIndex((s) => s.key === subStep);
@@ -1121,20 +1123,12 @@ export function TeamStep() {
   return (
     <div>
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-6 text-center"
-      >
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/12">
-          <span className="text-2xl">🏗️</span>
-        </div>
-        <h1 className="text-[28px] font-bold tracking-tight text-[#121312]">
-          Define your team structure
-        </h1>
-        <p className="mt-1.5 text-sm text-[#121312]/50">
-          Set up your organization so Voatomy maps everything correctly
-        </p>
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+        <StepHeader
+          stepKey="team"
+          title="Define your team structure"
+          subtitle="Set up your organization so Voatomy maps everything correctly"
+        />
       </motion.div>
 
       {/* Sub-step indicator */}
@@ -1164,7 +1158,7 @@ export function TeamStep() {
                     : "text-[#121312]/30 cursor-default"
               )}
             >
-              <span className="text-xs">{s.icon}</span>
+              <span className="flex items-center justify-center">{s.icon}</span>
               {s.label}
             </button>
           </React.Fragment>

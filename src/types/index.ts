@@ -35,13 +35,35 @@ export interface TeamLabel {
 // ══════════════════════════════════════════════════════════════════
 
 export type OnboardingStep =
+  // Universal
   | "welcome"
   | "workspace"
-  | "connect"
   | "team"
-  | "products"
   | "customize"
-  | "launch";
+  | "launch"
+  // Legacy (kept for API compat)
+  | "connect"
+  | "products"
+  // Atlas
+  | "atlas-connect"
+  | "atlas-board"
+  | "atlas-sprint"
+  // Loop
+  | "loop-connect"
+  | "loop-signals"
+  // Signal
+  | "signal-connect"
+  | "signal-catalog"
+  | "signal-routing"
+  // Drift
+  | "drift-connect"
+  | "drift-config"
+  // Phantom
+  | "phantom-connect"
+  | "phantom-config"
+  // Nexus
+  | "nexus-connect"
+  | "nexus-products";
 
 // ══════════════════════════════════════════════════════════════════
 //  Onboarding — Enums & Scalars

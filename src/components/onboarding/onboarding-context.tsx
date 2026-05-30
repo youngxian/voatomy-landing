@@ -1,10 +1,11 @@
 "use client";
 
 import * as React from "react";
-import type { OnboardingStep, OnboardingFormData, Region } from "@/types";
+import type { OnboardingStep, OnboardingFormData, Region, OnboardingSession } from "@/types";
 import { trackOnboardingStep, trackConversion, trackEvent } from "@/lib/analytics";
 import {
   fetchGeoLocation,
+  fetchCurrentUser,
   startOnboarding,
   getOnboardingStatus,
   saveOnboardingStep,
@@ -12,11 +13,13 @@ import {
   completeOnboarding,
   APIError,
 } from "@/lib/api";
+import type { UserRole } from "@/types";
 import { dashboardSessionHandoffUrl } from "@/lib/auth-redirect";
+import { computeStepOrder } from "@/lib/product-onboarding-config";
 
-// ── Step Order ──
+// ── Default step order (before product is known) ──
 
-const STEP_ORDER: OnboardingStep[] = [
+const DEFAULT_STEP_ORDER: OnboardingStep[] = [
   "welcome",
   "workspace",
   "connect",
@@ -116,8 +119,8 @@ interface OnboardingContextType {
   orgId: string | null;
   version: number;
   isLoading: boolean;
-  startSession: (data: { full_name: string; email: string; role: string }) => Promise<void>;
-  saveStep: (step: OnboardingStep, data: Record<string, unknown>) => Promise<void>;
+  startSession: (data: { full_name: string; email: string; role: string }) => Promise<OnboardingSession>;
+  saveStep: (step: OnboardingStep, data: Record<string, unknown>, versionOverride?: number) => Promise<void>;
   skipStepOnServer: (step: OnboardingStep) => Promise<void>;
   finishOnboarding: () => Promise<void>;
 }
@@ -181,7 +184,13 @@ export function OnboardingProvider({ children, initialStep = "welcome", userData
   const [version, setVersion] = React.useState(0);
   const [isLoading, setIsLoading] = React.useState(true);
 
-  const stepOrder = STEP_ORDER;
+  // Dynamic step order — recomputes whenever the primary product changes
+  const stepOrder = React.useMemo(() => {
+    const product = formData.primaryProduct || formData.startupIdeaTemplate;
+    if (!product) return DEFAULT_STEP_ORDER;
+    return computeStepOrder(product);
+  }, [formData.primaryProduct, formData.startupIdeaTemplate]);
+
   const currentStepIndex = stepOrder.indexOf(step);
   const totalSteps = stepOrder.length;
   const progressPercent = (currentStepIndex / (totalSteps - 1)) * 100;
@@ -192,18 +201,34 @@ export function OnboardingProvider({ children, initialStep = "welcome", userData
   React.useEffect(() => {
     trackEvent("onboarding", "onboarding_started", "Onboarding flow initiated", 0, {
       initialStep,
-      totalSteps: STEP_ORDER.length,
+      totalSteps: DEFAULT_STEP_ORDER.length,
     });
-    trackOnboardingStep("step_entered", initialStep, STEP_ORDER.indexOf(initialStep));
+    trackOnboardingStep("step_entered", initialStep, DEFAULT_STEP_ORDER.indexOf(initialStep));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Resume existing session on mount
+  // Load profile + resume existing session on mount
   React.useEffect(() => {
     let cancelled = false;
-    getOnboardingStatus()
-      .then((status) => {
+
+    Promise.all([
+      getOnboardingStatus(),
+      fetchCurrentUser().catch(() => null),
+    ])
+      .then(([status, me]) => {
         if (cancelled) return;
+
+        if (me) {
+          setFormData((prev) => ({
+            ...prev,
+            fullName: prev.fullName || me.full_name,
+            email: prev.email || me.email,
+            userRole: prev.userRole || (me.role as UserRole),
+          }));
+        }
+
+        if (!status?.session) return;
+
         const { session } = status;
         if (session.completed_at) {
           const match = document.cookie.match(/(?:^|; )session=([^;]*)/);
@@ -228,13 +253,16 @@ export function OnboardingProvider({ children, initialStep = "welcome", userData
           setFormData((prev) => ({ ...prev, ...(session.form_data as Partial<OnboardingFormData>) }));
         }
       })
-      .catch(() => {
-        // 404 = no existing session, stay on welcome
+      .catch((err) => {
+        console.warn("[onboarding] failed to resume session", err);
       })
       .finally(() => {
         if (!cancelled) setIsLoading(false);
       });
-    return () => { cancelled = true; };
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // Auto-detect country/region from IP
@@ -254,8 +282,8 @@ export function OnboardingProvider({ children, initialStep = "welcome", userData
 
   const setStep = React.useCallback(
     (newStep: OnboardingStep) => {
-      const ci = STEP_ORDER.indexOf(step);
-      const ni = STEP_ORDER.indexOf(newStep);
+      const ci = stepOrder.indexOf(step);
+      const ni = stepOrder.indexOf(newStep);
       const timeOnStep = Date.now() - stepEnteredAt.current;
       trackOnboardingStep("step_entered", newStep, ni, {
         previousStep: step,
@@ -267,13 +295,13 @@ export function OnboardingProvider({ children, initialStep = "welcome", userData
       setDirection(ni >= ci ? 1 : -1);
       setStepRaw(newStep);
     },
-    [step],
+    [step, stepOrder],
   );
 
   const goNext = React.useCallback(() => {
-    const ci = STEP_ORDER.indexOf(step);
-    if (ci < STEP_ORDER.length - 1) {
-      const nextStep = STEP_ORDER[ci + 1];
+    const ci = stepOrder.indexOf(step);
+    if (ci < stepOrder.length - 1) {
+      const nextStep = stepOrder[ci + 1];
       const timeOnStep = Date.now() - stepEnteredAt.current;
       trackOnboardingStep("step_completed", step, ci, {
         timeOnStepMs: timeOnStep,
@@ -287,12 +315,12 @@ export function OnboardingProvider({ children, initialStep = "welcome", userData
       setDirection(1);
       setStepRaw(nextStep);
     }
-  }, [step]);
+  }, [step, stepOrder]);
 
   const goBack = React.useCallback(() => {
-    const ci = STEP_ORDER.indexOf(step);
+    const ci = stepOrder.indexOf(step);
     if (ci > 0) {
-      const prevStep = STEP_ORDER[ci - 1];
+      const prevStep = stepOrder[ci - 1];
       const timeOnStep = Date.now() - stepEnteredAt.current;
       trackOnboardingStep("step_abandoned", step, ci, {
         timeOnStepMs: timeOnStep,
@@ -307,43 +335,43 @@ export function OnboardingProvider({ children, initialStep = "welcome", userData
       setDirection(-1);
       setStepRaw(prevStep);
     }
-  }, [step]);
+  }, [step, stepOrder]);
 
   const updateFormData = React.useCallback((data: Partial<OnboardingFormData>) => {
     setFormData((prev) => ({ ...prev, ...data }));
     // Log which fields changed (keys only, no PII)
-    trackOnboardingStep("field_changed", step, STEP_ORDER.indexOf(step), {
+    trackOnboardingStep("field_changed", step, stepOrder.indexOf(step), {
       fieldsUpdated: Object.keys(data),
     });
-  }, [step]);
+  }, [step, stepOrder]);
 
   const markStepComplete = React.useCallback((s: OnboardingStep) => {
     setCompletedSteps((prev) => {
       if (prev.includes(s)) return prev;
       const updated = [...prev, s];
-      trackOnboardingStep("step_completed", s, STEP_ORDER.indexOf(s), {
+      trackOnboardingStep("step_completed", s, stepOrder.indexOf(s), {
         totalCompleted: updated.length,
-        totalSteps: STEP_ORDER.length,
-        progressPercent: Math.round((updated.length / STEP_ORDER.length) * 100),
+        totalSteps: stepOrder.length,
+        progressPercent: Math.round((updated.length / stepOrder.length) * 100),
       });
       // Track onboarding completion
       if (s === "launch") {
         trackConversion("onboarding_complete", {
-          totalSteps: STEP_ORDER.length,
+          totalSteps: stepOrder.length,
           completedSteps: updated.length,
         });
       }
       return updated;
     });
-  }, []);
+  }, [stepOrder]);
 
   const markStepSkipped = React.useCallback((s: OnboardingStep) => {
     setSkippedSteps((prev) => {
       if (prev.includes(s)) return prev;
-      trackOnboardingStep("step_skipped", s, STEP_ORDER.indexOf(s));
+      trackOnboardingStep("step_skipped", s, stepOrder.indexOf(s));
       return [...prev, s];
     });
-  }, []);
+  }, [stepOrder]);
 
   const startSession = React.useCallback(async (data: { full_name: string; email: string; role: string }) => {
     const session = await startOnboarding(data);
@@ -351,22 +379,24 @@ export function OnboardingProvider({ children, initialStep = "welcome", userData
     setUserId(session.user_id);
     setOrgId(session.org_id);
     setVersion(session.version);
+    return session;
   }, []);
 
-  const saveStep = React.useCallback(async (s: OnboardingStep, data: Record<string, unknown>) => {
-    const session = await saveOnboardingStep(s, data, version);
+  const saveStep = React.useCallback(async (s: OnboardingStep, data: Record<string, unknown>, versionOverride?: number) => {
+    const v = versionOverride ?? version;
+    const session = await saveOnboardingStep(s, data, v);
     setVersion(session.version);
   }, [version]);
 
   const skipStepOnServer = React.useCallback(async (s: OnboardingStep) => {
-    const session = await skipOnboardingStep(s);
+    const session = await skipOnboardingStep(s, version);
     setVersion(session.version);
-  }, []);
+  }, [version]);
 
   const finishOnboarding = React.useCallback(async () => {
-    const session = await completeOnboarding();
+    const session = await completeOnboarding(version);
     setVersion(session.version);
-  }, []);
+  }, [version]);
 
   const contextValue = React.useMemo(
     () => ({

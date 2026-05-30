@@ -3,6 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { StepHeader } from "./_shared";
 import { useOnboarding } from "../onboarding-context";
 import { PRODUCT_CARDS, PURPOSE_OPTIONS } from "@/lib/constants";
 import type { ProductKey } from "@/types";
@@ -55,14 +56,12 @@ export function ProductsStep() {
 
   return (
     <div>
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-6 text-center">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/12">
-          <span className="text-2xl">📦</span>
-        </div>
-        <h1 className="text-[28px] font-bold tracking-tight text-[#121312]">Choose your products</h1>
-        <p className="mt-1.5 text-sm text-[#121312]/50">
-          Start with one or activate the full platform. You can add more anytime.
-        </p>
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+        <StepHeader
+          stepKey="products"
+          title="Choose your products"
+          subtitle="Start with one or activate the full platform. You can add more anytime."
+        />
       </motion.div>
 
       {/* Smart recommendation banner */}

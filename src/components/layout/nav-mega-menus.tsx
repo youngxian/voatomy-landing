@@ -90,7 +90,7 @@ export function ProductMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <div className="overflow-hidden rounded-[1.75rem] border border-fynk-border/80 bg-gradient-to-b from-white via-white to-[#F9FAFB] shadow-[0_24px_64px_rgba(17,24,39,0.12)]">
-      <div className="border-b border-fynk-border/60 bg-[#FAFBFC] px-6 py-5 sm:px-8">
+      <div className="border-b border-fynk-border/60 bg-[#FAFBFC] px-5 py-4 sm:px-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <MegaEyebrow>Six products. One system.</MegaEyebrow>
@@ -112,9 +112,9 @@ export function ProductMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
         </div>
       </div>
 
-      <div className="px-6 py-6 sm:px-8">
-        <div className="grid gap-5 lg:grid-cols-[1fr_300px]">
-          <div className="grid gap-3 sm:grid-cols-2">
+      <div className="px-5 py-5 sm:px-6">
+        <div className="grid gap-4 lg:grid-cols-[1fr_220px]">
+          <div className="grid gap-2.5 sm:grid-cols-2">
             {coreProducts.map((product) => {
               const accent = productAccent(product.color);
               return (
@@ -217,13 +217,13 @@ export function ProductMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
 export function SolutionsMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <div className="overflow-hidden rounded-[1.75rem] border border-fynk-border/80 bg-white shadow-[0_24px_64px_rgba(17,24,39,0.12)]">
-      <div className="border-b border-fynk-border/60 bg-[#FAFBFC] px-6 py-5 sm:px-8">
+      <div className="border-b border-fynk-border/60 bg-[#FAFBFC] px-5 py-4 sm:px-6">
         <MegaEyebrow>Built for every team</MegaEyebrow>
         <h3 className="mt-2 font-heading text-xl font-bold tracking-[-0.02em] text-fynk-ink">
           Solutions that fit your workflow
         </h3>
       </div>
-      <div className="grid gap-8 px-6 py-6 sm:px-8 lg:grid-cols-3">
+      <div className="grid gap-6 px-5 py-5 sm:px-6 lg:grid-cols-3">
         {(
           [
             { label: "By role", items: NAV_LINKS.solutions.byRole },
@@ -280,13 +280,13 @@ export function SolutionsMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
 export function ResourcesMegaMenu({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <div className="overflow-hidden rounded-[1.75rem] border border-fynk-border/80 bg-white shadow-[0_24px_64px_rgba(17,24,39,0.12)]">
-      <div className="border-b border-fynk-border/60 bg-[#FAFBFC] px-6 py-5 sm:px-8">
+      <div className="border-b border-fynk-border/60 bg-[#FAFBFC] px-5 py-4 sm:px-6">
         <MegaEyebrow>Learn & connect</MegaEyebrow>
         <h3 className="mt-2 font-heading text-xl font-bold tracking-[-0.02em] text-fynk-ink">
           Resources
         </h3>
       </div>
-      <div className="grid gap-8 px-6 py-6 sm:px-8 lg:grid-cols-2">
+      <div className="grid gap-6 px-5 py-5 sm:px-6 lg:grid-cols-2">
         <div>
           <MegaSectionLabel>Learn</MegaSectionLabel>
           <div className="mt-3 space-y-1">

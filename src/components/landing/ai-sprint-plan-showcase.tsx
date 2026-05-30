@@ -274,7 +274,7 @@ export function AiSprintPlanShowcase({
                 <p className="mt-5 text-[11px] font-bold uppercase tracking-[0.18em] text-[#0066FF]">
                   All six signals · one plan
                 </p>
-                <h3 className="mt-2 font-heading text-[1.875rem] font-bold leading-[1.02] tracking-[-0.035em] text-gray-900 sm:text-[2.25rem]">
+                <h3 className="mt-2 font-heading text-[1.625rem] font-bold leading-[1.02] tracking-[-0.035em] text-gray-900 sm:text-[1.9375rem]">
                   AI Sprint Plan
                   <span className="mt-1 block text-[#0066FF]">Generated</span>
                 </h3>

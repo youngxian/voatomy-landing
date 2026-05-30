@@ -52,7 +52,7 @@ export function FynkSubheading({ children, className }: { children: React.ReactN
 
 /** Shared scale for landing section titles — keep font size & line height in sync site-wide. */
 export const FYNK_SECTION_TITLE_CLASSES =
-  "font-heading text-balance font-bold leading-[0.85] tracking-[-0.035em] text-[3rem] sm:text-[4rem] lg:text-[4.75rem]";
+  "font-heading text-balance font-bold leading-[0.88] tracking-[-0.035em] text-[2.625rem] sm:text-[3.5rem] lg:text-[4.125rem]";
 
 /** Large display headline — Labil Grotesk, tight tracking */
 export function FynkDisplayHeading({

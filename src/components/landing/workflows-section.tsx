@@ -260,7 +260,7 @@ export function WorkflowsSection() {
         >
           <div className="min-w-0">
             <p className="text-sm font-bold text-fynk-ink">{meta.collection}</p>
-            <h3 className="mt-3 font-heading text-[2rem] font-bold leading-[1.12] tracking-[-0.02em] text-fynk-ink sm:text-[2.25rem] lg:text-[2.375rem]">
+            <h3 className="mt-3 font-heading text-[1.75rem] font-bold leading-[1.12] tracking-[-0.02em] text-fynk-ink sm:text-[2rem] lg:text-[2.0625rem]">
               {meta.headline}
             </h3>
             <p className="mt-4 max-w-lg text-body-lg leading-relaxed text-fynk-body">

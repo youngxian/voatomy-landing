@@ -27,11 +27,20 @@ const API_BASE = `${onboardingApiOrigin()}/v1`;
 const PUBLIC_API = `${onboardingApiOrigin()}/public`;
 const ATLAS_API_BASE = process.env.NEXT_PUBLIC_ATLAS_API_URL ?? "http://localhost:3010/v1";
 
+/** Read session JWT from document cookie (marketing site stores it same-origin). */
+export function getSessionTokenFromCookie(): string | undefined {
+  if (typeof document === "undefined") return undefined;
+  const match = document.cookie.match(/(?:^|; )session=([^;]*)/);
+  return match ? decodeURIComponent(match[1]) : undefined;
+}
+
 async function request<T>(path: string, opts?: RequestInit): Promise<T> {
+  const sessionToken = getSessionTokenFromCookie();
   const res = await fetch(`${API_BASE}${path}`, {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
+      ...(sessionToken ? { Authorization: `Bearer ${sessionToken}` } : {}),
       ...opts?.headers,
     },
     ...opts,
@@ -493,21 +502,54 @@ export async function acceptInvitation(
   return (json.data ?? json) as AcceptInvitationResult;
 }
 
+// ── Current user profile ──
+
+export interface CurrentUser {
+  id: string;
+  org_id: string;
+  email: string;
+  full_name: string;
+  role: string;
+  org_name?: string;
+  avatar?: string;
+  timezone?: string;
+  onboarding_completed: boolean;
+}
+
+export async function fetchCurrentUser(): Promise<CurrentUser> {
+  return request<CurrentUser>("/me");
+}
+
 // ── Onboarding Session ──
+
+function unwrapOnboardingSession(status: OnboardingStatusResponse): OnboardingSession {
+  if (!status?.session?.id) {
+    throw new APIError(500, "invalid_response", "Missing onboarding session in API response");
+  }
+  return status.session;
+}
 
 export async function startOnboarding(data: {
   full_name: string;
   email: string;
   role: string;
 }): Promise<OnboardingSession> {
-  return request<OnboardingSession>("/onboarding/start", {
+  const status = await request<OnboardingStatusResponse>("/onboarding/start", {
     method: "POST",
     body: JSON.stringify(data),
   });
+  return unwrapOnboardingSession(status);
 }
 
-export async function getOnboardingStatus(): Promise<OnboardingStatusResponse> {
-  return request<OnboardingStatusResponse>("/onboarding/status");
+export async function getOnboardingStatus(): Promise<OnboardingStatusResponse | null> {
+  try {
+    return await request<OnboardingStatusResponse>("/onboarding/status");
+  } catch (err) {
+    if (err instanceof APIError && err.status === 404) {
+      return null;
+    }
+    throw err;
+  }
 }
 
 export async function saveOnboardingStep(
@@ -515,24 +557,30 @@ export async function saveOnboardingStep(
   data: Record<string, unknown>,
   version: number,
 ): Promise<OnboardingSession> {
-  return request<OnboardingSession>(`/onboarding/steps/${step}`, {
+  const status = await request<OnboardingStatusResponse>(`/onboarding/steps/${step}`, {
     method: "PUT",
     body: JSON.stringify({ data, version }),
   });
+  return unwrapOnboardingSession(status);
 }
 
 export async function skipOnboardingStep(
   step: OnboardingStep,
+  version: number,
 ): Promise<OnboardingSession> {
-  return request<OnboardingSession>(`/onboarding/steps/${step}/skip`, {
+  const status = await request<OnboardingStatusResponse>(`/onboarding/steps/${step}/skip`, {
     method: "POST",
+    body: JSON.stringify({ version }),
   });
+  return unwrapOnboardingSession(status);
 }
 
-export async function completeOnboarding(): Promise<OnboardingSession> {
-  return request<OnboardingSession>("/onboarding/complete", {
+export async function completeOnboarding(version: number): Promise<OnboardingSession> {
+  const status = await request<OnboardingStatusResponse>("/onboarding/complete", {
     method: "POST",
+    body: JSON.stringify({ version }),
   });
+  return unwrapOnboardingSession(status);
 }
 
 // ── Workspace ──

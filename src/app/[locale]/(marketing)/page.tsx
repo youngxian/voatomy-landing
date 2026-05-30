@@ -38,7 +38,7 @@ export async function generateMetadata({
 
 export default function LandingPage() {
   return (
-    <div id="main-content">
+    <div id="main-content" className="landing-page">
       <JsonLd data={faqPageJsonLd()} />
       <JsonLd data={testimonialsJsonLd()} />
 

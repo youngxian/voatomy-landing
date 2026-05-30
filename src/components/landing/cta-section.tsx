@@ -375,7 +375,7 @@ export function CTASection() {
               ) : null}
             </FynkDisplayHeading>
 
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-white/85 sm:mt-8 sm:text-xl lg:text-2xl">
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/85 sm:mt-8 sm:text-lg lg:text-xl">
               {t.subtitle}
             </p>
           </ScrollReveal>
@@ -383,7 +383,7 @@ export function CTASection() {
           <ScrollReveal direction="up" delayMs={160} className="relative z-10 mt-10 sm:mt-12">
             <Link
               href={isLoggedIn ? localizedPath(dashboardUrl) : localizedPath("/signup")}
-              className="inline-flex items-center gap-2.5 rounded-full bg-white px-10 py-4 text-lg font-bold text-gray-900 shadow-[0_8px_32px_rgba(0,0,0,0.2)] transition hover:bg-gray-50 hover:shadow-[0_12px_40px_rgba(0,0,0,0.25)] sm:px-12 sm:py-4.5 sm:text-xl"
+              className="inline-flex items-center gap-2.5 rounded-full bg-white px-10 py-4 text-base font-bold text-gray-900 shadow-[0_8px_32px_rgba(0,0,0,0.2)] transition hover:bg-gray-50 hover:shadow-[0_12px_40px_rgba(0,0,0,0.25)] sm:px-12 sm:py-4.5 sm:text-lg"
             >
               {isLoggedIn ? nav.goToDashboard : t.startFreeTrial}
               {!isLoggedIn && (

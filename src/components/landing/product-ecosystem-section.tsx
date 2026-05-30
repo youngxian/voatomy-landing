@@ -247,7 +247,7 @@ export function ProductEcosystemSection() {
           visible={isVisible}
           className="mt-10 overflow-hidden rounded-[1.75rem] border border-fynk-border bg-gradient-to-r from-fynk-orange-light via-white to-blue-50 p-6 sm:p-8"
         >
-          <p className="text-center font-handwriting text-[1.35rem] font-bold text-fynk-orange sm:text-[1.5rem]">
+          <p className="text-center font-handwriting text-[1.2rem] font-bold text-fynk-orange sm:text-[1.3125rem]">
             Your journey: ATLAS today → full platform tomorrow
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3">

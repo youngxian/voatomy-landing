@@ -2,6 +2,9 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
+import { StepHeader, StepNav } from "./_shared";
+import { ob, ObField, ObInput } from "../onboarding-primitives";
+import { OnboardingIndustryIcon, OnboardingRegionIcon } from "../onboarding-icons";
 import { cn } from "@/lib/utils";
 import { useOnboarding } from "../onboarding-context";
 import {
@@ -152,118 +155,101 @@ export function WorkspaceStep() {
 
   return (
     <div>
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8 text-center">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand/12">
-          <span className="text-2xl">🏢</span>
-        </div>
-        <h1 className="text-[28px] font-bold tracking-tight text-[#121312]">Set up your workspace</h1>
-        <p className="mt-1.5 text-sm text-[#121312]/50">
-          Org-wide settings for {primaryModule.label} and your team — product-specific setup comes later
-        </p>
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+        <StepHeader
+          stepKey="workspace"
+          title="Set up your workspace"
+          subtitle={`Org-wide settings for ${primaryModule.label} and your team — product-specific setup comes later`}
+        />
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="space-y-6 text-left">
-        {/* Workspace name + slug */}
-        <div>
-          <label className="mb-2 block text-sm font-semibold text-[#121312]/80">Company or team name</label>
-          <input
+      <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className={cn(ob.section, "text-left")}>
+        <ObField label="Company or team name">
+          <ObInput
             type="text"
             value={workspaceName}
             onChange={(e) => setWorkspaceName(e.target.value)}
             placeholder="Acme Corp"
             autoFocus
-            className="h-12 w-full rounded-xl border border-[#121312]/12 bg-white px-4 text-base font-medium text-[#121312] outline-none transition-all placeholder:text-[#121312]/35 focus:border-brand focus:ring-2 focus:ring-brand/20"
           />
-          <div className="mt-1.5 flex items-center gap-1 text-xs text-[#121312]/40">
+          <div className="mt-1 flex items-center gap-1 text-xs text-fynk-muted">
             <span>voatomy.com/</span>
-            <span className="font-mono font-medium text-[#121312]/60">{workspaceSlug || "your-team"}</span>
-            {slugChecking && <span className="ml-1 text-[#121312]/30">checking…</span>}
+            <span className="font-mono font-medium text-fynk-ink/70">{workspaceSlug || "your-team"}</span>
+            {slugChecking && <span className="ml-1">checking…</span>}
             {!slugChecking && slugAvailable === true && <span className="ml-1 text-emerald-600">✓ available</span>}
             {!slugChecking && slugAvailable === false && <span className="ml-1 text-red-500">✗ taken</span>}
           </div>
-        </div>
+        </ObField>
 
-        {/* Industry */}
-        <div>
-          <label className="mb-1 block text-sm font-semibold text-[#121312]/80">Industry</label>
-          <p className="mb-3 text-xs text-[#121312]/40">We&apos;ll recommend products and integrations for your industry</p>
-          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+        <ObField label="Industry" hint="We'll recommend products and integrations for your industry">
+          <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-5">
             {INDUSTRY_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
                 type="button"
                 onClick={() => setIndustry(opt.value)}
                 className={cn(
-                  "flex flex-col items-center gap-1 rounded-xl border py-2.5 px-1 text-center transition-all duration-200",
-                  industry === opt.value
-                    ? "border-brand bg-brand/8 shadow-sm"
-                    : "border-[#121312]/8 bg-white hover:border-[#121312]/15",
+                  "flex flex-col items-center gap-1 rounded-xl border py-2 px-0.5 text-center transition-all duration-200",
+                  industry === opt.value ? ob.chip(true) : ob.chip(false),
                 )}
               >
-                <span className="text-base">{opt.icon}</span>
-                <span className={cn("text-[10px] font-medium leading-tight", industry === opt.value ? "text-[#121312]" : "text-[#121312]/55")}>
+                <span className={cn("flex h-6 w-6 items-center justify-center rounded-md", industry === opt.value ? "text-brand" : "text-fynk-muted")}>
+                  <OnboardingIndustryIcon industry={opt.value} />
+                </span>
+                <span className={cn("text-[9px] font-medium leading-tight", industry === opt.value ? "text-fynk-ink" : "text-fynk-muted")}>
                   {opt.label}
                 </span>
               </button>
             ))}
           </div>
-        </div>
+        </ObField>
 
-        {/* Company size */}
-        <div>
-          <label className="mb-2 block text-sm font-semibold text-[#121312]/80">Team size</label>
-          <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+        <ObField label="Team size">
+          <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-6">
             {COMPANY_SIZE_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
                 type="button"
                 onClick={() => setCompanySize(opt.value)}
                 className={cn(
-                  "flex flex-col items-center gap-0.5 rounded-xl border py-2.5 transition-all duration-200",
-                  companySize === opt.value
-                    ? "border-brand bg-brand/8 shadow-sm"
-                    : "border-[#121312]/8 bg-white hover:border-[#121312]/15",
+                  "flex flex-col items-center gap-0.5 rounded-xl border py-2 transition-all duration-200",
+                  companySize === opt.value ? ob.chip(true) : ob.chip(false),
                 )}
               >
-                <span className={cn("text-sm font-bold", companySize === opt.value ? "text-[#121312]" : "text-[#121312]/70")}>
+                <span className={cn("text-xs font-bold", companySize === opt.value ? "text-fynk-ink" : "text-fynk-muted")}>
                   {opt.label}
                 </span>
-                <span className="text-[9px] text-[#121312]/40">{opt.description}</span>
+                <span className="text-[8px] text-fynk-muted/80">{opt.description}</span>
               </button>
             ))}
           </div>
-        </div>
+        </ObField>
 
-        {/* Region */}
-        <div>
-          <label className="mb-2 block text-sm font-semibold text-[#121312]/80">Region</label>
-          <div className="grid grid-cols-3 gap-2">
+        <ObField label="Region">
+          <div className="grid grid-cols-3 gap-1.5">
             {REGIONS.map((r) => (
               <button
                 key={r.value}
                 type="button"
                 onClick={() => setRegion(r.value)}
                 className={cn(
-                  "flex flex-col items-center gap-1 rounded-xl border py-3 transition-all duration-200",
-                  region === r.value
-                    ? "border-brand bg-brand/8 shadow-sm"
-                    : "border-[#121312]/8 bg-white hover:border-[#121312]/15",
+                  "flex flex-col items-center gap-1 rounded-xl border py-2 transition-all duration-200",
+                  region === r.value ? ob.chip(true) : ob.chip(false),
                 )}
               >
-                <span className="text-lg">{r.icon}</span>
-                <span className={cn("text-[10px] font-medium leading-tight", region === r.value ? "text-[#121312]" : "text-[#121312]/55")}>
+                <span className={cn("flex h-6 w-6 items-center justify-center", region === r.value ? "text-brand" : "text-fynk-muted")}>
+                  <OnboardingRegionIcon region={r.value} />
+                </span>
+                <span className={cn("text-[9px] font-medium leading-tight", region === r.value ? "text-fynk-ink" : "text-fynk-muted")}>
                   {r.label}
                 </span>
               </button>
             ))}
           </div>
-        </div>
+        </ObField>
 
-        {/* Purposes */}
-        <div>
-          <label className="mb-1 block text-sm font-semibold text-[#121312]/80">What do you want to accomplish?</label>
-          <p className="mb-3 text-xs text-[#121312]/40">Select all that apply — we&apos;ll recommend the right products</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <ObField label="What do you want to accomplish?" hint="Select all that apply — we'll recommend the right products">
+          <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
             {filteredPurposes.map((opt) => {
               const selected = purposes.includes(opt.value);
               return (
@@ -272,79 +258,42 @@ export function WorkspaceStep() {
                   type="button"
                   onClick={() => togglePurpose(opt.value)}
                   className={cn(
-                    "flex items-center gap-3 rounded-xl border p-3 text-left transition-all duration-200",
-                    selected
-                      ? "border-brand bg-brand/6 shadow-sm"
-                      : "border-[#121312]/8 bg-white hover:border-[#121312]/15",
+                    "flex items-center gap-2.5 rounded-xl border p-2.5 text-left transition-all duration-200",
+                    selected ? "border-brand bg-brand/[0.04] ring-1 ring-brand/20" : "border-fynk-border bg-white hover:bg-fynk-surface-alt/50",
                   )}
                 >
-                  <span className={cn(
-                    "flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-colors",
-                    selected ? "border-brand bg-brand text-white" : "border-[#121312]/20",
-                  )}>
+                  <span
+                    className={cn(
+                      "flex h-4 w-4 shrink-0 items-center justify-center rounded border transition-colors",
+                      selected ? "border-brand bg-brand text-white" : "border-fynk-border",
+                    )}
+                  >
                     {selected && (
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
                     )}
                   </span>
                   <div className="min-w-0">
-                    <p className={cn("text-[13px] font-medium", selected ? "text-[#121312]" : "text-[#121312]/70")}>
-                      <span className="mr-1.5">{opt.icon}</span>
+                    <p className={cn("text-xs font-medium", selected ? "text-fynk-ink" : "text-fynk-muted")}>
                       {opt.label}
                     </p>
-                    <p className="text-[11px] text-[#121312]/40 truncate">{opt.description}</p>
+                    <p className="text-[10px] text-fynk-muted/80 line-clamp-1">{opt.description}</p>
                   </div>
                 </button>
               );
             })}
           </div>
-        </div>
+        </ObField>
 
-        {saveError && (
-          <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs text-red-700">
-            {saveError}
-          </div>
-        )}
+        {saveError && <p className={ob.error}>{saveError}</p>}
 
-        {/* Navigation */}
-        <div className="flex gap-3 pt-2">
-          <button
-            type="button"
-            onClick={goBack}
-            className="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-[#121312]/12 text-sm font-medium text-[#121312]/60 transition-all hover:bg-[#121312]/5"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-            Back
-          </button>
-          <button
-            type="button"
-            onClick={handleContinue}
-            disabled={!canContinue}
-            className={cn(
-              "flex h-12 flex-[2] items-center justify-center gap-2 rounded-xl text-sm font-semibold transition-all duration-200",
-              canContinue
-                ? "bg-brand text-[#121312] shadow-sm hover:shadow-md active:scale-[0.98]"
-                : "bg-[#121312]/8 text-[#121312]/35 cursor-not-allowed",
-            )}
-          >
-            {isSaving ? (
-              <>
-                <span className="block h-4 w-4 animate-spin rounded-full border-2 border-[#121312]/20 border-t-[#121312]" />
-                Saving…
-              </>
-            ) : (
-              <>
-                Continue
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="9 18 15 12 9 6" />
-                </svg>
-              </>
-            )}
-          </button>
-        </div>
+        <StepNav
+          onBack={goBack}
+          onContinue={handleContinue}
+          canContinue={canContinue}
+          isSaving={isSaving}
+        />
       </motion.div>
     </div>
   );

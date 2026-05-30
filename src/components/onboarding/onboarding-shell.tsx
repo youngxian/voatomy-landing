@@ -2,25 +2,28 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { HelpCircle, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ONBOARDING_STEPS } from "@/lib/constants";
+import { STEP_META } from "@/lib/constants";
 import { useOnboarding } from "./onboarding-context";
 import { useSession } from "@/hooks/use-session";
+import { useDictionary } from "@/i18n/locale-provider";
+import { LanguageSwitcher } from "@/components/i18n/language-switcher";
+import { VoatomyLogo } from "@/components/icons/voatomy-logo-mark";
+import { OnboardingStepIcon } from "./onboarding-icons";
 import type { OnboardingStep } from "@/types";
 
-// ── Step Indicator ──
-
-function StepDot({
+function StepNode({
   stepKey,
   label,
-  icon,
+  index,
   currentStep,
   completedSteps,
   stepOrder,
 }: {
   stepKey: OnboardingStep;
   label: string;
-  icon: string;
+  index: number;
   currentStep: OnboardingStep;
   completedSteps: OnboardingStep[];
   stepOrder: OnboardingStep[];
@@ -30,84 +33,90 @@ function StepDot({
   const currentIndex = stepOrder.indexOf(currentStep);
   const stepIndex = stepOrder.indexOf(stepKey);
   const isPast = stepIndex < currentIndex;
+  const done = isCompleted || isPast;
 
   return (
-    <div className="flex flex-col items-center gap-1.5 min-w-0">
+    <div className="relative z-[1] flex flex-1 flex-col items-center gap-1">
       <div
         className={cn(
-          "relative flex h-8 w-8 items-center justify-center rounded-full text-sm transition-all duration-300",
-          isCompleted || isPast
-            ? "bg-brand text-[#121312] shadow-sm shadow-brand/25"
-            : isCurrent
-              ? "bg-brand text-[#121312] shadow-md shadow-brand/30 ring-4 ring-brand/15"
-              : "border-2 border-[#121312]/12 bg-white text-[#121312]/35",
+          "relative flex h-7 w-7 items-center justify-center rounded-full transition-all duration-300 sm:h-8 sm:w-8",
+          done && "bg-brand text-white shadow-[0_2px_8px_rgba(240,90,40,0.35)]",
+          isCurrent &&
+            !done &&
+            "bg-white text-brand shadow-[0_0_0_3px_rgba(240,90,40,0.2)] ring-2 ring-brand",
+          !isCurrent && !done && "border border-fynk-border bg-white text-fynk-muted/50",
         )}
       >
-        {isCompleted || isPast ? (
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+        {done ? (
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12" />
           </svg>
         ) : (
-          <span className="text-xs">{icon}</span>
+          <OnboardingStepIcon step={stepKey} className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
         )}
         {isCurrent && (
           <motion.span
-            className="absolute inset-0 rounded-full bg-brand"
-            animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0, 0.3] }}
+            className="absolute -inset-1 rounded-full border border-brand/40"
+            animate={{ scale: [1, 1.12, 1], opacity: [0.6, 0, 0.6] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           />
         )}
       </div>
       <span
         className={cn(
-          "text-[10px] font-medium tracking-tight transition-colors text-center leading-tight",
-          isCurrent
-            ? "text-[#121312] font-semibold"
-            : isCompleted || isPast
-              ? "text-[#121312]/65"
-              : "text-[#121312]/35",
+          "hidden max-w-[4rem] truncate text-center text-[9px] font-medium leading-tight sm:block",
+          isCurrent ? "font-semibold text-fynk-ink" : done ? "text-fynk-muted" : "text-fynk-muted/50",
         )}
       >
         {label}
+      </span>
+      <span className="sr-only">
+        Step {index + 1}: {label}
       </span>
     </div>
   );
 }
 
-function ProgressBar() {
-  const { step, completedSteps, stepOrder, progressPercent } = useOnboarding();
+function OnboardingStepper() {
+  const { step, completedSteps, stepOrder, progressPercent, currentStepIndex, totalSteps } = useOnboarding();
+  const dict = useDictionary();
 
   return (
-    <div className="mx-auto w-full max-w-[600px] px-4">
-      <div className="relative flex items-start justify-between">
-        {/* Background line */}
-        <div className="absolute left-4 right-4 top-[15px] h-[2px] rounded-full bg-[#121312]/8" />
-        {/* Progress line */}
+    <div className="mx-auto w-full max-w-xl px-4">
+      <div className="mb-2 flex items-center justify-between text-[10px] font-medium uppercase tracking-wider text-fynk-muted sm:hidden">
+        <span>
+          Step {currentStepIndex + 1} of {totalSteps}
+        </span>
+        <span className="text-brand">{Math.round(progressPercent)}%</span>
+      </div>
+
+      <div className="relative rounded-2xl border border-fynk-border/80 bg-white/70 px-3 py-3 shadow-sm backdrop-blur-sm sm:px-4 sm:py-3.5">
+        <div className="absolute left-10 right-10 top-[1.125rem] hidden h-0.5 rounded-full bg-fynk-border sm:block" />
         <motion.div
-          className="absolute left-4 top-[15px] h-[2px] rounded-full bg-brand"
-          initial={{ width: "0%" }}
+          className="absolute left-10 hidden h-0.5 rounded-full bg-gradient-to-r from-brand to-[#3B82F6] sm:block"
+          style={{ top: "1.125rem", maxWidth: "calc(100% - 5rem)" }}
+          initial={{ width: 0 }}
           animate={{ width: `${progressPercent}%` }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          style={{ maxWidth: "calc(100% - 32px)" }}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         />
 
-        {ONBOARDING_STEPS.map((s) => (
-          <StepDot
-            key={s.key}
-            stepKey={s.key}
-            label={s.label}
-            icon={s.icon}
-            currentStep={step}
-            completedSteps={completedSteps}
-            stepOrder={stepOrder}
-          />
-        ))}
+        <div className="relative flex items-start justify-between gap-1">
+          {stepOrder.map((s, i) => (
+            <StepNode
+              key={s}
+              stepKey={s}
+              index={i}
+              label={dict.onboarding.steps[s] ?? STEP_META[s]?.label ?? s}
+              currentStep={step}
+              completedSteps={completedSteps}
+              stepOrder={stepOrder}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
 }
-
-// ── Shell ──
 
 interface OnboardingShellProps {
   children: React.ReactNode;
@@ -116,72 +125,70 @@ interface OnboardingShellProps {
 export function OnboardingShell({ children }: OnboardingShellProps) {
   const { currentStepIndex, totalSteps } = useOnboarding();
   const { logout } = useSession();
+  const dict = useDictionary();
+  const shell = dict.onboarding.shell;
 
   return (
-    <main className="flex min-h-screen flex-col bg-[#f7f7f8]">
-      {/* Header */}
-      <header className="flex items-center justify-between px-5 pt-5 md:px-8">
-        <Link href="/" className="inline-flex items-center gap-2.5" aria-label="Back to Voatomy">
-          <span
-            className="grid h-[18px] w-[18px] place-items-center rounded-md bg-brand shadow-sm shadow-brand/25"
-            aria-hidden="true"
-          >
-            <span className="block h-2 w-2 rounded-[3px] bg-safe-black/20" />
-          </span>
-          <span className="text-[28px] font-bold tracking-tight text-[#121312]">Voatomy</span>
-        </Link>
+    <main className="onboarding-flow relative flex min-h-screen flex-col overflow-hidden bg-[#f4f5f7]">
+      <div
+        className="pointer-events-none absolute inset-0"
+        aria-hidden
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 45% at 50% -5%, rgba(240,90,40,0.07) 0%, transparent 50%), radial-gradient(ellipse 50% 35% at 100% 0%, rgba(59,130,246,0.05) 0%, transparent 45%)",
+        }}
+      />
 
-        <div className="flex items-center gap-4">
-          <span className="text-xs font-medium text-[#121312]/40">
-            Step {currentStepIndex + 1} of {totalSteps}
+      <header className="relative z-10 flex shrink-0 items-center justify-between px-4 pt-4 md:px-6">
+        <VoatomyLogo href="/" />
+
+        <div className="flex items-center gap-2 sm:gap-3">
+          <LanguageSwitcher compact />
+          <span className="hidden rounded-full bg-white/80 px-2.5 py-1 text-[10px] font-semibold text-fynk-muted ring-1 ring-fynk-border sm:inline">
+            {shell.stepOf
+              .replace("{current}", String(currentStepIndex + 1))
+              .replace("{total}", String(totalSteps))}
           </span>
           <button
             type="button"
             onClick={logout}
-            className="text-xs font-medium text-[#121312]/40 transition-colors hover:text-[#121312]/70"
+            className="hidden text-xs font-medium text-fynk-muted transition-colors hover:text-fynk-ink sm:inline"
           >
-            Sign out
+            {shell.signOut}
           </button>
           <button
-            className="text-[#121312]/40 transition-colors hover:text-[#121312]/70"
+            type="button"
+            className="flex h-7 w-7 items-center justify-center rounded-full text-fynk-muted transition-colors hover:bg-white/80 hover:text-fynk-ink"
             aria-label="Help"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-              <line x1="12" y1="17" x2="12.01" y2="17" />
-            </svg>
+            <HelpCircle className="h-3.5 w-3.5" strokeWidth={2} />
           </button>
           <Link
             href="/"
-            className="text-[#121312]/40 transition-colors hover:text-[#121312]/70"
+            className="flex h-7 w-7 items-center justify-center rounded-full text-fynk-muted transition-colors hover:bg-white/80 hover:text-fynk-ink"
             aria-label="Exit onboarding"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
+            <X className="h-3.5 w-3.5" strokeWidth={2} />
           </Link>
         </div>
       </header>
 
-      {/* Progress */}
-      <div className="mt-6 mb-6">
-        <ProgressBar />
+      <div className="relative z-10 mt-4 mb-4 shrink-0">
+        <OnboardingStepper />
       </div>
 
-      {/* Content */}
-      <div className="mx-auto flex w-full max-w-[680px] flex-1 flex-col px-5">
-        {children}
+      <div className="relative z-10 mx-auto flex w-full max-w-[640px] flex-1 flex-col px-4 pb-4">
+        <div className="flex max-h-[calc(100vh-11rem)] min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-white/90 bg-white shadow-[0_4px_24px_rgba(17,24,39,0.06)] sm:max-h-[calc(100vh-10.5rem)]">
+          <div className="flex-1 overflow-y-auto overscroll-contain p-4 sm:p-5">{children}</div>
+        </div>
       </div>
 
-      {/* Footer */}
-      <footer className="mt-auto flex items-center justify-center gap-3.5 px-5 py-4 text-xs text-[#121312]/40">
+      <footer className="relative z-10 shrink-0 flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 px-4 py-3 text-[10px] text-fynk-muted/70">
         <span>&copy; 2025-2026 Voatomy Labs</span>
-        <span className="text-[#121312]/15">·</span>
-        <span>Encrypted & secure</span>
-        <span className="text-[#121312]/15">·</span>
-        <span>SOC 2 ready</span>
+        <span className="hidden sm:inline">·</span>
+        <span>{shell.encrypted}</span>
+        <span>·</span>
+        <span>{shell.soc2}</span>
       </footer>
     </main>
   );

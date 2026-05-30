@@ -3,6 +3,7 @@
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { StepHeader } from "./_shared";
 import { useOnboarding } from "../onboarding-context";
 import { PRODUCT_CARDS, LOADING_TIPS } from "@/lib/constants";
 import { trackConversion, trackEvent } from "@/lib/analytics";
@@ -206,29 +207,12 @@ export function LaunchStep() {
   if (phase === "analyzing") {
     return (
       <div className="text-center">
-        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="mb-6">
-          {/* Spinning logo */}
-          <div className="mx-auto mb-6 relative h-20 w-20">
-            <motion.div
-              className="absolute inset-0 rounded-3xl bg-brand/20"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-            />
-            <div className="absolute inset-2 rounded-2xl bg-brand/10 flex items-center justify-center">
-              <motion.span
-                className="text-3xl"
-                animate={{ scale: [1, 1.1, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                🚀
-              </motion.span>
-            </div>
-          </div>
-
-          <h1 className="mb-2 text-[28px] font-bold tracking-tight text-[#121312]">Setting up your workspace</h1>
-          <p className="mx-auto max-w-[380px] text-sm text-[#121312]/50">
-            We&apos;re configuring everything for <strong className="text-[#121312]/70">{formData.workspaceName || "your team"}</strong>. This only takes a moment.
-          </p>
+        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="mb-4">
+          <StepHeader
+            stepKey="launch"
+            title="Setting up your workspace"
+            subtitle={`Configuring everything for ${formData.workspaceName || "your team"}. This only takes a moment.`}
+          />
         </motion.div>
 
         {/* Progress bar */}
@@ -320,50 +304,21 @@ export function LaunchStep() {
 
   // ── Ready Phase ──
   return (
-    <div className="text-center">
-      {/* Celebration */}
-      <motion.div
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 200, damping: 15 }}
-        className="mx-auto mb-5 flex h-24 w-24 items-center justify-center rounded-3xl bg-brand/15"
-      >
-        <motion.span
-          className="text-5xl"
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          🎉
-        </motion.span>
-      </motion.div>
-
-      <motion.h1
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="mb-2 text-[32px] font-bold tracking-tight text-[#121312]"
-      >
-        You&apos;re all set!
-      </motion.h1>
-      <motion.p
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="mx-auto mb-8 max-w-[400px] text-sm text-[#121312]/50"
-      >
-        Your <strong className="text-[#121312]/70">{formData.workspaceName}</strong> workspace is ready
-        {primaryProduct && (
-          <> — opening <strong className="text-[#121312]/70">{getProductLabel(primaryProduct)}</strong></>
-        )}.
-        {formData.invitees.length > 0 && ` We've sent invitations to ${formData.invitees.length} teammate${formData.invitees.length !== 1 ? "s" : ""}.`}
-      </motion.p>
+    <div>
+      <StepHeader
+        stepKey="launch"
+        title="You're all set!"
+        subtitle={`Your ${formData.workspaceName || "workspace"} is ready${
+          primaryProduct ? ` — opening ${getProductLabel(primaryProduct)}` : ""
+        }.${formData.invitees.length > 0 ? ` Invitations sent to ${formData.invitees.length} teammate${formData.invitees.length !== 1 ? "s" : ""}.` : ""}`}
+      />
 
       {/* Summary cards */}
       <motion.div
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35 }}
-        className="mx-auto max-w-[480px] space-y-3 mb-8 text-left"
+        className="space-y-2.5 mb-5 text-left"
       >
         {/* Products */}
         <div className="rounded-2xl border border-[#121312]/8 bg-white p-4">

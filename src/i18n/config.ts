@@ -69,6 +69,8 @@ function isNonLocalizedPath(pathname: string): boolean {
   );
 }
 
+export { isNonLocalizedPath };
+
 export function localizedPath(path: string, locale: Locale): string {
   if (!path || path.startsWith("http") || path.startsWith("#") || path.startsWith("mailto:")) {
     return path;

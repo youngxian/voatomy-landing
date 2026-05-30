@@ -98,4 +98,36 @@ export type Dictionary = {
     productDemos: string;
     demosHint: string;
   };
+  onboarding: {
+    shell: {
+      stepOf: string;
+      signOut: string;
+      encrypted: string;
+      soc2: string;
+    };
+    steps: Record<string, string>;
+    roles: Record<string, string>;
+    welcome: {
+      title: string;
+      titleWithName: string;
+      subtitleSinglePrefix: string;
+      subtitleSingleSuffix: string;
+      subtitleMulti: string;
+      roleLabel: string;
+      roleHint: string;
+      yourProduct: string;
+      productSetupNote: string;
+      productPickerLabel: string;
+      productPickerHint: string;
+      getStarted: string;
+      saving: string;
+      securityNote: string;
+      errors: {
+        roleRequired: string;
+        productRequired: string;
+        profileLoadFailed: string;
+        sessionFailed: string;
+      };
+    };
+  };
 };

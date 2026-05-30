@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 export function VoatomyLogoMark({ className }: { className?: string }) {
@@ -13,5 +14,45 @@ export function VoatomyLogoMark({ className }: { className?: string }) {
         opacity="0.85"
       />
     </svg>
+  );
+}
+
+export function VoatomyLogo({
+  className,
+  wordmarkClassName,
+  href = "/",
+  asLink = true,
+}: {
+  className?: string;
+  wordmarkClassName?: string;
+  href?: string;
+  asLink?: boolean;
+}) {
+  const content = (
+    <>
+      <VoatomyLogoMark className={cn("h-8 w-8", className)} />
+      <span
+        className={cn(
+          "font-heading text-[18px] font-semibold tracking-[-0.02em] text-[#121312]",
+          wordmarkClassName,
+        )}
+      >
+        voatomy
+      </span>
+    </>
+  );
+
+  if (!asLink) {
+    return <span className="inline-flex items-center gap-2">{content}</span>;
+  }
+
+  return (
+    <Link
+      href={href}
+      className="group inline-flex items-center gap-2 rounded-lg transition-opacity hover:opacity-85"
+      aria-label="Voatomy home"
+    >
+      {content}
+    </Link>
   );
 }
