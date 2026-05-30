@@ -6,6 +6,7 @@ import { APIError } from "@/lib/api";
 import { resolvePostAuthDestinationAsync } from "@/lib/auth-redirect";
 import { verifyMagicLinkOnce } from "@/lib/verify-magic-link-once";
 import { AUTH_REDIRECT_KEY } from "@/components/auth/auth-page";
+import { useDictionary } from "@/i18n/locale-provider";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_ONBOARDING_API_URL ?? "http://localhost:8081/v1";
@@ -32,6 +33,10 @@ async function startTrialIfPending(): Promise<void> {
 type Status = "loading" | "success" | "expired" | "error";
 
 export default function VerifyMagicLinkPage() {
+  const dict = useDictionary();
+  const common = dict.auth.common;
+  const p = dict.auth.pages;
+
   const params = useParams();
   const router = useRouter();
   const token = params.token as string;
@@ -74,17 +79,17 @@ export default function VerifyMagicLinkPage() {
           if (err.code === "magic_link_expired") {
             setStatus("expired");
           } else if (err.code === "token_used") {
-            setErrorMsg("This link has already been used. Please request a new one.");
+            setErrorMsg(p.tokenAlreadyUsed);
             setStatus("error");
           } else if (err.code === "not_found") {
-            setErrorMsg("This sign-in link is invalid. Request a new link from the sign-in page.");
+            setErrorMsg(p.signInLinkInvalid);
             setStatus("error");
           } else {
             setErrorMsg(err.message);
             setStatus("error");
           }
         } else {
-          setErrorMsg("Could not reach the server. Make sure the onboarding API is running on port 8081.");
+          setErrorMsg(common.serverUnreachable);
           setStatus("error");
         }
       });
@@ -92,14 +97,14 @@ export default function VerifyMagicLinkPage() {
     return () => {
       cancelled = true;
     };
-  }, [token, completeLogin]);
+  }, [token, completeLogin, p.tokenAlreadyUsed, p.signInLinkInvalid, common.serverUnreachable]);
 
   if (status === "loading") {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
         <div className="text-center">
           <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-[#121312]/10 border-t-brand" />
-          <p className="text-sm text-[#121312]/50">Verifying your link…</p>
+          <p className="text-sm text-[#121312]/50">{p.verifyingLink}</p>
         </div>
       </div>
     );
@@ -114,8 +119,8 @@ export default function VerifyMagicLinkPage() {
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-[#121312]">You&apos;re in!</h1>
-          <p className="mt-2 text-sm text-[#121312]/50">Redirecting to your dashboard…</p>
+          <h1 className="text-2xl font-bold text-[#121312]">{p.youreIn}</h1>
+          <p className="mt-2 text-sm text-[#121312]/50">{p.redirectingDashboard}</p>
         </div>
       </div>
     );
@@ -132,28 +137,25 @@ export default function VerifyMagicLinkPage() {
               <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-[#121312]">Link expired</h1>
-          <p className="mt-2 text-sm text-[#121312]/50">
-            This sign-in link has expired. Links are valid for 15 minutes.
-          </p>
+          <h1 className="text-2xl font-bold text-[#121312]">{p.linkExpired}</h1>
+          <p className="mt-2 text-sm text-[#121312]/50">{p.linkExpiredVerify}</p>
           <button
             onClick={() => router.push(`/auth/expired${email ? `?email=${encodeURIComponent(email)}` : ""}`)}
             className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#121312] text-sm font-semibold text-white transition-all hover:bg-[#121312]/90 active:scale-[0.98]"
           >
-            Request a new link
+            {p.requestNewLink}
           </button>
           <button
             onClick={() => router.push("/auth/login")}
             className="mt-3 text-sm font-medium text-[#121312]/50 hover:text-[#121312] transition-colors cursor-pointer"
           >
-            Back to sign in
+            {common.backToSignIn}
           </button>
         </div>
       </div>
     );
   }
 
-  // Error state
   return (
     <div className="flex min-h-screen items-center justify-center bg-white">
       <div className="mx-4 max-w-sm text-center">
@@ -164,15 +166,15 @@ export default function VerifyMagicLinkPage() {
             <line x1="9" y1="9" x2="15" y2="15" />
           </svg>
         </div>
-        <h1 className="text-2xl font-bold text-[#121312]">Invalid link</h1>
+        <h1 className="text-2xl font-bold text-[#121312]">{p.invalidLink}</h1>
         <p className="mt-2 text-sm text-[#121312]/50">
-          {errorMsg || "This link is no longer valid."}
+          {errorMsg || p.linkNoLongerValid}
         </p>
         <button
           onClick={() => router.push("/auth/login")}
           className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#121312] text-sm font-semibold text-white transition-all hover:bg-[#121312]/90 active:scale-[0.98]"
         >
-          Back to sign in
+          {common.backToSignIn}
         </button>
       </div>
     </div>

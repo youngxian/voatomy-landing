@@ -3,8 +3,14 @@
 import * as React from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { resendMagicLink, APIError } from "@/lib/api";
+import { useDictionary } from "@/i18n/locale-provider";
 
 export default function ExpiredLinkPage() {
+  const dict = useDictionary();
+  const common = dict.auth.common;
+  const p = dict.auth.pages;
+  const e = p.expired;
+
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -16,7 +22,7 @@ export default function ExpiredLinkPage() {
 
   const handleResend = async () => {
     if (!email.includes("@")) {
-      setError("Please enter a valid email address");
+      setError(e.invalidEmail);
       return;
     }
     setSending(true);
@@ -25,7 +31,7 @@ export default function ExpiredLinkPage() {
       await resendMagicLink(email);
       setSent(true);
     } catch (err) {
-      const msg = err instanceof APIError ? err.message : "Failed to send link";
+      const msg = err instanceof APIError ? err.message : e.failedToSend;
       setError(msg);
     } finally {
       setSending(false);
@@ -42,15 +48,24 @@ export default function ExpiredLinkPage() {
               <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-[#121312]">New link sent!</h1>
+          <h1 className="text-2xl font-bold text-[#121312]">{e.newLinkSent}</h1>
           <p className="mt-2 text-sm text-[#121312]/50">
-            Check <span className="font-medium text-[#121312]/70">{email}</span> for a new sign-in link. It expires in 15 minutes.
+            {e.newLinkSubtitle.split("{email}").map((part, i, arr) =>
+              i < arr.length - 1 ? (
+                <React.Fragment key={i}>
+                  {part}
+                  <span className="font-medium text-[#121312]/70">{email}</span>
+                </React.Fragment>
+              ) : (
+                part
+              ),
+            )}
           </p>
           <button
             onClick={() => router.push("/auth/login")}
             className="mt-6 text-sm font-medium text-[#121312]/50 hover:text-[#121312] transition-colors cursor-pointer"
           >
-            Back to sign in
+            {common.backToSignIn}
           </button>
         </div>
       </div>
@@ -67,22 +82,20 @@ export default function ExpiredLinkPage() {
             <line x1="12" y1="16" x2="12.01" y2="16" />
           </svg>
         </div>
-        <h1 className="text-2xl font-bold text-[#121312]">Link expired</h1>
-        <p className="mt-2 mb-6 text-sm text-[#121312]/50">
-          Your sign-in link has expired. Enter your email below to get a new one.
-        </p>
+        <h1 className="text-2xl font-bold text-[#121312]">{e.title}</h1>
+        <p className="mt-2 mb-6 text-sm text-[#121312]/50">{e.subtitle}</p>
 
         <div className="space-y-3 text-left">
           <div>
             <label htmlFor="expired_email" className="mb-2 block text-sm font-semibold text-[#121312]/70">
-              Work email
+              {common.workEmail}
             </label>
             <input
               id="expired_email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="jane@yourcompany.com"
+              onChange={(ev) => setEmail(ev.target.value)}
+              placeholder={common.emailPlaceholder}
               className="flex h-12 w-full rounded-md border border-[#121312]/15 bg-white px-3.5 text-base font-medium text-[#121312] placeholder:text-[#121312]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:border-brand transition-colors"
             />
           </div>
@@ -94,7 +107,7 @@ export default function ExpiredLinkPage() {
             disabled={sending}
             className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#121312] text-sm font-semibold text-white transition-all hover:bg-[#121312]/90 active:scale-[0.98] disabled:opacity-50"
           >
-            {sending ? "Sending…" : "Send new link"}
+            {sending ? e.sending : e.sendNewLink}
           </button>
         </div>
 
@@ -102,7 +115,7 @@ export default function ExpiredLinkPage() {
           onClick={() => router.push("/auth/login")}
           className="mt-4 text-sm font-medium text-[#121312]/50 hover:text-[#121312] transition-colors cursor-pointer"
         >
-          Back to sign in
+          {common.backToSignIn}
         </button>
       </div>
     </div>

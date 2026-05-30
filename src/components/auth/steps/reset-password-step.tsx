@@ -5,30 +5,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { resetPassword, APIError } from "@/lib/api";
+import { useDictionary } from "@/i18n/locale-provider";
 
-const resetSchema = z
-  .object({
-    password: z
-      .string()
-      .min(8, "At least 8 characters")
-      .regex(/[A-Z]/, "At least 1 uppercase letter")
-      .regex(/[0-9]/, "At least 1 number")
-      .regex(/[!@#$%^&*(),.?":{}|<>]/, "At least 1 special character"),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
-
-type ResetValues = z.infer<typeof resetSchema>;
-
-const PASSWORD_RULES = [
-  { label: "At least 8 characters", test: (v: string) => v.length >= 8 },
-  { label: "At least 1 uppercase letter", test: (v: string) => /[A-Z]/.test(v) },
-  { label: "At least 1 number", test: (v: string) => /[0-9]/.test(v) },
-  { label: "At least 1 special character", test: (v: string) => /[!@#$%^&*(),.?":{}|<>]/.test(v) },
-];
+type ResetValues = {
+  password: string;
+  confirmPassword: string;
+};
 
 interface ResetPasswordStepProps {
   token: string;
@@ -36,6 +18,40 @@ interface ResetPasswordStepProps {
 }
 
 export function ResetPasswordStep({ token, onSuccess }: ResetPasswordStepProps) {
+  const dict = useDictionary();
+  const t = dict.auth.resetPassword;
+  const common = dict.auth.common;
+  const rules = t.rules;
+
+  const resetSchema = React.useMemo(
+    () =>
+      z
+        .object({
+          password: z
+            .string()
+            .min(8, rules.minLength)
+            .regex(/[A-Z]/, rules.uppercase)
+            .regex(/[0-9]/, rules.number)
+            .regex(/[!@#$%^&*(),.?":{}|<>]/, rules.special),
+          confirmPassword: z.string(),
+        })
+        .refine((data) => data.password === data.confirmPassword, {
+          message: rules.mismatch,
+          path: ["confirmPassword"],
+        }),
+    [rules],
+  );
+
+  const passwordRules = React.useMemo(
+    () => [
+      { label: rules.minLength, test: (v: string) => v.length >= 8 },
+      { label: rules.uppercase, test: (v: string) => /[A-Z]/.test(v) },
+      { label: rules.number, test: (v: string) => /[0-9]/.test(v) },
+      { label: rules.special, test: (v: string) => /[!@#$%^&*(),.?":{}|<>]/.test(v) },
+    ],
+    [rules],
+  );
+
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirm, setShowConfirm] = React.useState(false);
   const [apiError, setApiError] = React.useState<string | null>(null);
@@ -63,16 +79,16 @@ export function ResetPasswordStep({ token, onSuccess }: ResetPasswordStepProps) 
     } catch (err) {
       if (err instanceof APIError) {
         if (err.code === "reset_token_expired") {
-          setApiError("This reset link has expired. Please request a new one.");
+          setApiError(t.errors.expired);
         } else if (err.code === "reset_token_used") {
-          setApiError("This reset link has already been used.");
+          setApiError(t.errors.used);
         } else if (err.code === "not_found") {
-          setApiError("Invalid reset link. Please request a new one.");
+          setApiError(t.errors.invalid);
         } else {
           setApiError(err.message);
         }
       } else {
-        setApiError("Something went wrong. Please try again.");
+        setApiError(common.somethingWrong);
       }
     }
   };
@@ -86,10 +102,10 @@ export function ResetPasswordStep({ token, onSuccess }: ResetPasswordStepProps) 
           </svg>
         </div>
         <h1 className="mb-3 text-[46px] font-semibold leading-[1.04] tracking-tight text-[#121312]">
-          Password reset
+          {t.successTitle}
         </h1>
         <p className="mx-auto mb-8 max-w-[330px] text-[15px] leading-relaxed text-[#121312]/55">
-          Your password has been reset successfully. Redirecting to sign in…
+          {t.successRedirect}
         </p>
         <a
           href="/auth/login"
@@ -98,7 +114,7 @@ export function ResetPasswordStep({ token, onSuccess }: ResetPasswordStepProps) 
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="15 18 9 12 15 6" />
           </svg>
-          Go to sign in
+          {t.goToSignIn}
         </a>
       </div>
     );
@@ -107,23 +123,22 @@ export function ResetPasswordStep({ token, onSuccess }: ResetPasswordStepProps) 
   return (
     <div className="text-center">
       <h1 className="mb-3 text-[46px] font-semibold leading-[1.04] tracking-tight text-[#121312]">
-        Set a new password
+        {t.title}
       </h1>
       <p className="mx-auto mb-8 max-w-[330px] text-[15px] leading-relaxed text-[#121312]/55">
-        Choose a new password for your Voatomy account.
+        {t.subtitle}
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4 text-left">
-        {/* New password */}
         <div>
           <label htmlFor="reset_password" className="mb-2 block text-sm font-semibold text-[#121312]/70">
-            New password
+            {t.newPassword}
           </label>
           <div className="relative">
             <input
               id="reset_password"
               type={showPassword ? "text" : "password"}
-              placeholder="Enter new password"
+              placeholder={common.passwordPlaceholder}
               autoComplete="new-password"
               className="flex h-12 w-full rounded-md border border-[#121312]/15 bg-white px-3.5 pr-11 text-base font-medium text-[#121312] transition-colors placeholder:text-[#121312]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:border-brand"
               {...register("password")}
@@ -149,18 +164,15 @@ export function ResetPasswordStep({ token, onSuccess }: ResetPasswordStepProps) 
           </div>
         </div>
 
-        {/* Password strength indicators */}
         <div className="space-y-2 rounded-lg bg-[#121312]/[0.03] px-3.5 py-3">
-          <p className="text-xs font-semibold text-[#121312]/50">Password must have:</p>
-          {PASSWORD_RULES.map((rule) => {
+          <p className="text-xs font-semibold text-[#121312]/50">{t.passwordMustHave}</p>
+          {passwordRules.map((rule) => {
             const passed = rule.test(passwordValue);
             return (
               <div key={rule.label} className="flex items-center gap-2 text-sm">
                 <span
                   className={`grid h-4 w-4 place-items-center rounded-full transition-all duration-200 ${
-                    passed
-                      ? "bg-emerald-500 text-white"
-                      : "border border-[#121312]/20 text-transparent"
+                    passed ? "bg-emerald-500 text-white" : "border border-[#121312]/20 text-transparent"
                   }`}
                 >
                   <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -175,16 +187,15 @@ export function ResetPasswordStep({ token, onSuccess }: ResetPasswordStepProps) 
           })}
         </div>
 
-        {/* Confirm */}
         <div>
           <label htmlFor="reset_confirm" className="mb-2 block text-sm font-semibold text-[#121312]/70">
-            Confirm new password
+            {t.confirmPassword}
           </label>
           <div className="relative">
             <input
               id="reset_confirm"
               type={showConfirm ? "text" : "password"}
-              placeholder="Confirm new password"
+              placeholder={t.confirmPassword}
               autoComplete="new-password"
               className="flex h-12 w-full rounded-md border border-[#121312]/15 bg-white px-3.5 pr-11 text-base font-medium text-[#121312] transition-colors placeholder:text-[#121312]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:border-brand"
               {...register("confirmPassword")}
@@ -214,9 +225,7 @@ export function ResetPasswordStep({ token, onSuccess }: ResetPasswordStepProps) 
         </div>
 
         {apiError && (
-          <div className="rounded-lg bg-red-50 px-3.5 py-3 text-sm text-red-600">
-            {apiError}
-          </div>
+          <div className="rounded-lg bg-red-50 px-3.5 py-3 text-sm text-red-600">{apiError}</div>
         )}
 
         <button
@@ -224,7 +233,7 @@ export function ResetPasswordStep({ token, onSuccess }: ResetPasswordStepProps) 
           disabled={isSubmitting}
           className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#121312] text-sm font-semibold text-white transition-all duration-200 hover:bg-[#121312]/90 active:scale-[0.98] disabled:opacity-50"
         >
-          {isSubmitting ? "Resetting…" : "Reset password"}
+          {isSubmitting ? t.submitting : t.submit}
         </button>
       </form>
     </div>

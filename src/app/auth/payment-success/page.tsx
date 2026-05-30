@@ -3,12 +3,17 @@
 import * as React from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { useDictionary } from "@/i18n/locale-provider";
 
 type Status = "verifying" | "success" | "error";
 
 const API_BASE = process.env.NEXT_PUBLIC_ONBOARDING_API_URL?.replace("/v1", "") ?? "http://localhost:8081";
 
 export default function PaymentSuccessPage() {
+  const dict = useDictionary();
+  const common = dict.auth.common;
+  const pay = dict.auth.pages.payment;
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const sessionId = searchParams.get("session_id");
@@ -33,23 +38,23 @@ export default function PaymentSuccessPage() {
           setTimeout(() => router.push("/onboard"), 2000);
         } else {
           const body = await res.json().catch(() => ({}));
-          setErrorMsg(body.message ?? "Could not verify payment.");
+          setErrorMsg(body.message ?? pay.verifyFailed);
           setStatus("error");
         }
       })
       .catch(() => {
-        setErrorMsg("Something went wrong. Please try again.");
+        setErrorMsg(common.somethingWrong);
         setStatus("error");
       });
-  }, [sessionId, router]);
+  }, [sessionId, router, pay.verifyFailed, common.somethingWrong]);
 
   if (status === "verifying") {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
         <div className="text-center">
           <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-[#121312]/10 border-t-brand" />
-          <h1 className="text-lg font-bold text-[#121312]">Confirming payment...</h1>
-          <p className="mt-2 text-sm text-[#121312]/50">This will only take a moment.</p>
+          <h1 className="text-lg font-bold text-[#121312]">{pay.verifying}</h1>
+          <p className="mt-2 text-sm text-[#121312]/50">{pay.verifyingSubtitle}</p>
         </div>
       </div>
     );
@@ -87,7 +92,7 @@ export default function PaymentSuccessPage() {
             transition={{ delay: 0.2 }}
             className="text-2xl font-bold text-[#121312]"
           >
-            Payment successful!
+            {pay.success}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -95,7 +100,7 @@ export default function PaymentSuccessPage() {
             transition={{ delay: 0.35 }}
             className="mt-2 text-sm text-[#121312]/50"
           >
-            Your subscription is now active. Redirecting to setup...
+            {pay.successSubtitle}
           </motion.p>
           <motion.div
             initial={{ opacity: 0 }}
@@ -136,15 +141,13 @@ export default function PaymentSuccessPage() {
             <line x1="9" y1="9" x2="15" y2="15" />
           </svg>
         </div>
-        <h1 className="text-2xl font-bold text-[#121312]">Payment issue</h1>
-        <p className="mt-2 text-sm text-[#121312]/50">
-          {errorMsg}
-        </p>
+        <h1 className="text-2xl font-bold text-[#121312]">{pay.error}</h1>
+        <p className="mt-2 text-sm text-[#121312]/50">{errorMsg}</p>
         <button
           onClick={() => router.push("/dashboard")}
           className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#121312] text-sm font-semibold text-white transition-all hover:bg-[#121312]/90 active:scale-[0.98]"
         >
-          Back to dashboard
+          {pay.backToDashboard}
         </button>
       </div>
     </div>

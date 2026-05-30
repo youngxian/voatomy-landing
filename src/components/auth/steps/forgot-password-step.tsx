@@ -5,23 +5,25 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAuth } from "../auth-page";
-// import { isWorkEmail } from "@/lib/utils";
 import { forgotPassword, APIError } from "@/lib/api";
+import { useDictionary } from "@/i18n/locale-provider";
 
-const forgotSchema = z.object({
-  email: z
-    .string()
-    .email("Please enter a valid email"),
-    // .refine(isWorkEmail, "Please use your work email"),
-});
-
-type ForgotValues = z.infer<typeof forgotSchema>;
+type ForgotValues = { email: string };
 
 export function ForgotPasswordStep() {
+  const dict = useDictionary();
+  const t = dict.auth.forgotPassword;
+  const common = dict.auth.common;
+  const v = dict.auth.validation;
   const { setStep } = useAuth();
   const [submitted, setSubmitted] = React.useState(false);
   const [submittedEmail, setSubmittedEmail] = React.useState("");
   const [apiError, setApiError] = React.useState<string | null>(null);
+
+  const forgotSchema = React.useMemo(
+    () => z.object({ email: z.string().email(v.emailInvalid) }),
+    [v.emailInvalid],
+  );
 
   const {
     register,
@@ -41,7 +43,7 @@ export function ForgotPasswordStep() {
       if (err instanceof APIError) {
         setApiError(err.message);
       } else {
-        setApiError("Something went wrong. Please try again.");
+        setApiError(common.somethingWrong);
       }
     }
   };
@@ -49,7 +51,6 @@ export function ForgotPasswordStep() {
   if (submitted) {
     return (
       <div className="text-center">
-        {/* Success icon */}
         <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand/10">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-brand">
             <rect x="2" y="4" width="20" height="16" rx="2" />
@@ -58,23 +59,19 @@ export function ForgotPasswordStep() {
         </div>
 
         <h1 className="mb-3 text-[46px] font-semibold leading-[1.04] tracking-tight text-[#121312]">
-          Check your inbox
+          {t.successTitle}
         </h1>
         <p className="mx-auto mb-2 max-w-[330px] text-[15px] leading-relaxed text-[#121312]/55">
-          We sent a password reset link to
+          {t.successSent}
         </p>
-        <p className="mb-2 text-[15px] font-semibold text-[#121312]">
-          {submittedEmail}
-        </p>
-        <p className="mb-8 text-sm text-[#121312]/40">
-          The link expires in 1 hour.
-        </p>
+        <p className="mb-2 text-[15px] font-semibold text-[#121312]">{submittedEmail}</p>
+        <p className="mb-8 text-sm text-[#121312]/40">{t.successExpires}</p>
 
         <button
           onClick={() => setSubmitted(false)}
           className="text-sm font-medium text-[#121312]/50 hover:text-[#121312] transition-colors cursor-pointer"
         >
-          Didn&apos;t get it? Resend
+          {t.resend}
         </button>
 
         <div className="mt-6">
@@ -85,7 +82,7 @@ export function ForgotPasswordStep() {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="15 18 9 12 15 6" />
             </svg>
-            Back to sign in
+            {common.backToSignIn}
           </button>
         </div>
       </div>
@@ -94,7 +91,6 @@ export function ForgotPasswordStep() {
 
   return (
     <div className="text-center">
-      {/* Back */}
       <button
         onClick={() => setStep("login")}
         className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-[#121312]/55 hover:text-[#121312] transition-colors cursor-pointer"
@@ -102,25 +98,25 @@ export function ForgotPasswordStep() {
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="15 18 9 12 15 6" />
         </svg>
-        Back to sign in
+        {common.backToSignIn}
       </button>
 
       <h1 className="mb-3 text-[46px] font-semibold leading-[1.04] tracking-tight text-[#121312]">
-        Reset your password
+        {t.title}
       </h1>
       <p className="mx-auto mb-8 max-w-[330px] text-[15px] leading-relaxed text-[#121312]/55">
-        Enter the email address linked to your account and we&apos;ll send you a reset link.
+        {t.subtitle}
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4 text-left">
         <div>
           <label htmlFor="forgot_email" className="mb-2 block text-sm font-semibold text-[#121312]/70">
-            Work email
+            {common.workEmail}
           </label>
           <input
             id="forgot_email"
             type="email"
-            placeholder="jane@yourcompany.com"
+            placeholder={common.emailPlaceholder}
             autoComplete="email"
             className="flex h-12 w-full rounded-md border border-[#121312]/15 bg-white px-3.5 text-base font-medium text-[#121312] transition-colors placeholder:text-[#121312]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:border-brand"
             {...register("email")}
@@ -129,9 +125,7 @@ export function ForgotPasswordStep() {
         </div>
 
         {apiError && (
-          <div className="rounded-lg bg-red-50 px-3.5 py-3 text-sm text-red-600">
-            {apiError}
-          </div>
+          <div className="rounded-lg bg-red-50 px-3.5 py-3 text-sm text-red-600">{apiError}</div>
         )}
 
         <button
@@ -139,7 +133,7 @@ export function ForgotPasswordStep() {
           disabled={isSubmitting}
           className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#121312] text-sm font-semibold text-white transition-all duration-200 hover:bg-[#121312]/90 active:scale-[0.98] disabled:opacity-50"
         >
-          {isSubmitting ? "Sending…" : "Send reset link"}
+          {isSubmitting ? t.sending : t.sendReset}
         </button>
       </form>
     </div>

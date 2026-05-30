@@ -9,23 +9,32 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "../auth-page";
 import { SocialButtons } from "../social-buttons";
 import { OrDivider } from "../or-divider";
-// import { isWorkEmail } from "@/lib/utils";
 import { signupWithMagicLink, APIError } from "@/lib/api";
+import { useDictionary } from "@/i18n/locale-provider";
 
-const signupSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z
-    .string()
-    .email("Please enter a valid email"),
-    // .refine(isWorkEmail, "Please use your work email (e.g. jane@yourcompany.com)"),
-});
-
-type SignupValues = z.infer<typeof signupSchema>;
+type SignupValues = {
+  firstName: string;
+  lastName: string;
+  email: string;
+};
 
 export function SignupStep() {
+  const dict = useDictionary();
+  const t = dict.auth.signup;
+  const v = dict.auth.validation;
+  const common = dict.auth.common;
   const { setStep, updateFormData, formData } = useAuth();
   const [submitError, setSubmitError] = React.useState<string | null>(null);
+
+  const signupSchema = React.useMemo(
+    () =>
+      z.object({
+        firstName: z.string().min(1, v.firstNameRequired),
+        lastName: z.string().min(1, v.lastNameRequired),
+        email: z.string().email(v.emailInvalid),
+      }),
+    [v],
+  );
 
   const {
     register,
@@ -64,9 +73,7 @@ export function SignupStep() {
         }
         setSubmitError(err.message);
       } else {
-        setSubmitError(
-          "Could not reach the server. Is the onboarding API running on port 8081?",
-        );
+        setSubmitError(common.serverUnreachable);
       }
     }
   };
@@ -74,10 +81,10 @@ export function SignupStep() {
   return (
     <div className="text-center">
       <h1 className="mb-3 text-[46px] font-semibold leading-[1.04] tracking-tight text-[#121312]">
-        Create your account
+        {t.title}
       </h1>
       <p className="mx-auto mb-8 max-w-[330px] text-[15px] leading-relaxed text-[#121312]/55">
-        Enter your work email and we&apos;ll send you a secure sign-in link.
+        {t.subtitle}
       </p>
 
       <SocialButtons />
@@ -87,8 +94,8 @@ export function SignupStep() {
         <div className="grid grid-cols-2 gap-2.5">
           <Input
             id="signup_first_name"
-            label="First name"
-            placeholder="Your first name"
+            label={t.firstName}
+            placeholder={t.firstNamePlaceholder}
             error={errors.firstName?.message}
             autoComplete="given-name"
             className="bg-white border-[#121312]/15 text-[#121312] placeholder:text-[#121312]/40 focus-visible:ring-brand/30 focus-visible:border-brand"
@@ -96,8 +103,8 @@ export function SignupStep() {
           />
           <Input
             id="signup_last_name"
-            label="Last name"
-            placeholder="Your last name"
+            label={t.lastName}
+            placeholder={t.lastNamePlaceholder}
             error={errors.lastName?.message}
             autoComplete="family-name"
             className="bg-white border-[#121312]/15 text-[#121312] placeholder:text-[#121312]/40 focus-visible:ring-brand/30 focus-visible:border-brand"
@@ -106,9 +113,9 @@ export function SignupStep() {
         </div>
         <Input
           id="signup_email"
-          label="Work email"
+          label={common.workEmail}
           type="email"
-          placeholder="jane@yourcompany.com"
+          placeholder={common.emailPlaceholder}
           error={errors.email?.message}
           autoComplete="email"
           className="bg-white border-[#121312]/15 text-[#121312] placeholder:text-[#121312]/40 focus-visible:ring-brand/30 focus-visible:border-brand"
@@ -127,11 +134,11 @@ export function SignupStep() {
           {isSubmitting ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
-              Sending link…
+              {t.sendingLink}
             </>
           ) : (
             <>
-              Send sign-in link
+              {t.sendLink}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="9 18 15 12 9 6" />
               </svg>
@@ -141,12 +148,12 @@ export function SignupStep() {
       </form>
 
       <p className="mt-6 text-sm text-[#121312]/60">
-        Already have an account?{" "}
+        {t.hasAccount}{" "}
         <button
           onClick={() => setStep("login")}
           className="font-semibold text-[#121312]/85 hover:text-[#121312] transition-colors cursor-pointer"
         >
-          Sign in
+          {t.signIn}
         </button>
       </p>
     </div>

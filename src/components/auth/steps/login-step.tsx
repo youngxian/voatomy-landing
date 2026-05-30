@@ -13,27 +13,34 @@ import { OrDivider } from "../or-divider";
 import { initSSO, loginWithPassword, verifyLoginOTP, resendMagicLink, APIError } from "@/lib/api";
 import { AUTH_REDIRECT_KEY } from "../auth-page";
 import { resolvePostAuthDestinationAsync } from "@/lib/auth-redirect";
+import { useDictionary } from "@/i18n/locale-provider";
 
-const emailSchema = z.object({
-  email: z.string().email("Please enter a valid email"),
-});
-
-const passwordSchema = z.object({
-  password: z.string().min(1, "Password is required"),
-});
-
-const otpSchema = z.object({
-  code: z.string().length(6, "Please enter all 6 digits"),
-});
-
-type EmailValues = z.infer<typeof emailSchema>;
-type PasswordValues = z.infer<typeof passwordSchema>;
-type OTPValues = z.infer<typeof otpSchema>;
+type EmailValues = { email: string };
+type PasswordValues = { password: string };
+type OTPValues = { code: string };
 
 type LoginPhase = "email" | "password" | "otp";
 type LoginMode = "email" | "sso";
 
 export function LoginStep() {
+  const dict = useDictionary();
+  const t = dict.auth.login;
+  const common = dict.auth.common;
+  const v = dict.auth.validation;
+
+  const emailSchema = React.useMemo(
+    () => z.object({ email: z.string().email(v.emailInvalid) }),
+    [v.emailInvalid],
+  );
+  const passwordSchema = React.useMemo(
+    () => z.object({ password: z.string().min(1, v.passwordRequired) }),
+    [v.passwordRequired],
+  );
+  const otpSchema = React.useMemo(
+    () => z.object({ code: z.string().length(6, v.otpLength) }),
+    [v.otpLength],
+  );
+
   const { setStep, updateFormData, formData } = useAuth();
   const router = useRouter();
 
@@ -44,13 +51,15 @@ export function LoginStep() {
   const [loginToken, setLoginToken] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
   const [apiError, setApiError] = React.useState("");
-  const [infoMessage, setInfoMessage] = React.useState(
-    prefilled ? "An account with this email already exists. Log in or use an email sign-in link." : "",
-  );
+  const [infoMessage, setInfoMessage] = React.useState("");
   const [resending, setResending] = React.useState(false);
   const [sendingMagicLink, setSendingMagicLink] = React.useState(false);
   const [otpExpiry, setOtpExpiry] = React.useState(0);
   const otpRefs = React.useRef<(HTMLInputElement | null)[]>([]);
+
+  React.useEffect(() => {
+    if (prefilled) setInfoMessage(t.accountExistsHint);
+  }, [prefilled, t.accountExistsHint]);
 
   // SSO state
   const [ssoEmail, setSsoEmail] = React.useState("");
@@ -113,11 +122,11 @@ export function LoginStep() {
       if (err instanceof APIError) {
         setApiError(
           err.code === "unauthorized"
-            ? "Invalid email or password"
+            ? t.invalidCredentials
             : err.message,
         );
       } else {
-        setApiError("Something went wrong. Please try again.");
+        setApiError(common.somethingWrong);
       }
     }
   };
@@ -139,11 +148,11 @@ export function LoginStep() {
       if (err instanceof APIError) {
         setApiError(
           err.code === "invalid_otp"
-            ? "Invalid or expired code. Please try again."
+            ? t.invalidOtp
             : err.message,
         );
       } else {
-        setApiError("Something went wrong. Please try again.");
+        setApiError(common.somethingWrong);
       }
     }
   };
@@ -164,7 +173,7 @@ export function LoginStep() {
         otpRefs.current[0]?.focus();
       }
     } catch {
-      setApiError("Failed to resend code. Please try again.");
+      setApiError(t.resendFailed);
     } finally {
       setResending(false);
     }
@@ -226,12 +235,12 @@ export function LoginStep() {
     } catch (err) {
       if (err instanceof APIError) {
         if (err.code === "sso_not_configured") {
-          setSsoError("SSO is not configured for this domain. Contact your admin.");
+          setSsoError(t.ssoNotConfigured);
         } else {
           setSsoError(err.message);
         }
       } else {
-        setSsoError("Something went wrong. Please try again.");
+        setSsoError(common.somethingWrong);
       }
       setSsoLoading(false);
     }
@@ -240,12 +249,12 @@ export function LoginStep() {
   return (
     <div className="text-center">
       <h1 className="mb-3 text-[46px] font-semibold leading-[1.04] tracking-tight text-[#121312]">
-        {phase === "otp" ? "Check your email" : "Get started"}
+        {phase === "otp" ? t.titleOtp : t.title}
       </h1>
       <p className="mx-auto mb-8 max-w-[330px] text-[15px] leading-relaxed text-[#121312]/55">
         {phase === "otp"
-          ? `We sent a 6-digit code to ${email}`
-          : "Connect your workspace to access your Voatomy account or explore as a viewer."}
+          ? t.subtitleOtp.replace("{email}", email)
+          : t.subtitle}
       </p>
 
       {phase === "email" && (
@@ -266,12 +275,12 @@ export function LoginStep() {
                     htmlFor="login_email"
                     className="mb-2 block text-sm font-semibold text-[#121312]/70"
                   >
-                    Work email
+                    {common.workEmail}
                   </label>
                   <input
                     id="login_email"
                     type="email"
-                    placeholder="jane@yourcompany.com"
+                    placeholder={common.emailPlaceholder}
                     autoComplete="email"
                     className="flex h-12 w-full rounded-md border border-[#121312]/15 bg-white px-3.5 text-base font-medium text-[#121312] transition-colors placeholder:text-[#121312]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:border-brand"
                     {...emailForm.register("email")}
@@ -288,7 +297,7 @@ export function LoginStep() {
                   disabled={emailForm.formState.isSubmitting}
                   className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#121312] text-sm font-semibold text-white transition-all duration-200 hover:bg-[#121312]/90 active:scale-[0.98] disabled:opacity-50"
                 >
-                  Sign in with email
+                  {t.signInEmail}
                 </button>
               </form>
 
@@ -298,7 +307,7 @@ export function LoginStep() {
                   onClick={() => setStep("forgot-password")}
                   className="text-sm font-medium text-[#121312]/50 hover:text-[#121312] transition-colors cursor-pointer"
                 >
-                  Forgot password?
+                  {t.forgotPassword}
                 </button>
               </div>
 
@@ -316,7 +325,7 @@ export function LoginStep() {
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                     <path d="M7 11V7a5 5 0 0110 0v4" />
                   </svg>
-                  SSO
+                  {common.sso}
                 </button>
                 <span className="h-3 w-px bg-[#121312]/15" />
                 <Link
@@ -327,7 +336,7 @@ export function LoginStep() {
                     <circle cx="12" cy="12" r="10" />
                     <polygon points="10 8 16 12 10 16 10 8" />
                   </svg>
-                  Demo
+                  {common.demo}
                 </Link>
               </div>
             </React.Fragment>
@@ -336,12 +345,12 @@ export function LoginStep() {
               <form onSubmit={handleSsoSubmit} noValidate className="space-y-3 text-left">
                 <div>
                   <label htmlFor="sso_email" className="mb-2 block text-sm font-semibold text-[#121312]/70">
-                    Work email or SSO domain
+                    {t.ssoEmailLabel}
                   </label>
                   <input
                     id="sso_email"
                     type="email"
-                    placeholder="name@company.com"
+                    placeholder={common.ssoEmailPlaceholder}
                     value={ssoEmail}
                     onChange={(e) => {
                       setSsoEmail(e.target.value);
@@ -358,11 +367,11 @@ export function LoginStep() {
                   disabled={ssoLoading}
                   className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#121312] text-sm font-semibold text-white transition-all duration-200 hover:bg-[#121312]/90 active:scale-[0.98] disabled:opacity-50"
                 >
-                  {ssoLoading ? "Redirecting\u2026" : "Continue with SSO"}
+                  {ssoLoading ? t.redirectingSso : t.continueSso}
                 </button>
 
                 <p className="text-center text-xs text-[#121312]/40">
-                  Okta, Azure AD, Google Workspace, or any SAML 2.0 provider
+                  {t.ssoHint}
                 </p>
               </form>
 
@@ -379,7 +388,7 @@ export function LoginStep() {
                     <rect x="2" y="4" width="20" height="16" rx="2" />
                     <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                   </svg>
-                  Sign in with email
+                  {t.signInWithEmail}
                 </button>
                 <span className="h-3 w-px bg-[#121312]/15" />
                 <Link
@@ -390,7 +399,7 @@ export function LoginStep() {
                     <circle cx="12" cy="12" r="10" />
                     <polygon points="10 8 16 12 10 16 10 8" />
                   </svg>
-                  Demo
+                  {common.demo}
                 </Link>
               </div>
             </React.Fragment>
@@ -434,13 +443,13 @@ export function LoginStep() {
                 htmlFor="login_password"
                 className="mb-2 block text-sm font-semibold text-[#121312]/70"
               >
-                Password
+                {common.password}
               </label>
               <div className="relative">
                 <input
                   id="login_password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
+                  placeholder={common.passwordPlaceholder}
                   autoComplete="current-password"
                   autoFocus
                   className="flex h-12 w-full rounded-md border border-[#121312]/15 bg-white px-3.5 pr-12 text-base font-medium text-[#121312] transition-colors placeholder:text-[#121312]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:border-brand"
@@ -482,10 +491,10 @@ export function LoginStep() {
               {passwordForm.formState.isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Signing in\u2026
+                  {t.signingIn}
                 </>
               ) : (
-                "Log in"
+                t.logIn
               )}
             </button>
           </form>
@@ -494,7 +503,7 @@ export function LoginStep() {
             type="button"
             onClick={async () => {
               if (!email?.trim()) {
-                setApiError("Enter your email first.");
+                setApiError(t.enterEmailFirst);
                 return;
               }
               setSendingMagicLink(true);
@@ -511,14 +520,12 @@ export function LoginStep() {
               } catch (err) {
                 if (err instanceof APIError) {
                   if (err.code === "not_found") {
-                    setApiError("No account found with this email. Please sign up first.");
+                    setApiError(t.noAccountFound);
                   } else {
                     setApiError(err.message);
                   }
                 } else {
-                  setApiError(
-                    "Could not reach the server. Is the onboarding API running on port 8081?",
-                  );
+                  setApiError(common.serverUnreachable);
                 }
               } finally {
                 setSendingMagicLink(false);
@@ -530,7 +537,7 @@ export function LoginStep() {
             {sendingMagicLink ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Sending\u2026
+                {t.sending}
               </>
             ) : (
               <>
@@ -538,7 +545,7 @@ export function LoginStep() {
                   <rect x="2" y="4" width="20" height="16" rx="2" />
                   <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                 </svg>
-                Email sign-in link
+                {t.emailSignInLink}
               </>
             )}
           </button>
@@ -549,7 +556,7 @@ export function LoginStep() {
               onClick={() => setStep("forgot-password")}
               className="text-sm font-medium text-[#121312]/50 hover:text-[#121312] transition-colors cursor-pointer"
             >
-              Forgot password?
+              {t.forgotPassword}
             </button>
           </div>
 
@@ -568,7 +575,7 @@ export function LoginStep() {
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                 <path d="M7 11V7a5 5 0 0110 0v4" />
               </svg>
-              SSO
+              {common.sso}
             </button>
             <span className="h-3 w-px bg-[#121312]/15" />
             <Link
@@ -579,7 +586,7 @@ export function LoginStep() {
                 <circle cx="12" cy="12" r="10" />
                 <polygon points="10 8 16 12 10 16 10 8" />
               </svg>
-              Demo
+              {common.demo}
             </Link>
           </div>
         </>
@@ -620,19 +627,19 @@ export function LoginStep() {
 
             {otpExpiry > 0 && (
               <p className="text-center text-xs text-[#121312]/40">
-                Code expires in {formatTimer(otpExpiry)}
+                {t.codeExpires.replace("{time}", formatTimer(otpExpiry))}
               </p>
             )}
             {otpExpiry === 0 && phase === "otp" && (
               <p className="text-center text-xs text-red-500">
-                Code expired.{" "}
+                {t.codeExpired}{" "}
                 <button
                   type="button"
                   onClick={handleResend}
                   disabled={resending}
                   className="font-semibold underline hover:no-underline cursor-pointer"
                 >
-                  Resend a new code
+                  {t.resendNewCode}
                 </button>
               </p>
             )}
@@ -645,10 +652,10 @@ export function LoginStep() {
               {otpForm.formState.isSubmitting ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Verifying\u2026
+                  {t.verifying}
                 </>
               ) : (
-                "Verify"
+                t.verify
               )}
             </button>
           </form>
@@ -661,7 +668,7 @@ export function LoginStep() {
               className="inline-flex items-center gap-1.5 font-medium text-[#121312]/50 hover:text-[#121312] transition-colors cursor-pointer disabled:opacity-50"
             >
               {resending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-              {resending ? "Sending\u2026" : "Resend code"}
+              {resending ? t.sending : t.resendCode}
             </button>
             <span className="h-3 w-px bg-[#121312]/15" />
             <button
@@ -672,19 +679,19 @@ export function LoginStep() {
               }}
               className="font-medium text-[#121312]/50 hover:text-[#121312] transition-colors cursor-pointer"
             >
-              Back
+              {common.back}
             </button>
           </div>
         </>
       )}
 
       <p className="mt-6 text-sm text-[#121312]/60">
-        Don&apos;t have an account?{" "}
+        {t.noAccount}{" "}
         <button
           onClick={() => setStep("signup")}
           className="font-semibold text-[#121312]/85 hover:text-[#121312] transition-colors cursor-pointer"
         >
-          Sign up
+          {t.signUp}
         </button>
       </p>
     </div>

@@ -3,8 +3,12 @@
 import * as React from "react";
 import { useAuth } from "../auth-page";
 import { resendMagicLink, APIError } from "@/lib/api";
+import { useDictionary } from "@/i18n/locale-provider";
 
 export function VerifyEmailStep() {
+  const dict = useDictionary();
+  const t = dict.auth.verifyEmail;
+  const common = dict.auth.common;
   const { setStep, formData } = useAuth();
   const [resendTimer, setResendTimer] = React.useState(60);
   const [resendDisabled, setResendDisabled] = React.useState(true);
@@ -21,7 +25,7 @@ export function VerifyEmailStep() {
       setResendDisabled(false);
       return;
     }
-    const interval = setInterval(() => setResendTimer((t) => t - 1), 1000);
+    const interval = setInterval(() => setResendTimer((prev) => prev - 1), 1000);
     return () => clearInterval(interval);
   }, [resendTimer]);
 
@@ -35,9 +39,9 @@ export function VerifyEmailStep() {
         sessionStorage.setItem("voatomy_dev_magic_link", result.dev_magic_link_url);
         setDevLink(result.dev_magic_link_url);
       }
-      setResendMessage("New link sent!");
+      setResendMessage(t.newLinkSent);
     } catch (err) {
-      const msg = err instanceof APIError ? err.message : "Failed to resend";
+      const msg = err instanceof APIError ? err.message : t.resendFailed;
       setResendMessage(msg);
     }
   };
@@ -51,7 +55,7 @@ export function VerifyEmailStep() {
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="15 18 9 12 15 6" />
         </svg>
-        Back
+        {common.back}
       </button>
 
       <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand/10">
@@ -62,34 +66,25 @@ export function VerifyEmailStep() {
       </div>
 
       <h1 className="mb-3 text-[46px] font-semibold leading-[1.04] tracking-tight text-[#121312]">
-        Check your inbox
+        {t.title}
       </h1>
       <p className="mx-auto mb-2 max-w-[330px] text-[15px] leading-relaxed text-[#121312]/55">
-        We sent a sign-in link to
+        {t.sentTo}
       </p>
       <p className="mb-2 text-[15px] font-semibold text-[#121312]">
         {formData.email || "your email"}
       </p>
-      <p className="mb-8 text-sm text-[#121312]/40">
-        The link expires in 15 minutes.
-      </p>
+      <p className="mb-8 text-sm text-[#121312]/40">{t.expires}</p>
 
       <div className="mx-auto max-w-[320px] rounded-xl border border-[#121312]/8 bg-[#121312]/[0.02] p-4 text-left">
-        <p className="text-sm text-[#121312]/60">
-          Click the link in your email to sign in and start setting up your workspace. No password needed.
-        </p>
+        <p className="text-sm text-[#121312]/60">{t.inboxHint}</p>
       </div>
 
       {devLink && (
         <div className="mx-auto mt-4 max-w-[360px] rounded-xl border border-amber-200 bg-amber-50 p-4 text-left">
-          <p className="text-xs font-semibold uppercase tracking-wide text-amber-800">Dev mode</p>
-          <p className="mt-1 text-sm text-amber-900/80">
-            Email may not arrive locally. Use this link instead:
-          </p>
-          <a
-            href={devLink}
-            className="mt-2 block break-all text-sm font-medium text-brand underline"
-          >
+          <p className="text-xs font-semibold uppercase tracking-wide text-amber-800">{t.devMode}</p>
+          <p className="mt-1 text-sm text-amber-900/80">{t.devHint}</p>
+          <a href={devLink} className="mt-2 block break-all text-sm font-medium text-brand underline">
             {devLink}
           </a>
         </div>
@@ -101,13 +96,15 @@ export function VerifyEmailStep() {
 
       <div className="mt-6">
         <p className="text-sm text-[#121312]/50">
-          Didn&apos;t receive it?{" "}
+          {t.didntReceive}{" "}
           <button
             onClick={handleResend}
             disabled={resendDisabled}
             className="font-semibold text-[#121312]/70 hover:text-[#121312] transition-colors disabled:text-[#121312]/30 disabled:cursor-not-allowed cursor-pointer"
           >
-            {resendDisabled ? `Resend in ${resendTimer}s` : "Resend link"}
+            {resendDisabled
+              ? t.resendIn.replace("{seconds}", String(resendTimer))
+              : t.resendLink}
           </button>
         </p>
       </div>
@@ -116,7 +113,7 @@ export function VerifyEmailStep() {
         onClick={() => setStep("signup")}
         className="mt-3 text-sm font-medium text-[#121312]/50 hover:text-[#121312] transition-colors cursor-pointer"
       >
-        Use a different email
+        {t.differentEmail}
       </button>
     </div>
   );

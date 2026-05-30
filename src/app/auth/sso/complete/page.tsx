@@ -4,10 +4,15 @@ import * as React from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { AUTH_REDIRECT_KEY } from "@/components/auth/auth-page";
 import { resolvePostAuthDestinationAsync } from "@/lib/auth-redirect";
+import { useDictionary } from "@/i18n/locale-provider";
 
 type Status = "loading" | "success" | "error";
 
 export default function SSOCompletePage() {
+  const dict = useDictionary();
+  const common = dict.auth.common;
+  const p = dict.auth.pages;
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get("token");
@@ -17,7 +22,7 @@ export default function SSOCompletePage() {
 
   React.useEffect(() => {
     if (!token) {
-      setErrorMsg("No authentication token was provided.");
+      setErrorMsg(p.noAuthToken);
       setStatus("error");
       return;
     }
@@ -32,14 +37,14 @@ export default function SSOCompletePage() {
         window.location.href = destination;
       }, 1500);
     })();
-  }, [token]);
+  }, [token, p.noAuthToken]);
 
   if (status === "loading") {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
         <div className="text-center">
           <div className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-4 border-[#121312]/10 border-t-brand" />
-          <p className="text-sm text-[#121312]/50">Signing you in…</p>
+          <p className="text-sm text-[#121312]/50">{p.signingIn}</p>
         </div>
       </div>
     );
@@ -54,8 +59,8 @@ export default function SSOCompletePage() {
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-[#121312]">You&apos;re in!</h1>
-          <p className="mt-2 text-sm text-[#121312]/50">Redirecting to your dashboard…</p>
+          <h1 className="text-2xl font-bold text-[#121312]">{p.youreIn}</h1>
+          <p className="mt-2 text-sm text-[#121312]/50">{p.redirectingDashboard}</p>
         </div>
       </div>
     );
@@ -71,15 +76,15 @@ export default function SSOCompletePage() {
             <line x1="9" y1="9" x2="15" y2="15" />
           </svg>
         </div>
-        <h1 className="text-2xl font-bold text-[#121312]">Sign-in failed</h1>
+        <h1 className="text-2xl font-bold text-[#121312]">{p.ssoFailed}</h1>
         <p className="mt-2 text-sm text-[#121312]/50">
-          {errorMsg || "Something went wrong during SSO authentication."}
+          {errorMsg || p.ssoFailedDefault}
         </p>
         <button
           onClick={() => router.push("/auth/login")}
           className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#121312] text-sm font-semibold text-white transition-all hover:bg-[#121312]/90 active:scale-[0.98]"
         >
-          Back to sign in
+          {common.backToSignIn}
         </button>
       </div>
     </div>
