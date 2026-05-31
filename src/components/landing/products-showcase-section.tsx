@@ -58,8 +58,8 @@ export function ProductsShowcaseSection() {
             </FynkHeadingUnderlineAccent>
           </FynkDisplayHeading>
           <FynkSubheading className="mx-auto mt-4 max-w-2xl">
-            Start with ATLAS for sprint planning. Add the rest as you grow — each product has its own
-            job, and they all connect through NEXUS.
+            Start with ATLAS — an intelligence layer on the board you already use. Add the rest as you
+            grow — each product has its own job, and they all connect through NEXUS.
           </FynkSubheading>
         </FynkReveal>
 

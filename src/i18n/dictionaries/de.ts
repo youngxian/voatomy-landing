@@ -68,7 +68,7 @@ export const de: Dictionary = {
     headlineSuffix: "Sprints in messbare Ergebnisse.",
     webinarPill: "10-Min-Demo: vom Backlog zum committed Sprint",
     subheadline:
-      "Die Daten haben Sie schon — in GitHub, Jira und Ihrem Kalender. Voatomy verbindet sie und liefert einen Sprint-Plan, dem Ihr Team vor dem Standup vertraut.",
+      "Ihr Sprint lebt bereits in Jira oder Linear. ATLAS ist die Intelligenzschicht darüber — liest Repos, Kapazität und Revenue-Signale und zeigt, was wirklich committbar ist.",
     ctaPrimary: "Gratis testen",
     ctaSecondary: "Live-Demo ansehen",
     socialProofBefore: "Schließen Sie sich",
@@ -130,29 +130,29 @@ export const de: Dictionary = {
     betaLabel: "Beta-Teams",
   },
   workflow: {
-    titleLead: "Planen Sie Sprints noch",
-    titleAccent: "in Spreadsheets?",
-    subtitle: "Sie sind nicht allein — und müssen nicht dort bleiben.",
+    titleLead: "Ihr Board hat die Tickets.",
+    titleAccent: "ATLAS liefert die Intelligenz.",
+    subtitle: "Jira, Linear, was auch immer — kein neues Tool nötig.",
     intro:
-      "Drei Schritte von verstreuten Tools zu einem Sprint-Plan, dem Ihr ganzes Unternehmen vertraut. Keine Berater. Kein Halbjahres-Rollout. Einfach verbinden, analysieren, shippen.",
+      "ATLAS ist eine Schicht auf dem Board, das Sie bereits nutzen. Es liest Repos, Teamkapazität und Revenue-Signale — und zeigt, was wirklich committbar ist, ohne ein Ticket zu verschieben.",
     steps: [
       {
         step: "01",
         title: "Verbinden",
-        subtitle: "Tools nutzen, die Sie schon haben",
-        desc: "GitHub, Jira, Linear, Slack — Voatomy dockt in Minuten an. Keine Migration, kein Rip-and-Replace.",
+        subtitle: "Board behalten. Schicht hinzufügen.",
+        desc: "GitHub und Jira oder Linear in Minuten verbinden. Keine Migration, kein doppeltes Backlog — ATLAS reichert Ihre bestehenden Tickets an.",
       },
       {
         step: "02",
         title: "Analysieren",
-        subtitle: "KI übernimmt die schwere Lese-Arbeit",
-        desc: "Code-Komplexität, Velocity, Tech Debt und Revenue — zu einem Sprint zusammengeführt, den Ihr Team wirklich committen kann.",
+        subtitle: "Signale, die Ihr Board allein nicht zeigt",
+        desc: "Code-Komplexität, echte Kapazität, Tech Debt und Revenue — zu Confidence-Scores und Risiko-Flags auf jedem Sprint-Item zusammengeführt.",
       },
       {
         step: "03",
         title: "Mit Vertrauen shippen",
         subtitle: "Einmal committen. Früh korrigieren.",
-        desc: "Risiko-Flags und Dependency-Alerts, solange Probleme noch lösbar sind — nicht am Tag vor dem Release.",
+        desc: "Risiko-Flags und Dependency-Alerts, solange Probleme noch lösbar sind — direkt auf dem Sprint, den Sie ohnehin fahren.",
       },
     ],
     cta: "Zeig mir, wie es funktioniert",

@@ -96,7 +96,7 @@ function ConnectIllustration() {
         </div>
       </foreignObject>
       <text x={cx} y={cy + 42} textAnchor="middle" fill={INK} fontSize="9" fontWeight="700">
-        Connected in 5 min
+        Layer on your board
       </text>
       <defs>
         <linearGradient id="hub-grad" x1="0" y1="0" x2="1" y2="1">

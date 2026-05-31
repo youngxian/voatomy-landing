@@ -221,8 +221,9 @@ export function WorkflowsSection() {
             <FynkHeadingUnderlineAccent variant="indigo">One sprint plan out.</FynkHeadingUnderlineAccent>
           </FynkDisplayHeading>
           <p className="mx-auto mt-4 max-w-3xl text-lg font-normal leading-relaxed text-fynk-body sm:text-xl">
-            Voatomy pulls from code, capacity, customer demand, tech debt, design scope, and revenue
-            — then gives you a single plan your team can commit to without another three-hour meeting.
+            ATLAS layers on your Jira or Linear board — pulling code complexity, capacity, customer
+            demand, tech debt, design scope, and revenue into confidence scores your team can commit
+            to without another three-hour meeting.
           </p>
         </FynkReveal>
 

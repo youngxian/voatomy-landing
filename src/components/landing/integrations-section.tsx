@@ -47,7 +47,7 @@ const SPOTLIGHT = [
   {
     name: "Jira",
     title: "Your backlog stays honest",
-    desc: "Ticket weight and dependencies sync live — no more stale priorities from last month's spreadsheet.",
+    desc: "Ticket weight and dependencies stay live on your board — ATLAS keeps priorities honest as code and capacity shift.",
     accent: "#2684FF",
     light: "#EFF6FF",
   },

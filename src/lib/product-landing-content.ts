@@ -12,9 +12,9 @@ export type ProductLandingContent = {
 
 export const PRODUCT_LANDING: Record<ProductKey, ProductLandingContent> = {
   atlas: {
-    headline: "Sprint plans your leads can defend in any meeting",
+    headline: "An intelligence layer on the board you already use",
     subheadline:
-      "ATLAS reads code complexity, team capacity, and revenue signals — then builds sprint plans with ticket-level estimates your whole org can trust.",
+      "ATLAS reads code complexity, team capacity, and revenue signals — then enriches your Jira or Linear sprint with estimates and risk flags your whole org can trust.",
     bullets: [...PRODUCT_DETAILS.atlas.sections],
     integrationNames: ["GitHub", "Jira", "Linear", "Figma"],
     users: PRODUCT_DETAILS.atlas.users,
@@ -82,7 +82,7 @@ export const PLATFORM_CONNECTION_FLOWS = [
     fromColor: "#F05A28",
     to: "NEXUS",
     toColor: "#111827",
-    desc: "Sprint plans your leads can defend in any meeting",
+    desc: "Intelligence layer on the board you already use",
   },
   {
     from: "LOOP",

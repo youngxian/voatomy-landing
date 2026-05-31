@@ -297,7 +297,7 @@ export const HERO_CONTENT = {
   headlineSuffix: "sprints into shipped outcomes.",
   headlineInline: "engineering",
   subheadline:
-    "Stop debating story points in hour-long meetings. Voatomy reads your repos, capacity, and revenue signals — then builds sprint plans your exec team will actually trust.",
+    "Your sprint already lives in Jira or Linear. ATLAS is the intelligence layer on top — reading repos, capacity, and revenue signals so you commit to what you can actually ship.",
   ctaPrimary: "Start free trial",
   ctaSecondary: "Get a demo",
   ctaRiskReducer: "No credit card · Setup in under 5 minutes",
@@ -330,7 +330,7 @@ export const WHY_VOATOMY = [
   },
   {
     title: "Alignment across engineering, product, and revenue.",
-    desc: "Everyone works from the same plan. No more Slack threads, spreadsheet forks, or lost context.",
+    desc: "Everyone works from the same enriched board. No more Slack threads, stale ticket fields, or lost context.",
   },
   {
     title: "Pricing that scales with you — not against you.",
@@ -350,14 +350,14 @@ export const WORKFLOW_STEPS = [
   {
     step: "01",
     title: "Connect",
-    subtitle: "Plug in the tools you already pay for",
-    desc: "GitHub, Jira, Linear, Slack — Voatomy syncs your repos, tickets, and team capacity in one click.",
+    subtitle: "Keep your board. Add the layer.",
+    desc: "Link GitHub and Jira or Linear in minutes. Your tickets stay where they are — ATLAS enriches them with code-aware estimates and risk flags.",
   },
   {
     step: "02",
     title: "Analyze",
-    subtitle: "AI reads what humans can't scan fast enough",
-    desc: "Code complexity, velocity trends, tech-debt cost, and revenue weight converge into one prioritized sprint.",
+    subtitle: "Signals your board can't show on its own",
+    desc: "Code complexity, real capacity, tech debt, and revenue weight — merged into confidence scores on the work you already planned.",
   },
   {
     step: "03",
@@ -420,7 +420,7 @@ export const SOLUTIONS_TEAMS = [
   {
     key: "operations",
     title: "Operations",
-    desc: "Replace the spreadsheet maze with one hub your whole org can rely on.",
+    desc: "ATLAS layers on Jira or Linear — no new board, no migration, no planning theater.",
     href: "/products/signal",
   },
   {

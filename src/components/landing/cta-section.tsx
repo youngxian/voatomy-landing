@@ -103,7 +103,7 @@ function CtaDesktopMock() {
   const capacityUsed = 82;
 
   return (
-    <div className="pointer-events-none absolute bottom-0 left-1/2 z-10 w-[min(98%,1180px)] -translate-x-[54%] select-none">
+    <div className="pointer-events-none absolute bottom-0 left-1/2 z-10 w-[min(98%,1360px)] -translate-x-[54%] select-none">
       <div className="overflow-hidden rounded-t-[1.25rem] border border-white/25 bg-white shadow-[0_40px_120px_rgba(0,0,0,0.45)] sm:rounded-t-[1.5rem]">
         <div className="flex min-h-[380px] sm:min-h-[460px] lg:min-h-[520px]">
           {/* Sidebar */}
@@ -135,14 +135,17 @@ function CtaDesktopMock() {
                 <div className="text-left">
                   <div className="flex flex-wrap items-center gap-2">
                     <p className="text-base font-bold text-gray-900 sm:text-lg lg:text-xl">
-                      Sprint 14 · ATLAS
+                      Jira · Sprint 14
                     </p>
+                    <span className="rounded-full bg-orange-50 px-2.5 py-0.5 text-[10px] font-semibold text-orange-700 sm:text-xs">
+                      ATLAS layer
+                    </span>
                     <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-700 sm:text-xs">
                       High confidence
                     </span>
                   </div>
                   <p className="mt-1 text-xs text-gray-500 sm:text-sm">
-                    May 12 – May 26 · Capacity-aware plan · 6 signals merged
+                    Synced from your board · Capacity-aware estimates · 6 signals merged
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2 sm:gap-3">
@@ -189,13 +192,13 @@ function CtaDesktopMock() {
               </p>
             </div>
 
-            {/* Table */}
+            {/* Ticket list — enriched by ATLAS on top of your board */}
             <div className="grid grid-cols-[1fr_72px_64px_72px_80px] gap-1 border-b border-gray-100 bg-white px-4 py-2.5 text-[9px] font-semibold uppercase tracking-wide text-gray-400 sm:grid-cols-[1fr_80px_72px_80px_88px] sm:px-6 sm:text-[10px]">
-              <span>Name</span>
+              <span>Ticket</span>
               <span>Assignee</span>
               <span>Status</span>
-              <span>Pts</span>
-              <span>Labels</span>
+              <span>Conf.</span>
+              <span>Signal</span>
             </div>
             <div className="divide-y divide-gray-100 bg-white">
               {SPRINT_ROWS.map((row) => (
@@ -341,9 +344,9 @@ export function CTASection() {
 
   return (
     <section className="bg-fynk-surface-alt px-4 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-28">
-      <div className="mx-auto max-w-container">
+      <div className="mx-auto w-full max-w-[min(100%,1400px)]">
         <div
-          className="relative overflow-hidden rounded-[1rem] px-4 pb-0 pt-8 text-center sm:rounded-[1.5rem] sm:px-6 sm:pt-12 md:rounded-[2rem] md:px-8 md:pt-16 lg:px-10 lg:pt-20"
+          className="relative overflow-hidden rounded-[1rem] px-4 pb-0 pt-8 text-center sm:rounded-[1.5rem] sm:px-8 sm:pt-12 md:rounded-[2rem] md:px-12 md:pt-16 lg:px-14 lg:pt-20 xl:px-16"
           style={{
             background:
               "linear-gradient(145deg, #021a12 0%, #004838 28%, #047857 52%, #0d9488 72%, #F05A28 100%)",
@@ -365,7 +368,7 @@ export function CTASection() {
           </ScrollReveal>
 
           <ScrollReveal direction="up" delayMs={80} className="relative z-10">
-            <FynkDisplayHeading align="center" className="max-w-3xl !text-white">
+            <FynkDisplayHeading align="center" className="mx-auto max-w-5xl !text-white lg:max-w-6xl">
               {titleLine1}
               {titleLine2 ? (
                 <>
@@ -375,7 +378,7 @@ export function CTASection() {
               ) : null}
             </FynkDisplayHeading>
 
-            <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-white/85 sm:mt-6 sm:text-base md:mt-8 md:text-lg lg:text-xl">
+            <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-white/85 sm:mt-6 sm:text-base md:mt-8 md:max-w-4xl md:text-lg lg:text-xl">
               {t.subtitle}
             </p>
           </ScrollReveal>

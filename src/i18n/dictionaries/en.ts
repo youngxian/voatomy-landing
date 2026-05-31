@@ -3,7 +3,7 @@ import type { Dictionary } from "../types";
 export const en: Dictionary = {
   meta: {
     siteDescription:
-      "Voatomy turns your repos, capacity, and customer signals into sprint plans your team can actually commit to — so you ship on time, not just plan well.",
+      "ATLAS is an intelligence layer on Jira, Linear, and the tools you already use — turning repos, capacity, and customer signals into sprint estimates your team can commit to.",
   },
   cookieConsent: {
     bannerTitle: "Hello! Even we need cookies 🍪",
@@ -68,7 +68,7 @@ export const en: Dictionary = {
     headlineSuffix: "sprints into shipped outcomes.",
     webinarPill: "10-min demo: from backlog to committed sprint",
     subheadline:
-      "You already have the data — in GitHub, Jira, and your calendar. Voatomy connects the dots and builds a sprint plan your team believes in before standup ends.",
+      "Your sprint already lives in Jira or Linear. ATLAS is the intelligence layer on top — reading your repos, capacity, and revenue signals to show what's actually committable.",
     ctaPrimary: "Try it free",
     ctaSecondary: "See a live demo",
     socialProofBefore: "Join",
@@ -130,29 +130,29 @@ export const en: Dictionary = {
     betaLabel: "Beta teams",
   },
   workflow: {
-    titleLead: "Still planning sprints",
-    titleAccent: "in spreadsheets?",
-    subtitle: "You're not alone — and you don't have to stay there.",
+    titleLead: "Your board has the tickets.",
+    titleAccent: "ATLAS adds the intelligence.",
+    subtitle: "Jira, Linear, whatever you run on — you don't need another tool.",
     intro:
-      "Three steps from scattered tools to a sprint plan your whole company can trust. No consultants. No six-month rollout. Just connect, analyze, and ship.",
+      "ATLAS is a layer on the board you already use. It reads your repos, team capacity, and revenue signals — then shows you what's actually committable, without moving a single ticket.",
     steps: [
       {
         step: "01",
         title: "Connect",
-        subtitle: "Use the tools you already have",
-        desc: "GitHub, Jira, Linear, Slack — Voatomy plugs into your stack in minutes. No migration, no rip-and-replace.",
+        subtitle: "Keep your board. Add the layer.",
+        desc: "Link GitHub and Jira or Linear in minutes. No migration, no duplicate backlog — ATLAS enriches the tickets you already have.",
       },
       {
         step: "02",
         title: "Analyze",
-        subtitle: "Let AI do the heavy reading",
-        desc: "Code complexity, velocity trends, tech debt, and revenue weight — synthesized into one prioritized sprint your team can actually commit to.",
+        subtitle: "Signals your board can't show on its own",
+        desc: "Code complexity, real capacity, tech debt, and revenue weight — merged into confidence scores and risk flags on every item in your sprint.",
       },
       {
         step: "03",
         title: "Ship with confidence",
         subtitle: "Commit once. Adjust early.",
-        desc: "Risk flags and dependency alerts surface problems while they're still fixable — not the day before release.",
+        desc: "Risk flags and dependency alerts surface problems while they're still fixable — right on top of the sprint you're already running.",
       },
     ],
     cta: "Show me how it works",
