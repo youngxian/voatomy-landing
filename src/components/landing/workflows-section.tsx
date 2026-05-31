@@ -13,7 +13,7 @@ import {
   SIGNAL_GRADIENTS,
   SIGNAL_ICON_SET,
 } from "@/components/marketing/landing-section-icons";
-import { DoodleIntegrationIcon } from "@/components/marketing/doodle-integration-icons";
+import { IntegrationLogoTile } from "@/components/marketing/integration-logo-tile";
 import { AiSprintPlanShowcase } from "@/components/landing/ai-sprint-plan-showcase";
 import { useLocale } from "@/i18n/locale-provider";
 
@@ -272,11 +272,8 @@ export function WorkflowsSection() {
             </p>
             <ul className="mt-4 flex flex-wrap gap-6 sm:gap-8">
               {meta.includes.map((name) => (
-                <li key={name} className="flex flex-col items-center gap-2">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-fynk-border bg-white shadow-sm">
-                    <DoodleIntegrationIcon name={name} size={28} />
-                  </div>
-                  <span className="text-xs font-semibold text-fynk-ink">{name}</span>
+                <li key={name}>
+                  <IntegrationLogoTile name={name} size="md" />
                 </li>
               ))}
             </ul>

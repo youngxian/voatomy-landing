@@ -1,0 +1,41 @@
+/** Map human-readable integration names to logo component keys. */
+const NAME_TO_KEY: Record<string, string> = {
+  GitHub: "github",
+  GitLab: "gitlab",
+  Bitbucket: "bitbucket",
+  "Azure DevOps": "azure-devops",
+  Jira: "jira",
+  Linear: "linear",
+  Asana: "asana",
+  Trello: "trello",
+  Monday: "monday",
+  ClickUp: "clickup",
+  Slack: "slack",
+  "Microsoft Teams": "teams",
+  Discord: "discord",
+  Figma: "figma",
+  Framer: "figma",
+  Sketch: "sketch",
+  Notion: "notion",
+  Confluence: "confluence",
+  Salesforce: "salesforce",
+  HubSpot: "hubspot",
+  Intercom: "intercom",
+  Pipedrive: "pipedrive",
+  Gong: "gong",
+  Datadog: "datadog",
+  PagerDuty: "pagerduty",
+  Sentry: "sentry",
+  Grafana: "grafana",
+  OpsGenie: "opsgenie",
+  Freshdesk: "freshdesk",
+  Zendesk: "zendesk",
+  "Google Calendar": "google-drive",
+  "Google Drive": "google-drive",
+  Gmail: "google-drive",
+  "Adobe Creative Cloud": "figma",
+};
+
+export function integrationKeyFromName(name: string): string {
+  return NAME_TO_KEY[name] ?? name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}

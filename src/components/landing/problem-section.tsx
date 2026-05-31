@@ -2,11 +2,10 @@
 
 import * as React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
-import { MARKETING_IMAGES } from "@/lib/marketing-images";
+import { WorkflowStepIllustration } from "@/components/marketing/landing-illustrations";
 import {
   FynkDisplayHeading,
   FynkGradientBackdrop,
@@ -15,12 +14,6 @@ import {
   FynkReveal,
 } from "@/components/marketing/fynk-primitives";
 import { useDictionary, useLocale } from "@/i18n/locale-provider";
-
-const STEP_IMAGES = [
-  MARKETING_IMAGES.collaboration,
-  MARKETING_IMAGES.dashboardMood,
-  MARKETING_IMAGES.codeScreen,
-] as const;
 
 export function ProblemSection() {
   const [activeStep, setActiveStep] = React.useState(0);
@@ -83,36 +76,13 @@ export function ProblemSection() {
             </Link>
           </FynkReveal>
 
-          {/* fynk-style: floating image with back card + soft shadow stack */}
-          <div className="relative">
-            {/* Back accent card */}
-            <div
-              aria-hidden
-              className="absolute -left-4 -top-4 hidden h-full w-full rounded-3xl border border-fynk-border bg-white/70 sm:block animate-fynk-card-drift"
-            />
-            {/* Floating accent card behind */}
-            <div
-              aria-hidden
-              className="absolute -right-3 -bottom-3 hidden h-full w-full rounded-3xl border border-fynk-orange/10 bg-fynk-orange-light/40 sm:block animate-fynk-card-drift-alt"
-            />
-            <div
-              className={cn(
-                "relative overflow-hidden rounded-3xl border border-fynk-border bg-white shadow-xl shadow-fynk-ink/[0.06] transition-all duration-500",
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
-              )}
-            >
-              <Image
-                key={activeStep}
-                src={STEP_IMAGES[activeStep]}
-                alt={step.subtitle}
-                width={1600}
-                height={1000}
-                className="aspect-[4/3] w-full object-cover animate-fade-in"
-                sizes="(max-width: 1024px) 100vw, 55vw"
-              />
-              {/* subtle bottom fade */}
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-fynk-ink/10 to-transparent" />
-            </div>
+          <div
+            className={cn(
+              "relative transition-all duration-500",
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
+            )}
+          >
+            <WorkflowStepIllustration key={activeStep} step={activeStep} />
           </div>
         </div>
       </div>

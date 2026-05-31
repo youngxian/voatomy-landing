@@ -14,16 +14,12 @@ import {
   FynkReveal,
   FynkSubheading,
 } from "@/components/marketing/fynk-primitives";
-import {
-  DoodleIconChip,
-  DoodleIntegrationIcon,
-} from "@/components/marketing/doodle-integration-icons";
+import { IntegrationLogoChip, IntegrationLogoTile } from "@/components/marketing/integration-logo-tile";
 import { ColoredIconBadge } from "@/components/marketing/colored-icon-badge";
+import { IntegrationLogo } from "@/components/icons/integration-logos";
+import { integrationKeyFromName } from "@/lib/integration-name-map";
 import { TeamworkGraphCanvas } from "@/components/marketing/teamwork-graph-canvas";
-import {
-  GraphLabelPill,
-  HexIconStrip,
-} from "@/components/marketing/graph-node-primitives";
+import { GraphLabelPill } from "@/components/marketing/graph-node-primitives";
 import { INTEGRATION_GRAPH_POSITIONS } from "@/lib/graph-layout";
 import { useLocale } from "@/i18n/locale-provider";
 
@@ -93,7 +89,13 @@ function IntegrationsHubScene({ visible }: { visible: boolean }) {
         <GraphLabelPill
           label={item.label}
           color={item.color}
-          icon={<DoodleIntegrationIcon name={item.name} size={22} />}
+          icon={
+            <IntegrationLogo
+              integrationKey={integrationKeyFromName(item.name)}
+              name={item.name}
+              size="sm"
+            />
+          }
         />
       ),
     };
@@ -106,13 +108,11 @@ function IntegrationsHubScene({ visible }: { visible: boolean }) {
         visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0",
       )}
     >
-      <HexIconStrip
-        className="mb-5"
-        icons={HEX_STRIP.map((item) => ({
-          key: item.name,
-          node: <DoodleIntegrationIcon name={item.name} size={32} />,
-        }))}
-      />
+      <div className="mb-5 flex flex-wrap items-center justify-center gap-3">
+        {HEX_STRIP.map((item) => (
+          <IntegrationLogoTile key={item.name} name={item.name} size="sm" label="" />
+        ))}
+      </div>
 
       <TeamworkGraphCanvas
         visible={visible}
@@ -152,8 +152,13 @@ function SpotlightCard({
       style={{ transitionDelay: `${250 + index * 70}ms` }}
     >
       <div className="flex items-start gap-4">
-        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-2 border-fynk-ink/90 bg-white shadow-sm transition-transform duration-300 group-hover:scale-105">
-          <DoodleIntegrationIcon name={item.name} size={38} />
+        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-fynk-ink/10 bg-white shadow-sm transition-transform duration-300 group-hover:scale-105">
+          <IntegrationLogo
+            integrationKey={integrationKeyFromName(item.name)}
+            name={item.name}
+            size="lg"
+            className="h-9 w-9"
+          />
         </div>
         <div>
           <p className="font-handwriting text-[1.1rem] font-bold leading-none" style={{ color: item.accent }}>
@@ -232,11 +237,10 @@ export function IntegrationsSection() {
               </div>
               <div className="flex flex-wrap gap-3">
                 {cat.items.map((name, ii) => (
-                  <DoodleIconChip
+                  <IntegrationLogoChip
                     key={name}
                     name={name}
-                    size={34}
-                    rotate={(ci + ii) % 2 === 0 ? 3 : -3}
+                    rotate={(ci + ii) % 2 === 0 ? 2 : -2}
                   />
                 ))}
                 <div className="flex items-center rounded-2xl border-2 border-dashed border-fynk-ink/15 bg-white/60 px-4 py-2">

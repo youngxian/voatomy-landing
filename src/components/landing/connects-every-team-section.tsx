@@ -4,20 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { SOLUTIONS_TEAMS } from "@/lib/constants";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
-import {
-  Code2,
-  LayoutGrid,
-  Building2,
-  Shield,
-  Palette,
-  DollarSign,
-  ArrowRight,
-  Factory,
-  ShoppingBag,
-  Cpu,
-  HeartPulse,
-  Landmark,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useDictionary, useLocale } from "@/i18n/locale-provider";
 import {
   FynkCard,
@@ -26,16 +13,15 @@ import {
   FynkReveal,
   FynkTabGroup,
 } from "@/components/marketing/fynk-primitives";
-
-const TEAM_ICONS = [Code2, LayoutGrid, Building2, Shield, Palette, DollarSign] as const;
+import { IndustrySolutionIcon, TeamSolutionIcon } from "@/components/marketing/landing-illustrations";
 
 const INDUSTRIES = [
-  { key: "saas", title: "SaaS", desc: "Ship faster without adding another planning tool nobody uses.", href: "/industries/saas", icon: Cpu },
-  { key: "fintech", title: "Finance", desc: "Hit compliance deadlines without sacrificing delivery speed.", href: "/industries/fintech", icon: Landmark },
-  { key: "healthtech", title: "Healthtech", desc: "Regulated releases with audit trails your team can actually trust.", href: "/industries/healthtech", icon: HeartPulse },
-  { key: "enterprise", title: "Enterprise", desc: "One view across squads — fewer missed commitments at scale.", href: "/industries/enterprise", icon: Building2 },
-  { key: "ecommerce", title: "E-commerce", desc: "Survive peak season with sprints that account for real capacity.", href: "/industries/ecommerce", icon: ShoppingBag },
-  { key: "devtools", title: "DevTools", desc: "Repo-aware planning built for teams who ship code every week.", href: "/industries/devtools", icon: Factory },
+  { key: "saas", title: "SaaS", desc: "Ship faster without adding another planning tool nobody uses.", href: "/industries/saas" },
+  { key: "fintech", title: "Finance", desc: "Hit compliance deadlines without sacrificing delivery speed.", href: "/industries/fintech" },
+  { key: "healthtech", title: "Healthtech", desc: "Regulated releases with audit trails your team can actually trust.", href: "/industries/healthtech" },
+  { key: "enterprise", title: "Enterprise", desc: "One view across squads — fewer missed commitments at scale.", href: "/industries/enterprise" },
+  { key: "ecommerce", title: "E-commerce", desc: "Survive peak season with sprints that account for real capacity.", href: "/industries/ecommerce" },
+  { key: "devtools", title: "DevTools", desc: "Repo-aware planning built for teams who ship code every week.", href: "/industries/devtools" },
 ] as const;
 
 export function ConnectsEveryTeamSection() {
@@ -67,17 +53,16 @@ export function ConnectsEveryTeamSection() {
         </FynkReveal>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((item, i) => {
-            const Icon =
-              tab === "teams"
-                ? TEAM_ICONS[i]
-                : INDUSTRIES[i]?.icon ?? Building2;
-            return (
-              <Link key={item.key} href={localizedPath(item.href)} className="group block">
-                <FynkCard visible={isVisible} delay={i * 60} className="h-full transition-transform group-hover:-translate-y-0.5">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-fynk-orange-light text-fynk-orange sm:h-10 sm:w-10 sm:rounded-xl">
-                    <Icon className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={1.5} />
-                  </span>
+          {items.map((item, i) => (
+            <Link key={item.key} href={localizedPath(item.href)} className="group block">
+              <FynkCard visible={isVisible} delay={i * 60} className="h-full transition-transform group-hover:-translate-y-0.5">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white shadow-sm ring-1 ring-black/[0.05] sm:h-11 sm:w-11">
+                  {tab === "teams" ? (
+                    <TeamSolutionIcon index={i} className="h-8 w-8" />
+                  ) : (
+                    <IndustrySolutionIcon index={i} className="h-8 w-8" />
+                  )}
+                </span>
                   <h3 className="mt-3 text-base font-bold text-fynk-ink sm:mt-4 sm:text-lg">{item.title}</h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-fynk-muted sm:mt-2 sm:text-base">{item.desc}</p>
                   <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-fynk-orange opacity-0 transition-opacity group-hover:opacity-100">
@@ -86,8 +71,7 @@ export function ConnectsEveryTeamSection() {
                   </span>
                 </FynkCard>
               </Link>
-            );
-          })}
+          ))}
         </div>
       </div>
     </section>
