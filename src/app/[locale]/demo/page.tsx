@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, CheckCircle2, Calendar, Play, Users, Building2, Mail, User, ChevronDown } from "lucide-react";
 import { PRODUCT_CARDS } from "@/lib/constants";
 import { VoatomyLogo } from "@/components/icons/voatomy-logo-mark";
+import { useLocale } from "@/i18n/locale-provider";
 
 const TEAM_SIZES = ["1–10", "11–50", "51–200", "201–1 000", "1 000+"];
 const ROLES = ["Engineering Lead", "Product Manager", "Founder / CTO", "DevOps / SRE", "Design Lead", "Other"];
@@ -19,6 +20,7 @@ const TRUST_ITEMS = [
 type FormStep = "details" | "sent";
 
 export default function DemoPage() {
+  const { localizedPath } = useLocale();
   const [tab, setTab] = React.useState<"book" | "try">("book");
   const [formStep, setFormStep] = React.useState<FormStep>("details");
   const [sending, setSending] = React.useState(false);
@@ -43,7 +45,7 @@ export default function DemoPage() {
       {/* Header */}
       <header className="flex items-center justify-between px-5 pt-5 md:px-10">
         <VoatomyLogo
-          href="/"
+          href={localizedPath("/")}
           wordmarkClassName="text-xl font-bold tracking-tight text-fynk-ink sm:text-[26px]"
         />
         <Link

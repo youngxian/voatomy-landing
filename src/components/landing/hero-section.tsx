@@ -12,7 +12,6 @@ import {
   FynkInlineDocIcon,
   FynkEventPill,
   FynkRibbonBackdrop,
-  FynkRatingBadge,
   FynkButtonPrimary,
   FynkButtonSecondary,
   FynkPaperPlane,
@@ -80,19 +79,23 @@ export function HeroSection() {
 
       <div className="relative z-[2] mx-auto max-w-container">
         {/* fynk stack: webinar → headline → sub → CTAs → ratings */}
-        <div className="mx-auto flex max-w-6xl flex-col items-center text-center">
+        <div className="mx-auto flex w-full flex-col items-center text-center">
           <HeroReveal loaded={loaded} delayMs={0}>
             <FynkEventPill href={localizedPath("/demo")} icon="calendar">
               {t.webinarPill}
             </FynkEventPill>
           </HeroReveal>
 
-          <HeroReveal loaded={loaded} delayMs={80} className="mt-5 sm:mt-10">
-            <h1 className="font-heading text-balance text-[2rem] font-bold leading-[1.08] tracking-[-0.04em] text-fynk-ink min-[480px]:text-[2.25rem] sm:text-[3.875rem] md:text-[4.5rem] md:leading-[1.02] lg:text-[5.125rem] lg:leading-[0.98]">
-              <span className="inline">
-                {t.headlinePrefix}{" "}
-                <FynkInlineAvatarCluster seeds={AVATAR_SEEDS} size="lg" className="[&_span]:h-8 [&_span]:w-8 sm:[&_span]:h-12 sm:[&_span]:w-12 md:[&_span]:h-16 md:[&_span]:w-16" /> {t.headlineBridge}{" "}
-                <FynkInlineDocIcon className="[&_span]:h-8 [&_span]:w-8 sm:[&_span]:h-12 sm:[&_span]:w-12 md:[&_span]:h-16 md:[&_span]:w-16 [&_svg]:h-4 [&_svg]:w-4 sm:[&_svg]:h-6 sm:[&_svg]:w-6 md:[&_svg]:h-8 md:[&_svg]:w-8" /> {t.headlineSuffix.replace(/\.$/, "")}
+          <HeroReveal loaded={loaded} delayMs={80} className="mt-5 w-full sm:mt-10">
+            <h1 className="font-heading w-full text-center text-[clamp(1.75rem,5.4vw,5.25rem)] font-bold tracking-[-0.042em] text-fynk-ink">
+              <span className="mx-auto block w-fit max-w-full whitespace-nowrap leading-[1.08] sm:leading-[1.06] lg:leading-[0.98]">
+                <span className="inline">{t.headlinePrefix}</span>{" "}
+                <FynkInlineAvatarCluster seeds={AVATAR_SEEDS} size="lg" className="mx-[0.06em]" />{" "}
+                <span className="inline">{t.headlineBridge}</span>{" "}
+                <FynkInlineDocIcon className="ml-[0.04em]" />
+              </span>
+              <span className="mx-auto mt-[0.08em] block w-fit max-w-full whitespace-nowrap leading-[1.08] sm:mt-[0.1em] sm:leading-[1.06] lg:leading-[0.98]">
+                {t.headlineSuffix.replace(/\.$/, "")}
                 <span className="text-fynk-ink">.</span>
               </span>
             </h1>
@@ -117,13 +120,6 @@ export function HeroSection() {
                 <ArrowRight className="h-4 w-4" />
               </FynkButtonPrimary>
               <FynkButtonSecondary href={localizedPath("/demo")}>{t.ctaSecondary}</FynkButtonSecondary>
-            </div>
-          </HeroReveal>
-
-          <HeroReveal loaded={loaded} delayMs={320} className="mt-4 sm:mt-6">
-            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-              <FynkRatingBadge score={t.ratingG2} label={t.ratingG2Label} />
-              <FynkRatingBadge score={t.ratingBeta} label={t.ratingBetaLabel} />
             </div>
           </HeroReveal>
         </div>

@@ -229,7 +229,6 @@ export const en: Dictionary = {
   },
   auth: {
     shell: {
-      byline: "by Voatomy Labs",
       terms: "Terms",
       privacy: "Privacy",
       licenses: "Licenses",

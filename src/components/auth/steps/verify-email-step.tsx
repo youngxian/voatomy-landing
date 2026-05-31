@@ -65,7 +65,7 @@ export function VerifyEmailStep() {
         </svg>
       </div>
 
-      <h1 className="mb-3 text-[46px] font-semibold leading-[1.04] tracking-tight text-[#121312]">
+      <h1 className="mb-2 text-[clamp(26px,7.5vw,46px)] font-semibold leading-[1.08] tracking-tight text-[#121312] sm:mb-3">
         {t.title}
       </h1>
       <p className="mx-auto mb-2 max-w-[330px] text-[15px] leading-relaxed text-[#121312]/55">

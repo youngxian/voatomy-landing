@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { defaultLocale, isValidLocale, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { LocaleProvider } from "@/i18n/locale-provider";
@@ -17,6 +18,12 @@ export default async function OnboardLayout({
   children: React.ReactNode;
 }) {
   const cookieStore = await cookies();
+
+  const sessionToken = cookieStore.get("session")?.value;
+  if (!sessionToken) {
+    redirect("/auth/login?redirect=/onboard");
+  }
+
   const raw = cookieStore.get("NEXT_LOCALE")?.value;
   const locale = (raw && isValidLocale(raw) ? raw : defaultLocale) as Locale;
   const dictionary = getDictionary(locale);

@@ -75,11 +75,11 @@ export function ConnectsEveryTeamSection() {
             return (
               <Link key={item.key} href={localizedPath(item.href)} className="group block">
                 <FynkCard visible={isVisible} delay={i * 60} className="h-full transition-transform group-hover:-translate-y-0.5">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-fynk-orange-light text-fynk-orange">
-                    <Icon className="h-5 w-5" strokeWidth={1.5} />
+                  <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-fynk-orange-light text-fynk-orange sm:h-10 sm:w-10 sm:rounded-xl">
+                    <Icon className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={1.5} />
                   </span>
-                  <h3 className="mt-4 text-lg font-bold text-fynk-ink">{item.title}</h3>
-                  <p className="mt-2 text-base leading-relaxed text-fynk-muted">{item.desc}</p>
+                  <h3 className="mt-3 text-base font-bold text-fynk-ink sm:mt-4 sm:text-lg">{item.title}</h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-fynk-muted sm:mt-2 sm:text-base">{item.desc}</p>
                   <span className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-fynk-orange opacity-0 transition-opacity group-hover:opacity-100">
                     {t.learnMore}
                     <ArrowRight className="h-3.5 w-3.5" />

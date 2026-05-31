@@ -1,354 +1,151 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
-import { buildProductCheckoutUrl } from "@/lib/product-purchase";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Section } from "@/components/ui/section";
-import { Chip } from "@/components/ui/chip";
-import {
-  ArrowRight,
-  PlayCircle,
-  MessageSquare,
-  DollarSign,
-  TrendingUp,
-  Users,
-  CheckCircle2,
-  Sparkles,
-} from "lucide-react";
-import { BRAND_GREEN } from "@/lib/marketing-visual";
+import * as React from "react";
+import { motion } from "framer-motion";
+import { MessageSquare, DollarSign, TrendingUp, Users } from "lucide-react";
+import { ProductDemoShell } from "@/components/marketing/product-demo-shell";
 
+/* ── Signal feed mock ── */
+const SIGNALS = [
+  { id: 1, account: "Acme Corp", arr: "$128k", type: "churn-risk", body: "3 support tickets in 7 days referencing missing API rate-limit controls.", feature: "Rate-limit controls", weight: 92 },
+  { id: 2, account: "Stripe (deal)", arr: "$220k", type: "deal-blocker", body: "Deal stalled — champion asked about multi-region data residency support.", feature: "Data residency", weight: 88 },
+  { id: 3, account: "Notion", arr: "$84k", type: "expansion", body: "Power user segment tripled in 30 days. Requesting bulk export API.", feature: "Bulk export API", weight: 71 },
+  { id: 4, account: "Figma", arr: "$195k", type: "churn-risk", body: "NPS dropped 24 pts. Engineering bottleneck cited in exit interview notes.", feature: "Performance improvements", weight: 85 },
+];
 
-const PRODUCT_COLOR = "#6366F1";
+const TYPE_META: Record<string, { label: string; color: string }> = {
+  "churn-risk":   { label: "Churn risk",    color: "#EF4444" },
+  "deal-blocker": { label: "Deal blocker",  color: "#F97316" },
+  "expansion":    { label: "Expansion",     color: "#22c55e" },
+};
+
+function SignalFeedTab() {
+  const [active, setActive] = React.useState<number | null>(1);
+  return (
+    <div className="grid gap-4 lg:grid-cols-5">
+      <div className="space-y-2 lg:col-span-2">
+        {SIGNALS.map((s) => {
+          const meta = TYPE_META[s.type];
+          return (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => setActive(s.id)}
+              className={`flex w-full flex-col gap-1 rounded-xl border px-3 py-2.5 text-left text-sm transition-all ${active === s.id ? "border-[#8B5CF6]/30 bg-[#8B5CF6]/6" : "border-[#121312]/8 hover:border-[#8B5CF6]/15"}`}
+            >
+              <div className="flex items-center justify-between">
+                <p className="text-[11px] font-bold text-[#121312]">{s.account}</p>
+                <span className="text-[10px] font-semibold" style={{ color: meta.color }}>{meta.label}</span>
+              </div>
+              <p className="line-clamp-1 text-[11px] text-[#121312]/50">{s.body}</p>
+              <div className="flex items-center gap-2">
+                <div className="flex-1 h-1.5 rounded-full bg-[#121312]/8 overflow-hidden">
+                  <div className="h-full rounded-full bg-[#8B5CF6]" style={{ width: `${s.weight}%` }} />
+                </div>
+                <span className="text-[10px] font-bold text-[#8B5CF6]">{s.weight}</span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+      <div className="lg:col-span-3">
+        {active !== null && (() => {
+          const s = SIGNALS.find((x) => x.id === active)!;
+          const meta = TYPE_META[s.type];
+          return (
+            <motion.div key={active} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="rounded-xl border border-[#121312]/10 p-4">
+              <div className="mb-3 flex items-center justify-between">
+                <span className="text-sm font-bold text-[#121312]">{s.account}</span>
+                <span className="rounded-full px-2 py-0.5 text-[10px] font-bold" style={{ backgroundColor: `${meta.color}15`, color: meta.color }}>{meta.label}</span>
+              </div>
+              <p className="text-sm text-[#121312]/60">{s.body}</p>
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <div className="rounded-lg bg-[#f4f5f7] p-2.5">
+                  <p className="text-[10px] font-semibold text-[#121312]/40">ARR at risk / at play</p>
+                  <p className="mt-0.5 text-base font-bold text-[#121312]">{s.arr}</p>
+                </div>
+                <div className="rounded-lg bg-[#f4f5f7] p-2.5">
+                  <p className="text-[10px] font-semibold text-[#121312]/40">Revenue weight</p>
+                  <p className="mt-0.5 text-base font-bold text-[#8B5CF6]">{s.weight} / 100</p>
+                </div>
+              </div>
+              <div className="mt-3 rounded-lg border border-[#8B5CF6]/20 bg-[#8B5CF6]/5 p-3">
+                <p className="text-[10px] font-bold text-[#8B5CF6]">Loop recommendation</p>
+                <p className="mt-0.5 text-xs text-[#121312]/60">Prioritise <strong>"{s.feature}"</strong> in next sprint. Impacts {s.arr} ARR.</p>
+              </div>
+            </motion.div>
+          );
+        })()}
+      </div>
+    </div>
+  );
+}
+
+function RevenueBacklogTab() {
+  const items = [
+    { title: "Rate-limit controls", pts: 5, arr: "$128k", score: 92 },
+    { title: "Data residency (EU)", pts: 13, arr: "$220k", score: 88 },
+    { title: "Performance improvements", pts: 8, arr: "$195k", score: 85 },
+    { title: "Bulk export API", pts: 3, arr: "$84k", score: 71 },
+  ];
+  return (
+    <div>
+      <div className="mb-3 flex items-center justify-between">
+        <p className="text-sm font-bold text-[#121312]">Revenue-weighted backlog</p>
+        <span className="text-xs text-[#121312]/40">Sorted by Loop score</span>
+      </div>
+      <div className="space-y-2">
+        {items.map((item, i) => (
+          <motion.div key={item.title} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.07 }}
+            className="flex items-center gap-3 rounded-xl border border-[#121312]/8 px-4 py-3">
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#8B5CF6]/15 text-xs font-bold text-[#8B5CF6]">{i + 1}</span>
+            <p className="flex-1 text-sm font-medium text-[#121312]">{item.title}</p>
+            <span className="text-xs text-[#121312]/40">{item.pts}pts</span>
+            <span className="text-xs font-semibold text-[#121312]/60">{item.arr}</span>
+            <div className="flex w-16 items-center gap-1">
+              <div className="flex-1 h-1.5 rounded-full bg-[#121312]/8 overflow-hidden">
+                <div className="h-full rounded-full bg-[#8B5CF6]" style={{ width: `${item.score}%` }} />
+              </div>
+              <span className="text-[10px] font-bold text-[#8B5CF6]">{item.score}</span>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const TABS = [
+  { key: "signals", label: "Signal Feed", content: <SignalFeedTab /> },
+  { key: "backlog", label: "Revenue Backlog", content: <RevenueBacklogTab /> },
+];
 
 const FEATURES = [
-  {
-    icon: MessageSquare,
-    title: "Revenue-Weighted Backlogs",
-    description:
-      "Automatically rank backlog items by the revenue they protect or unlock. Build what matters most to the business.",
-  },
-  {
-    icon: DollarSign,
-    title: "Churn Risk Scoring",
-    description:
-      "LOOP surfaces feature requests tied to at-risk accounts so engineering can act before customers leave.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Deal Velocity Tracking",
-    description:
-      "See which features are blocking sales pipeline. Accelerate deals by shipping what prospects need.",
-  },
-  {
-    icon: Users,
-    title: "Customer Voice Integration",
-    description:
-      "Aggregate feedback from support, NPS, and sales calls into a unified demand signal for engineering.",
-  },
+  { icon: MessageSquare, title: "Revenue-weighted backlogs", body: "Automatically rank backlog items by the revenue they protect or unlock." },
+  { icon: DollarSign, title: "Churn risk scoring", body: "LOOP surfaces feature requests tied to at-risk accounts so engineering can act before customers leave." },
+  { icon: TrendingUp, title: "Deal velocity mapping", body: "Connect CRM stages to product gaps — see which features are blocking pipeline directly." },
+  { icon: Users, title: "Cross-team signal digest", body: "Sales, CS, and engineering share one view of what customers are asking for." },
 ];
 
 const STEPS = [
-  {
-    num: "01",
-    title: "Connect Revenue Data",
-    description:
-      "Integrate CRM, support tools, and billing. LOOP maps customer signals to your backlog.",
-  },
-  {
-    num: "02",
-    title: "Score & Prioritize",
-    description:
-      "AI assigns revenue weight and churn risk to every backlog item automatically.",
-  },
-  {
-    num: "03",
-    title: "Align Teams",
-    description:
-      "Product, engineering, and sales share a single source of truth on what to build next.",
-  },
-  {
-    num: "04",
-    title: "Measure Impact",
-    description:
-      "Track how shipped features move the needle on retention, expansion, and deal velocity.",
-  },
+  { num: "01", title: "Connect CRM & support", body: "Link Salesforce, HubSpot, Zendesk, or Intercom. LOOP ingests signal automatically." },
+  { num: "02", title: "Configure signals", body: "Choose which events matter — churn risk, deal blockers, expansion opportunities." },
+  { num: "03", title: "View revenue backlog", body: "Your backlog is automatically re-ranked by ARR impact every 24 hours." },
+  { num: "04", title: "Ship & close", body: "Engineering ships the right feature. Sales closes the deal. LOOP tracks the outcome." },
 ];
 
-function useScrollAnimation() {
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" },
-    );
-    const elements = document.querySelectorAll(".animate-on-scroll");
-    elements.forEach((el) => observerRef.current?.observe(el));
-    return () => observerRef.current?.disconnect();
-  }, []);
-}
-
 export default function LoopDemoPageContent() {
-  const [loaded, setLoaded] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setLoaded(true), 80);
-    return () => clearTimeout(t);
-  }, []);
-  useScrollAnimation();
-
   return (
-    <div id="loop-demo">
-      {/* ── Hero ── */}
-      <section className="relative min-h-[80vh] overflow-hidden bg-theme px-4 pb-20 pt-28 transition-colors duration-300">
-        <div
-          className="pointer-events-none absolute inset-0 bg-dot-grid"
-          style={{ backgroundSize: "40px 40px" }}
-          aria-hidden="true"
-        />
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background: `radial-gradient(ellipse 70% 55% at 50% 35%, ${PRODUCT_COLOR}15, transparent)`,
-          }}
-          aria-hidden="true"
-        />
-
-        <div className="relative z-[2] mx-auto max-w-container text-center">
-          <div
-            className={cn(
-              "transition-all duration-700 delay-[0s]",
-              loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
-            )}
-          >
-            <Chip
-              dotColor={PRODUCT_COLOR}
-              className="border border-indigo-500/20 bg-indigo-500/[0.08] font-semibold text-indigo-400"
-            >
-              LOOP Demo
-            </Chip>
-          </div>
-
-          <h1
-            className={cn(
-              "mx-auto mt-8 max-w-[860px] text-4xl font-semibold leading-[1.08] tracking-tight text-theme sm:text-5xl md:text-display-2 lg:text-display-1 transition-all duration-700 delay-[0.1s]",
-              loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
-            )}
-          >
-            See the{" "}
-            <span style={{ color: PRODUCT_COLOR }}>Revenue Feedback Engine</span>{" "}
-            in action
-          </h1>
-
-          <p
-            className={cn(
-              "mx-auto mt-6 max-w-[640px] text-lg leading-relaxed text-theme-m transition-all duration-700 delay-[0.2s]",
-              loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
-            )}
-          >
-            Close the loop between customer demand and engineering delivery.
-            Watch how LOOP turns revenue signals into prioritized backlogs.
-          </p>
-
-          <div
-            className={cn(
-              "mx-auto mt-10 flex max-w-md flex-col items-center justify-center gap-3 sm:flex-row transition-all duration-700 delay-[0.3s]",
-              loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
-            )}
-          >
-            <Button variant="primary" size="lg" className="gap-2" asChild>
-              <Link href={buildProductCheckoutUrl({ product: "loop", plan: "pro" })}>
-                Start 14-day trial
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-            <Button variant="secondary" size="lg" asChild>
-              <Link href="/products/loop">Learn More</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Video Placeholder ── */}
-      <Section variant="amber" className="py-20 sm:py-28">
-        <div className="mx-auto max-w-[960px]">
-          <Card
-            variant="fynk-alt"
-            className="group relative aspect-video overflow-hidden"
-          >
-            <div
-              className="absolute inset-0"
-              style={{
-                background: `radial-gradient(ellipse 80% 60% at 50% 50%, ${PRODUCT_COLOR}20, transparent)`,
-              }}
-            />
-            <div className="relative z-[1] flex h-full flex-col items-center justify-center gap-4">
-              <div
-                className="flex h-20 w-20 items-center justify-center rounded-full border-2 transition-transform duration-300 group-hover:scale-110"
-                style={{
-                  borderColor: `${PRODUCT_COLOR}60`,
-                  background: `${PRODUCT_COLOR}15`,
-                }}
-              >
-                <PlayCircle
-                  className="h-10 w-10"
-                  style={{ color: PRODUCT_COLOR }}
-                />
-              </div>
-              <p className="text-sm font-medium text-theme-m">
-                Demo coming soon
-              </p>
-            </div>
-          </Card>
-        </div>
-      </Section>
-
-      {/* ── Key Features ── */}
-      <Section variant="coral" className="py-20 sm:py-28">
-        <div className="text-center">
-          <span
-            className="text-xs font-bold uppercase tracking-widest"
-            style={{ color: `${PRODUCT_COLOR}cc` }}
-          >
-            Key Features
-          </span>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-theme sm:text-heading-1">
-            What makes LOOP different
-          </h2>
-          <p className="mx-auto mt-4 max-w-[560px] text-body-lg text-theme-m">
-            Revenue intelligence that connects what customers need to what
-            engineering builds.
-          </p>
-        </div>
-
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {FEATURES.map((feature, i) => {
-            const Icon = feature.icon;
-            return (
-              <Card
-                key={feature.title}
-                variant="light"
-                className="animate-on-scroll opacity-0 translate-y-4 transition-all duration-500 [&.is-visible]:opacity-100 [&.is-visible]:translate-y-0"
-                style={{ transitionDelay: `${i * 100}ms` }}
-              >
-                <div
-                  className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl"
-                  style={{ background: `${PRODUCT_COLOR}15` }}
-                >
-                  <Icon className="h-5 w-5" style={{ color: PRODUCT_COLOR }} />
-                </div>
-                <h3 className="text-heading-3 text-theme">{feature.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-theme-m">
-                  {feature.description}
-                </p>
-              </Card>
-            );
-          })}
-        </div>
-      </Section>
-
-      {/* ── How It Works ── */}
-      <Section variant="sky" className="py-20 sm:py-28">
-        <div className="text-center">
-          <span
-            className="text-xs font-bold uppercase tracking-widest"
-            style={{ color: `${PRODUCT_COLOR}cc` }}
-          >
-            How It Works
-          </span>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-theme sm:text-heading-1">
-            From signals to shipped features
-          </h2>
-        </div>
-
-        <div className="mx-auto mt-14 grid max-w-[880px] gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {STEPS.map((step, i) => (
-            <div
-              key={step.num}
-              className="animate-on-scroll opacity-0 translate-y-4 transition-all duration-500 [&.is-visible]:opacity-100 [&.is-visible]:translate-y-0 text-center"
-              style={{ transitionDelay: `${i * 120}ms` }}
-            >
-              <div
-                className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full text-sm font-bold text-white"
-                style={{ background: PRODUCT_COLOR }}
-              >
-                {step.num}
-              </div>
-              <h3 className="text-heading-3 text-theme">{step.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-theme-m">
-                {step.description}
-              </p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      {/* ── CTA ── */}
-      <section className="relative overflow-hidden bg-theme px-4 py-24 sm:py-32 transition-colors duration-300">
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background: `radial-gradient(ellipse 60% 50% at 50% 50%, ${BRAND_GREEN}18, transparent)`,
-          }}
-          aria-hidden="true"
-        />
-        <div
-          className="pointer-events-none absolute inset-0 bg-dot-grid"
-          style={{ backgroundSize: "40px 40px" }}
-          aria-hidden="true"
-        />
-
-        <div className="relative z-[2] mx-auto max-w-container text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/[0.08] px-4 py-1.5 text-sm font-semibold text-brand mb-6">
-            <Sparkles className="h-3.5 w-3.5" />
-            Start in under 5 minutes
-          </div>
-
-          <h2 className="mx-auto max-w-[700px] text-3xl font-semibold tracking-tight text-theme sm:text-heading-1 md:text-display-2">
-            Ready to close the{" "}
-            <span className="text-brand">revenue loop?</span>
-          </h2>
-
-          <p className="mx-auto mt-5 max-w-[520px] text-lg leading-relaxed text-theme-m">
-            Connect your CRM and backlog, and let LOOP surface the features
-            your customers and prospects need most.
-          </p>
-
-          <div className="mx-auto mt-10 flex max-w-md flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button variant="primary" size="lg" className="gap-2" asChild>
-              <Link href={buildProductCheckoutUrl({ product: "loop", plan: "pro" })}>
-                Start 14-day trial
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-            <Button variant="secondary" size="lg" asChild>
-              <Link href="/products/loop">Back to LOOP</Link>
-            </Button>
-          </div>
-
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm text-theme-m">
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-brand" />
-              Free tier available
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-brand" />
-              Salesforce &amp; HubSpot integration
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-brand" />
-              SOC 2 compliant
-            </span>
-          </div>
-        </div>
-      </section>
-    </div>
+    <ProductDemoShell
+      productKey="loop"
+      productName="LOOP"
+      color="#8B5CF6"
+      tagline="Revenue Feedback Engine"
+      headline={<>See the <span style={{ color: "#8B5CF6" }}>Revenue Feedback Engine</span> in action</>}
+      subhead="Close the loop between customer demand and engineering delivery — with real ARR impact scores on every backlog item."
+      tabs={TABS}
+      features={FEATURES}
+      steps={STEPS}
+    />
   );
 }

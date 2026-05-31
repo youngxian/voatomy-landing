@@ -123,7 +123,7 @@ export function AuthPage({ initialStep = "signup" }: AuthPageProps) {
   return (
     <AuthContext.Provider value={contextValue}>
       <AuthShell>
-        <div className="mx-auto w-full max-w-[390px]">
+        <div className="mx-auto w-full max-w-[390px] px-1 sm:px-0">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={step}

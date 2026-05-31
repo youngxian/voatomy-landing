@@ -132,7 +132,6 @@ export type Dictionary = {
   };
   auth: {
     shell: {
-      byline: string;
       terms: string;
       privacy: string;
       licenses: string;

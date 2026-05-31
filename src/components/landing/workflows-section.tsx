@@ -214,7 +214,7 @@ export function WorkflowsSection() {
 
       <div ref={ref} className="relative z-[1] mx-auto max-w-container">
         {/* Centered header — reference: Transform how your teams work */}
-        <FynkReveal visible={isVisible} className="mx-auto max-w-4xl text-center">
+        <FynkReveal visible={isVisible} className="mx-auto max-w-3xl text-center">
           <FynkDisplayHeading align="center">
             Six signals in.
             <br />

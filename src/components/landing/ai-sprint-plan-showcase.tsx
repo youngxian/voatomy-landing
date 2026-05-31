@@ -248,7 +248,7 @@ export function AiSprintPlanShowcase({
   return (
     <div
       className={cn(
-        "relative mx-auto w-full max-w-5xl px-2 transition-all duration-700 sm:px-4",
+        "relative mx-auto w-full max-w-4xl px-2 transition-all duration-700 sm:px-4",
         visible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0",
       )}
     >

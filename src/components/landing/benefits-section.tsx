@@ -126,8 +126,8 @@ export function BenefitsSection() {
       <FynkGradientBackdrop intensity="soft" />
 
       <div ref={ref} className="relative z-[1] mx-auto max-w-container">
-        <FynkReveal visible={isVisible} className="mx-auto max-w-5xl text-center lg:max-w-6xl">
-          <FynkDisplayHeading align="center" className="max-w-6xl">
+        <FynkReveal visible={isVisible} className="mx-auto max-w-3xl text-center lg:max-w-4xl">
+          <FynkDisplayHeading align="center" className="max-w-4xl">
             {t.titleLine1}
             <br />
             <FynkHeadingUnderlineAccent>{t.titleLine2}</FynkHeadingUnderlineAccent>

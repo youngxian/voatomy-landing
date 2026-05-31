@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 import {
   FynkDisplayHeading,
   FynkHeadingUnderlineAccent,
-  FynkRatingBadge,
   FynkReveal,
 } from "@/components/marketing/fynk-primitives";
 import { useDictionary, useLocale } from "@/i18n/locale-provider";
@@ -161,12 +160,6 @@ export function TestimonialsSection() {
           >
             <ChevronRight className="h-4 w-4" />
           </button>
-        </div>
-
-        {/* Rating chips at bottom */}
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:mt-10 sm:gap-4">
-          <FynkRatingBadge score={t.g2Rating} label={t.g2Label} />
-          <FynkRatingBadge score={t.betaRating} label={t.betaLabel} />
         </div>
       </div>
     </section>

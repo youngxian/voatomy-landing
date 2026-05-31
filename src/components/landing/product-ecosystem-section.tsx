@@ -67,14 +67,14 @@ function ProductEcosystemIllustration({ visible }: { visible: boolean }) {
   return (
     <div
       className={cn(
-        "relative mx-auto w-full max-w-[520px] transition-all duration-700",
+        "relative mx-auto w-full max-w-[440px] transition-all duration-700 sm:max-w-[480px]",
         visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0",
       )}
     >
       <TeamworkGraphCanvas
         visible={visible}
         variant="light"
-        minHeight={460}
+        minHeight={380}
         center={
           <div className="flex flex-col items-center">
             {/* Light-paper NEXUS hub with fynk-orange accent ring */}

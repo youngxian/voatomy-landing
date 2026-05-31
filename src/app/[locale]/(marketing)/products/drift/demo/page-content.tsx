@@ -1,354 +1,181 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
-import { buildProductCheckoutUrl } from "@/lib/product-purchase";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Section } from "@/components/ui/section";
-import { Chip } from "@/components/ui/chip";
-import {
-  ArrowRight,
-  PlayCircle,
-  Palette,
-  RefreshCw,
-  Layers,
-  Eye,
-  CheckCircle2,
-  Sparkles,
-} from "lucide-react";
-import { BRAND_GREEN } from "@/lib/marketing-visual";
+import * as React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Layers, GitBranch, Bell, BarChart2 } from "lucide-react";
+import { ProductDemoShell } from "@/components/marketing/product-demo-shell";
 
+const DRIFT_ITEMS = [
+  { id: "DRF-01", component: "Button / Primary", type: "color-token", figma: "#EC4899", code: "#e11d48", severity: "high", file: "src/components/ui/button.tsx" },
+  { id: "DRF-02", component: "Heading / H1", type: "typography", figma: "700 / 48px", code: "600 / 46px", severity: "medium", file: "src/components/ui/typography.tsx" },
+  { id: "DRF-03", component: "Card / Radius", type: "spacing", figma: "16px", code: "12px", severity: "low", file: "src/components/ui/card.tsx" },
+  { id: "DRF-04", component: "Icon / CheckCircle", type: "icon-usage", figma: "heroicons", code: "lucide-react", severity: "medium", file: "src/components/landing/cta-section.tsx" },
+];
 
-const PRODUCT_COLOR = "#A855F7";
+const SEV_META: Record<string, { color: string; label: string }> = {
+  high:   { color: "#EF4444", label: "High" },
+  medium: { color: "#F97316", label: "Medium" },
+  low:    { color: "#6B7280", label: "Low" },
+};
+
+function DriftScanTab() {
+  const [scanning, setScanning] = React.useState(false);
+  const [scanned, setScanned] = React.useState(false);
+  const [dismissed, setDismissed] = React.useState<string[]>([]);
+
+  const runScan = () => {
+    setScanning(true);
+    setScanned(false);
+    setTimeout(() => { setScanning(false); setScanned(true); }, 2000);
+  };
+
+  const visible = DRIFT_ITEMS.filter((d) => !dismissed.includes(d.id));
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm font-bold text-[#121312]">Design drift scanner</p>
+          <p className="text-xs text-[#121312]/45">Figma → GitHub · Last scan: 2 hours ago · {visible.length} issues</p>
+        </div>
+        <button
+          type="button"
+          onClick={runScan}
+          disabled={scanning}
+          className="flex items-center gap-1.5 rounded-xl bg-[#EC4899] px-3 py-2 text-xs font-bold text-white disabled:opacity-60 transition-opacity hover:opacity-85"
+        >
+          {scanning
+            ? <><svg className="h-3.5 w-3.5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" strokeOpacity="0.3" /><path d="M12 2a10 10 0 0 1 10 10" /></svg> Scanning…</>
+            : "▶ Run scan"}
+        </button>
+      </div>
+
+      {scanning && (
+        <div className="space-y-1.5">
+          {["Fetching Figma tokens…", "Parsing component tree…", "Comparing to codebase…"].map((msg, i) => (
+            <motion.p key={msg} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.5 }}
+              className="text-xs text-[#121312]/40">
+              <span className="mr-1.5 inline-block animate-pulse">⚙</span>{msg}
+            </motion.p>
+          ))}
+        </div>
+      )}
+
+      <AnimatePresence>
+        {visible.map((item) => {
+          const sev = SEV_META[item.severity];
+          return (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="rounded-xl border border-[#121312]/8 p-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-[#121312]">{item.component}</span>
+                      <span className="rounded-full px-1.5 py-0.5 text-[9px] font-bold" style={{ backgroundColor: `${sev.color}15`, color: sev.color }}>{sev.label}</span>
+                    </div>
+                    <p className="mt-0.5 font-mono text-[10px] text-[#121312]/40">{item.file}</p>
+                  </div>
+                  <button type="button" onClick={() => setDismissed((p) => [...p, item.id])}
+                    className="shrink-0 text-[10px] text-[#121312]/30 hover:text-[#121312]/60">dismiss</button>
+                </div>
+                <div className="mt-2 grid grid-cols-2 gap-2 text-[11px]">
+                  <div className="rounded-lg bg-[#f4f5f7] px-2 py-1.5">
+                    <p className="font-semibold text-[#121312]/40">Figma</p>
+                    <p className="font-mono text-[#121312]">{item.figma}</p>
+                  </div>
+                  <div className="rounded-lg border border-[#EC4899]/20 bg-[#EC4899]/5 px-2 py-1.5">
+                    <p className="font-semibold text-[#EC4899]/60">Code</p>
+                    <p className="font-mono text-[#EC4899]">{item.code}</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
+      </AnimatePresence>
+
+      {scanned && visible.length === 0 && (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-center">
+          <p className="text-sm font-bold text-emerald-700">✓ Zero drift detected</p>
+          <p className="mt-0.5 text-xs text-emerald-600">Your design system and codebase are perfectly in sync.</p>
+        </motion.div>
+      )}
+    </div>
+  );
+}
+
+function ComponentHealthTab() {
+  const components = [
+    { name: "Button", health: 94, issues: 1, tokens: 12 },
+    { name: "Card",   health: 87, issues: 2, tokens: 8  },
+    { name: "Input",  health: 100, issues: 0, tokens: 9 },
+    { name: "Modal",  health: 72, issues: 4, tokens: 15 },
+    { name: "Badge",  health: 98, issues: 0, tokens: 5  },
+  ];
+
+  return (
+    <div>
+      <div className="mb-3 flex items-center justify-between">
+        <p className="text-sm font-bold text-[#121312]">Component health scores</p>
+        <span className="text-xs text-[#121312]/40">5 components tracked</span>
+      </div>
+      <div className="space-y-2.5">
+        {components.map((c, i) => {
+          const color = c.health >= 90 ? "#22c55e" : c.health >= 80 ? "#f59e0b" : "#EF4444";
+          return (
+            <motion.div key={c.name} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.07 }}
+              className="flex items-center gap-3 rounded-xl border border-[#121312]/8 px-4 py-2.5">
+              <p className="w-16 text-sm font-semibold text-[#121312]">{c.name}</p>
+              <div className="flex-1 h-2 rounded-full bg-[#121312]/8 overflow-hidden">
+                <div className="h-full rounded-full transition-all" style={{ width: `${c.health}%`, backgroundColor: color }} />
+              </div>
+              <span className="w-10 text-right text-sm font-bold" style={{ color }}>{c.health}%</span>
+              <span className="w-16 text-right text-[11px] text-[#121312]/40">{c.issues} issue{c.issues !== 1 ? "s" : ""}</span>
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+const TABS = [
+  { key: "scan",   label: "Drift Scanner",     content: <DriftScanTab /> },
+  { key: "health", label: "Component Health",  content: <ComponentHealthTab /> },
+];
 
 const FEATURES = [
-  {
-    icon: Palette,
-    title: "Real-Time Drift Detection",
-    description:
-      "DRIFT continuously compares Figma source-of-truth against your live code components and flags deviations the moment they appear.",
-  },
-  {
-    icon: RefreshCw,
-    title: "Token Sync",
-    description:
-      "Design tokens — colors, spacing, typography — stay in lockstep between Figma and code. One change propagates everywhere.",
-  },
-  {
-    icon: Layers,
-    title: "Component Coverage",
-    description:
-      "See exactly which Figma components have matching code implementations and which are missing or stale.",
-  },
-  {
-    icon: Eye,
-    title: "Revenue-Aware Design",
-    description:
-      "Prioritize design consistency fixes by business impact. Fix drift in your checkout flow before your settings page.",
-  },
+  { icon: Layers,    title: "Token-level comparison", body: "Drift compares every design token — color, spacing, typography, radius — against your live code on each commit." },
+  { icon: GitBranch, title: "Commit-triggered scans",  body: "Every push triggers a scan. Drift reports surface in PRs before code reaches production." },
+  { icon: Bell,      title: "Smart severity alerts",   body: "Set severity thresholds. Get notified on high-risk drift only, not every minor pixel." },
+  { icon: BarChart2, title: "Component health scores", body: "Track the overall design-code health of every component in your system over time." },
 ];
 
 const STEPS = [
-  {
-    num: "01",
-    title: "Connect Figma & Code",
-    description:
-      "Link your Figma files and component library repo. DRIFT maps design tokens to code tokens automatically.",
-  },
-  {
-    num: "02",
-    title: "Scan for Drift",
-    description:
-      "AI compares every component and token pair, surfacing mismatches with visual diffs and severity scores.",
-  },
-  {
-    num: "03",
-    title: "Prioritize Fixes",
-    description:
-      "DRIFT ranks drift by user-facing impact and revenue exposure so your team fixes what matters first.",
-  },
-  {
-    num: "04",
-    title: "Stay in Sync",
-    description:
-      "Continuous monitoring ensures drift never accumulates again. Get alerts on PRs that introduce new mismatches.",
-  },
+  { num: "01", title: "Connect Figma & repo", body: "Link your Figma workspace and GitHub/GitLab. Drift reads your design tokens and component library." },
+  { num: "02", title: "Configure categories", body: "Choose which drift types matter — colors, typography, spacing, icons, component names." },
+  { num: "03", title: "Set scan cadence", body: "Scan on every commit, daily, or weekly. PR comments flag drift before it merges." },
+  { num: "04", title: "Fix & stay in sync", body: "Engineers get file-level attribution. Designers approve fixes in Figma. Health improves sprint over sprint." },
 ];
 
-function useScrollAnimation() {
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" },
-    );
-    const elements = document.querySelectorAll(".animate-on-scroll");
-    elements.forEach((el) => observerRef.current?.observe(el));
-    return () => observerRef.current?.disconnect();
-  }, []);
-}
-
 export default function DriftDemoPageContent() {
-  const [loaded, setLoaded] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setLoaded(true), 80);
-    return () => clearTimeout(t);
-  }, []);
-  useScrollAnimation();
-
   return (
-    <div id="drift-demo">
-      {/* ── Hero ── */}
-      <section className="relative min-h-[80vh] overflow-hidden bg-theme px-4 pb-20 pt-28 transition-colors duration-300">
-        <div
-          className="pointer-events-none absolute inset-0 bg-dot-grid"
-          style={{ backgroundSize: "40px 40px" }}
-          aria-hidden="true"
-        />
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background: `radial-gradient(ellipse 70% 55% at 50% 35%, ${PRODUCT_COLOR}15, transparent)`,
-          }}
-          aria-hidden="true"
-        />
-
-        <div className="relative z-[2] mx-auto max-w-container text-center">
-          <div
-            className={cn(
-              "transition-all duration-700 delay-[0s]",
-              loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
-            )}
-          >
-            <Chip
-              dotColor={PRODUCT_COLOR}
-              className="border border-purple-500/20 bg-purple-500/[0.08] font-semibold text-purple-400"
-            >
-              DRIFT Demo
-            </Chip>
-          </div>
-
-          <h1
-            className={cn(
-              "mx-auto mt-8 max-w-[860px] text-4xl font-semibold leading-[1.08] tracking-tight text-theme sm:text-5xl md:text-display-2 lg:text-display-1 transition-all duration-700 delay-[0.1s]",
-              loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
-            )}
-          >
-            See{" "}
-            <span style={{ color: PRODUCT_COLOR }}>Design System Sync</span>{" "}
-            in action
-          </h1>
-
-          <p
-            className={cn(
-              "mx-auto mt-6 max-w-[640px] text-lg leading-relaxed text-theme-m transition-all duration-700 delay-[0.2s]",
-              loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
-            )}
-          >
-            Keep Figma designs and code components in permanent sync. Watch how
-            DRIFT detects and resolves design-code drift in real time.
-          </p>
-
-          <div
-            className={cn(
-              "mx-auto mt-10 flex max-w-md flex-col items-center justify-center gap-3 sm:flex-row transition-all duration-700 delay-[0.3s]",
-              loaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
-            )}
-          >
-            <Button variant="primary" size="lg" className="gap-2" asChild>
-              <Link href={buildProductCheckoutUrl({ product: "drift", plan: "pro" })}>
-                Start 14-day trial
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-            <Button variant="secondary" size="lg" asChild>
-              <Link href="/products/drift">Learn More</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Video Placeholder ── */}
-      <Section variant="amber" className="py-20 sm:py-28">
-        <div className="mx-auto max-w-[960px]">
-          <Card
-            variant="fynk-alt"
-            className="group relative aspect-video overflow-hidden"
-          >
-            <div
-              className="absolute inset-0"
-              style={{
-                background: `radial-gradient(ellipse 80% 60% at 50% 50%, ${PRODUCT_COLOR}20, transparent)`,
-              }}
-            />
-            <div className="relative z-[1] flex h-full flex-col items-center justify-center gap-4">
-              <div
-                className="flex h-20 w-20 items-center justify-center rounded-full border-2 transition-transform duration-300 group-hover:scale-110"
-                style={{
-                  borderColor: `${PRODUCT_COLOR}60`,
-                  background: `${PRODUCT_COLOR}15`,
-                }}
-              >
-                <PlayCircle
-                  className="h-10 w-10"
-                  style={{ color: PRODUCT_COLOR }}
-                />
-              </div>
-              <p className="text-sm font-medium text-theme-m">
-                Demo coming soon
-              </p>
-            </div>
-          </Card>
-        </div>
-      </Section>
-
-      {/* ── Key Features ── */}
-      <Section variant="coral" className="py-20 sm:py-28">
-        <div className="text-center">
-          <span
-            className="text-xs font-bold uppercase tracking-widest"
-            style={{ color: `${PRODUCT_COLOR}cc` }}
-          >
-            Key Features
-          </span>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-theme sm:text-heading-1">
-            What makes DRIFT different
-          </h2>
-          <p className="mx-auto mt-4 max-w-[560px] text-body-lg text-theme-m">
-            Continuous design-code synchronization that keeps your product
-            pixel-perfect and your teams aligned.
-          </p>
-        </div>
-
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {FEATURES.map((feature, i) => {
-            const Icon = feature.icon;
-            return (
-              <Card
-                key={feature.title}
-                variant="light"
-                className="animate-on-scroll opacity-0 translate-y-4 transition-all duration-500 [&.is-visible]:opacity-100 [&.is-visible]:translate-y-0"
-                style={{ transitionDelay: `${i * 100}ms` }}
-              >
-                <div
-                  className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl"
-                  style={{ background: `${PRODUCT_COLOR}15` }}
-                >
-                  <Icon className="h-5 w-5" style={{ color: PRODUCT_COLOR }} />
-                </div>
-                <h3 className="text-heading-3 text-theme">{feature.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-theme-m">
-                  {feature.description}
-                </p>
-              </Card>
-            );
-          })}
-        </div>
-      </Section>
-
-      {/* ── How It Works ── */}
-      <Section variant="sky" className="py-20 sm:py-28">
-        <div className="text-center">
-          <span
-            className="text-xs font-bold uppercase tracking-widest"
-            style={{ color: `${PRODUCT_COLOR}cc` }}
-          >
-            How It Works
-          </span>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-theme sm:text-heading-1">
-            From drift to sync in four steps
-          </h2>
-        </div>
-
-        <div className="mx-auto mt-14 grid max-w-[880px] gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {STEPS.map((step, i) => (
-            <div
-              key={step.num}
-              className="animate-on-scroll opacity-0 translate-y-4 transition-all duration-500 [&.is-visible]:opacity-100 [&.is-visible]:translate-y-0 text-center"
-              style={{ transitionDelay: `${i * 120}ms` }}
-            >
-              <div
-                className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full text-sm font-bold text-white"
-                style={{ background: PRODUCT_COLOR }}
-              >
-                {step.num}
-              </div>
-              <h3 className="text-heading-3 text-theme">{step.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-theme-m">
-                {step.description}
-              </p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      {/* ── CTA ── */}
-      <section className="relative overflow-hidden bg-theme px-4 py-24 sm:py-32 transition-colors duration-300">
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background: `radial-gradient(ellipse 60% 50% at 50% 50%, ${BRAND_GREEN}18, transparent)`,
-          }}
-          aria-hidden="true"
-        />
-        <div
-          className="pointer-events-none absolute inset-0 bg-dot-grid"
-          style={{ backgroundSize: "40px 40px" }}
-          aria-hidden="true"
-        />
-
-        <div className="relative z-[2] mx-auto max-w-container text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/[0.08] px-4 py-1.5 text-sm font-semibold text-brand mb-6">
-            <Sparkles className="h-3.5 w-3.5" />
-            Start in under 5 minutes
-          </div>
-
-          <h2 className="mx-auto max-w-[700px] text-3xl font-semibold tracking-tight text-theme sm:text-heading-1 md:text-display-2">
-            Ready to eliminate{" "}
-            <span className="text-brand">design drift?</span>
-          </h2>
-
-          <p className="mx-auto mt-5 max-w-[520px] text-lg leading-relaxed text-theme-m">
-            Connect Figma and your component library. DRIFT maps every token and
-            component in minutes. No credit card required.
-          </p>
-
-          <div className="mx-auto mt-10 flex max-w-md flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button variant="primary" size="lg" className="gap-2" asChild>
-              <Link href={buildProductCheckoutUrl({ product: "drift", plan: "pro" })}>
-                Start 14-day trial
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-            <Button variant="secondary" size="lg" asChild>
-              <Link href="/products/drift">Back to DRIFT</Link>
-            </Button>
-          </div>
-
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm text-theme-m">
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-brand" />
-              Free tier available
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-brand" />
-              Figma &amp; Storybook integration
-            </span>
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-brand" />
-              SOC 2 compliant
-            </span>
-          </div>
-        </div>
-      </section>
-    </div>
+    <ProductDemoShell
+      productKey="drift"
+      productName="DRIFT"
+      color="#EC4899"
+      tagline="Design System Guardian"
+      headline={<>See the <span style={{ color: "#EC4899" }}>Design System Guardian</span> in action</>}
+      subhead="Detect design-code drift on every commit. Keep Figma and production permanently in sync."
+      tabs={TABS}
+      features={FEATURES}
+      steps={STEPS}
+    />
   );
 }

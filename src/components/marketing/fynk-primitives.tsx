@@ -52,7 +52,7 @@ export function FynkSubheading({ children, className }: { children: React.ReactN
 
 /** Shared scale for landing section titles — keep font size & line height in sync site-wide. */
 export const FYNK_SECTION_TITLE_CLASSES =
-  "font-heading text-balance font-bold leading-[0.92] tracking-[-0.03em] text-[1.875rem] sm:leading-[0.88] sm:tracking-[-0.035em] sm:text-[2.625rem] md:text-[3.5rem] lg:text-[4.125rem]";
+  "font-heading text-balance font-bold leading-[0.92] tracking-[-0.03em] text-[1.75rem] sm:leading-[0.88] sm:tracking-[-0.035em] sm:text-[2.25rem] md:text-[2.875rem] lg:text-[3.375rem]";
 
 /** Large display headline — Labil Grotesk, tight tracking */
 export function FynkDisplayHeading({
@@ -225,13 +225,18 @@ export function FynkInlineAvatarCluster({
   size?: "sm" | "md" | "lg";
 }) {
   const dim =
-    size === "lg" ? "h-12 w-12 sm:h-16 sm:w-16" : size === "sm" ? "h-7 w-7 sm:h-9 sm:w-9" : "h-10 w-10 sm:h-14 sm:w-14";
+    size === "lg"
+      ? "h-[0.88em] w-[0.88em] min-h-8 min-w-8 sm:min-h-12 sm:min-w-12 md:min-h-14 md:min-w-14 lg:min-h-16 lg:min-w-16"
+      : size === "sm"
+        ? "h-7 w-7 sm:h-9 sm:w-9"
+        : "h-10 w-10 sm:h-14 sm:w-14";
   const overlap = size === "lg" ? "-ml-4" : size === "sm" ? "-ml-2" : "-ml-3";
 
   return (
     <span
       className={cn(
-        "inline-flex shrink-0 -translate-y-[0.08em] items-center align-middle",
+        "inline-flex shrink-0 items-center align-middle",
+        "-translate-y-[0.06em]",
         className,
       )}
       aria-hidden
@@ -272,13 +277,14 @@ export function FynkInlineDocIcon({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        "inline-flex shrink-0 -translate-y-[0.08em] items-center justify-center align-middle",
+        "inline-flex shrink-0 items-center justify-center align-middle",
+        "-translate-y-[0.06em]",
         className,
       )}
       aria-hidden
     >
-      <span className="grid h-10 w-10 place-items-center rounded-xl bg-white shadow-md ring-1 ring-fynk-border sm:h-14 sm:w-14">
-        <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5 sm:h-7 sm:w-7">
+      <span className="grid h-[0.88em] w-[0.88em] min-h-8 min-w-8 place-items-center rounded-xl bg-white shadow-md ring-1 ring-fynk-border sm:min-h-12 sm:min-w-12 md:min-h-14 md:min-w-14 lg:min-h-16 lg:min-w-16">
+        <svg viewBox="0 0 24 24" fill="none" className="h-[0.42em] w-[0.42em] min-h-[1.125rem] min-w-[1.125rem] sm:min-h-6 sm:min-w-6 md:min-h-7 md:min-w-7 lg:min-h-8 lg:min-w-8">
           <rect x="5" y="3" width="14" height="18" rx="2" className="fill-fynk-surface-alt stroke-fynk-ink" strokeWidth="1.5" />
           <line x1="8" y1="8" x2="16" y2="8" className="stroke-fynk-ink" strokeWidth="1.5" strokeLinecap="round" />
           <line x1="8" y1="11.5" x2="16" y2="11.5" className="stroke-fynk-ink" strokeWidth="1.5" strokeLinecap="round" />
@@ -306,13 +312,13 @@ export function FynkEventPill({
     <Link
       href={href}
       className={cn(
-        "group inline-flex items-center gap-1.5 rounded-full border border-fynk-border bg-white/80 px-3 py-1.5 text-xs font-medium text-fynk-body shadow-sm backdrop-blur transition-all hover:border-fynk-border-hover hover:bg-white sm:gap-2 sm:px-4 sm:py-2 sm:text-sm md:text-[15px]",
+        "group inline-flex max-w-[min(100%,18.5rem)] items-center gap-1 rounded-full border border-fynk-border bg-white/80 px-2.5 py-1 text-[10px] font-bold leading-snug text-fynk-ink shadow-sm backdrop-blur transition-all hover:border-fynk-border-hover hover:bg-white sm:max-w-none sm:gap-1.5 sm:px-3 sm:py-1.5 sm:text-[11px] md:px-3.5 md:py-2 md:text-xs",
         className,
       )}
     >
-      <span className="grid h-5 w-5 place-items-center rounded-md bg-fynk-orange-light text-fynk-orange">
+      <span className="grid h-4 w-4 shrink-0 place-items-center rounded-md bg-fynk-orange-light text-fynk-orange sm:h-[18px] sm:w-[18px]">
         {icon === "calendar" ? (
-          <svg viewBox="0 0 24 24" fill="none" className="h-3 w-3">
+          <svg viewBox="0 0 24 24" fill="none" className="h-2.5 w-2.5 sm:h-3 sm:w-3">
             <rect x="4" y="5" width="16" height="15" rx="2" stroke="currentColor" strokeWidth="1.8" />
             <line x1="4" y1="9" x2="20" y2="9" stroke="currentColor" strokeWidth="1.8" />
             <line x1="8" y1="3" x2="8" y2="7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
@@ -324,8 +330,8 @@ export function FynkEventPill({
           </svg>
         )}
       </span>
-      <span>{children}</span>
-      <svg viewBox="0 0 24 24" fill="none" className="h-3 w-3 text-fynk-muted transition-transform group-hover:translate-x-0.5">
+      <span className="text-left">{children}</span>
+      <svg viewBox="0 0 24 24" fill="none" className="h-2.5 w-2.5 shrink-0 text-fynk-muted transition-transform group-hover:translate-x-0.5 sm:h-3 sm:w-3">
         <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </Link>

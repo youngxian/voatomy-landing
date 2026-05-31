@@ -33,7 +33,7 @@ export function VoatomyLogo({
       <VoatomyLogoMark className={cn("h-8 w-8", className)} />
       <span
         className={cn(
-          "font-heading text-[18px] font-semibold tracking-[-0.02em] text-[#121312]",
+          "font-heading text-[18px] font-semibold tracking-[-0.02em] text-fynk-ink",
           wordmarkClassName,
         )}
       >
@@ -49,7 +49,7 @@ export function VoatomyLogo({
   return (
     <Link
       href={href}
-      className="group inline-flex items-center gap-2 rounded-lg transition-opacity hover:opacity-85"
+      className="group inline-flex items-center gap-2 rounded-lg text-fynk-ink transition-opacity hover:opacity-85"
       aria-label="Voatomy home"
     >
       {content}

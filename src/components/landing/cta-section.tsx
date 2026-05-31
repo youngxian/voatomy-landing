@@ -343,7 +343,7 @@ export function CTASection() {
     <section className="bg-fynk-surface-alt px-4 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-28">
       <div className="mx-auto max-w-container">
         <div
-          className="relative overflow-hidden rounded-[1.25rem] px-4 pb-0 pt-10 text-center sm:rounded-[2rem] sm:px-8 sm:pt-16 md:rounded-[3rem] md:pt-20 lg:px-12 lg:pt-24"
+          className="relative overflow-hidden rounded-[1rem] px-4 pb-0 pt-8 text-center sm:rounded-[1.5rem] sm:px-6 sm:pt-12 md:rounded-[2rem] md:px-8 md:pt-16 lg:px-10 lg:pt-20"
           style={{
             background:
               "linear-gradient(145deg, #021a12 0%, #004838 28%, #047857 52%, #0d9488 72%, #F05A28 100%)",
@@ -365,7 +365,7 @@ export function CTASection() {
           </ScrollReveal>
 
           <ScrollReveal direction="up" delayMs={80} className="relative z-10">
-            <FynkDisplayHeading align="center" className="max-w-4xl !text-white">
+            <FynkDisplayHeading align="center" className="max-w-3xl !text-white">
               {titleLine1}
               {titleLine2 ? (
                 <>
@@ -382,7 +382,7 @@ export function CTASection() {
 
           <ScrollReveal direction="up" delayMs={160} className="relative z-10 mt-6 sm:mt-10 md:mt-12">
             <Link
-              href={isLoggedIn ? localizedPath(dashboardUrl) : localizedPath("/signup")}
+              href={isLoggedIn ? localizedPath(dashboardUrl) : localizedPath("/auth/signup")}
               className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-sm font-bold text-gray-900 shadow-[0_8px_32px_rgba(0,0,0,0.2)] transition hover:bg-gray-50 hover:shadow-[0_12px_40px_rgba(0,0,0,0.25)] sm:gap-2.5 sm:px-10 sm:py-4 sm:text-base md:px-12 md:text-lg"
             >
               {isLoggedIn ? nav.goToDashboard : t.startFreeTrial}
@@ -395,7 +395,7 @@ export function CTASection() {
 
           {/* Mockup stage — much taller & full-bleed within banner */}
           <ScrollReveal direction="up" delayMs={240} className="relative z-10 mx-auto mt-12 w-full sm:mt-16 lg:mt-20">
-            <div className="relative mx-auto h-[220px] w-full sm:h-[340px] md:h-[400px] lg:h-[520px] xl:h-[580px]">
+            <div className="relative mx-auto h-[200px] w-full sm:h-[300px] md:h-[360px] lg:h-[460px] xl:h-[520px]">
               <CtaDesktopMock />
               <CtaMobileMock />
             </div>

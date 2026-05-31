@@ -80,10 +80,10 @@ export function SignupStep() {
 
   return (
     <div className="text-center">
-      <h1 className="mb-3 text-[46px] font-semibold leading-[1.04] tracking-tight text-[#121312]">
+      <h1 className="mb-2 text-[clamp(26px,7.5vw,46px)] font-semibold leading-[1.08] tracking-tight text-[#121312] sm:mb-3">
         {t.title}
       </h1>
-      <p className="mx-auto mb-8 max-w-[330px] text-[15px] leading-relaxed text-[#121312]/55">
+      <p className="mx-auto mb-5 max-w-[330px] text-[14px] sm:mb-8 sm:text-[15px] leading-relaxed text-[#121312]/55">
         {t.subtitle}
       </p>
 
@@ -91,7 +91,7 @@ export function SignupStep() {
       <OrDivider />
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-3">
-        <div className="grid grid-cols-2 gap-2.5">
+        <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
           <Input
             id="signup_first_name"
             label={t.firstName}

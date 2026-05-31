@@ -142,6 +142,11 @@
     --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05);
   }
 
+  /* Landing page — narrower content column than site-wide header/footer */
+  .landing-page .max-w-container {
+    max-width: 1200px;
+  }
+
   /* Landing page — compact type scale (desktop ~12% smaller than marketing default) */
   .landing-page .text-body-xl {
     font-size: 19px;

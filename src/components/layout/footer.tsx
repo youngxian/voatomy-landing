@@ -64,7 +64,7 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative z-20 overflow-hidden bg-black text-white">
+    <footer className="relative z-20 bg-black text-white">
       <div className="mx-auto max-w-container px-4 sm:px-6 lg:px-8">
         {/* Link columns */}
         <div className="grid grid-cols-2 gap-x-6 gap-y-8 py-10 sm:grid-cols-3 sm:gap-x-10 sm:gap-y-10 sm:py-16 lg:grid-cols-5 lg:gap-x-12 lg:py-20">
@@ -101,17 +101,18 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Giant outlined wordmark — full bleed */}
+      {/* Giant outlined wordmark — full bleed, bottom cropped intentionally */}
       <div
-        className="pointer-events-none relative mt-2 w-full overflow-hidden sm:mt-6"
-        style={{ height: "clamp(140px, 32vw, 480px)" }}
+        className="pointer-events-none relative w-full overflow-hidden"
+        style={{ height: "clamp(200px, 34vw, 520px)" }}
         aria-hidden
       >
         <p
-          className="absolute left-1/2 w-[100vw] max-w-none -translate-x-1/2 text-center font-heading font-bold leading-[0.76] tracking-[-0.05em] text-transparent [WebkitTextStroke:1px_rgba(255,255,255,0.85)] sm:[WebkitTextStroke:2px_rgba(255,255,255,0.9)]"
+          className="absolute bottom-0 left-1/2 w-max -translate-x-1/2 translate-y-[18%] text-center font-heading font-bold leading-[0.82] tracking-[-0.05em]"
           style={{
-            bottom: "-4%",
-            fontSize: "clamp(7.5rem, 28vw, 44rem)",
+            fontSize: "clamp(10rem, 32vw, 44rem)",
+            color: "transparent",
+            WebkitTextStroke: "2px rgba(255, 255, 255, 0.9)",
           }}
         >
           voatomy

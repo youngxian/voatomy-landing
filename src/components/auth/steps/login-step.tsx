@@ -248,10 +248,10 @@ export function LoginStep() {
 
   return (
     <div className="text-center">
-      <h1 className="mb-3 text-[46px] font-semibold leading-[1.04] tracking-tight text-[#121312]">
+      <h1 className="mb-2 text-[clamp(26px,7.5vw,46px)] font-semibold leading-[1.08] tracking-tight text-[#121312] sm:mb-3">
         {phase === "otp" ? t.titleOtp : t.title}
       </h1>
-      <p className="mx-auto mb-8 max-w-[330px] text-[15px] leading-relaxed text-[#121312]/55">
+      <p className="mx-auto mb-5 max-w-[330px] text-[14px] sm:mb-8 sm:text-[15px] leading-relaxed text-[#121312]/55">
         {phase === "otp"
           ? t.subtitleOtp.replace("{email}", email)
           : t.subtitle}
@@ -599,7 +599,7 @@ export function LoginStep() {
             noValidate
             className="space-y-4 text-left"
           >
-            <div className="flex justify-center gap-2">
+            <div className="flex justify-center gap-1.5 sm:gap-2">
               {Array.from({ length: 6 }).map((_, i) => (
                 <input
                   key={i}
@@ -616,7 +616,7 @@ export function LoginStep() {
                     const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
                     handleOtpInput(0, pasted);
                   }}
-                  className="h-14 w-12 rounded-lg border border-[#121312]/15 bg-white text-center text-xl font-bold text-[#121312] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:border-brand"
+                  className="h-11 w-10 rounded-lg border border-[#121312]/15 bg-white text-center text-lg font-bold text-[#121312] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:border-brand sm:h-14 sm:w-12 sm:text-xl"
                 />
               ))}
             </div>

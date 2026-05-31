@@ -390,7 +390,7 @@ export function FeatureBucketsSection() {
       <div ref={ref} className="relative z-[1] mx-auto max-w-container">
         {/* Atlassian-style: left-aligned headline + horizontal insight cards */}
         <FynkReveal visible={isVisible}>
-          <div className="max-w-5xl">
+          <div className="max-w-3xl">
             <FynkDisplayHeading>
               Know what&apos;s in every sprint —
               <br />
@@ -398,7 +398,7 @@ export function FeatureBucketsSection() {
                 before it costs you a release.
               </FynkHeadingUnderlineAccent>
             </FynkDisplayHeading>
-            <p className="mt-5 max-w-4xl text-lg font-normal leading-relaxed text-fynk-body sm:text-xl">
+            <p className="mt-4 max-w-2xl text-sm font-normal leading-relaxed text-fynk-body sm:mt-5 sm:text-base md:text-lg">
               Your backlog, repos, and team capacity already tell the story. Voatomy reads them
               together and surfaces what matters — so you fix problems on Monday, not the night
               before launch.
@@ -410,7 +410,7 @@ export function FeatureBucketsSection() {
           </div>
         </FynkReveal>
 
-        <div className="mt-24 text-center">
+        <div className="mt-16 text-center sm:mt-20">
           <FynkDisplayHeading align="center">
             Less busywork.{" "}
             <FynkHeadingUnderlineAccent>More shipping.</FynkHeadingUnderlineAccent>
@@ -421,7 +421,7 @@ export function FeatureBucketsSection() {
           </FynkSubheading>
         </div>
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:gap-6">
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 sm:gap-5 lg:gap-5">
           {FEATURE_BUCKETS.map((bucket, i) => {
             const { label, accent, light, tag, FeatureIcon } = BUCKET_CONFIG[i];
             const IconSvg = BUCKET_ICON_SET[i];
@@ -434,7 +434,7 @@ export function FeatureBucketsSection() {
                 delay={150 + i * 80}
                 className="group flex h-full flex-col overflow-hidden p-0 hover:shadow-xl"
               >
-                <div className="p-6 sm:p-7">
+                <div className="p-4 sm:p-5 md:p-6">
                   <div className="flex items-start justify-between gap-3">
                     <ColoredIconPill
                       label={label}
@@ -469,10 +469,10 @@ export function FeatureBucketsSection() {
                       />
                     </ColoredIconBadge>
                     <div>
-                      <h3 className="font-heading text-[18px] font-bold leading-snug text-fynk-ink sm:text-xl">
+                      <h3 className="font-heading text-base font-bold leading-snug text-fynk-ink sm:text-lg">
                         {bucket.title}
                       </h3>
-                      <p className="mt-2 text-base leading-relaxed text-fynk-muted sm:text-body-lg">
+                      <p className="mt-1.5 text-sm leading-relaxed text-fynk-muted sm:mt-2 sm:text-base">
                         {bucket.desc}
                       </p>
                     </div>

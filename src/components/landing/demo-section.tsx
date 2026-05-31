@@ -1,6 +1,7 @@
 "use client";
 
 import { Play, Monitor, CheckCircle2, BarChart3, Zap, ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -109,13 +110,13 @@ export function DemoSection() {
                   sizes="(max-width: 1024px) 100vw, 60vw"
                 />
                 <div className="absolute inset-0 bg-charcoal/20" />
-                <button
-                  type="button"
+                <Link
+                  href="/demo"
                   className="absolute z-10 grid h-16 w-16 place-items-center rounded-full bg-accent-lime shadow-xl shadow-accent-lime/25 transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:shadow-accent-lime/35 sm:h-20 sm:w-20"
-                  aria-label="Play demo video"
+                  aria-label="Explore interactive demo"
                 >
                   <Play className="ml-1 h-7 w-7 fill-teal text-teal sm:h-8 sm:w-8" />
-                </button>
+                </Link>
               </div>
 
               <div className="flex border-t border-charcoal/10 bg-white">
