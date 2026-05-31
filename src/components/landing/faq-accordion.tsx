@@ -13,7 +13,7 @@ export function FAQAccordion({
   const [openIndex, setOpenIndex] = React.useState<number | null>(null);
 
   return (
-    <div className="mt-10 space-y-2">
+    <div className="mt-6 space-y-2 sm:mt-10">
       {items.map((item, i) => {
         const isOpen = openIndex === i;
         return (
@@ -28,7 +28,7 @@ export function FAQAccordion({
           >
             <button
               type="button"
-              className="flex w-full items-start justify-between gap-4 px-5 py-4 text-left"
+              className="flex w-full items-start justify-between gap-3 px-4 py-3.5 text-left sm:gap-4 sm:px-5 sm:py-4"
               onClick={() => {
                 setOpenIndex(isOpen ? null : i);
                 if (!isOpen)
@@ -41,7 +41,7 @@ export function FAQAccordion({
             >
               <span
                 className={cn(
-                  "text-base font-medium transition-colors",
+                  "text-sm font-medium transition-colors sm:text-base",
                   isOpen ? "text-teal" : "text-charcoal",
                 )}
               >
@@ -55,8 +55,8 @@ export function FAQAccordion({
               />
             </button>
             {isOpen && (
-              <div className="border-t border-charcoal/10 px-5 pb-4 pt-3">
-                <p className="text-base leading-relaxed text-charcoal/60">
+              <div className="border-t border-charcoal/10 px-4 pb-3.5 pt-2.5 sm:px-5 sm:pb-4 sm:pt-3">
+                <p className="text-sm leading-relaxed text-charcoal/60 sm:text-base">
                   {item.answer}
                 </p>
               </div>

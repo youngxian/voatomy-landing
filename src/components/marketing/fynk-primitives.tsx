@@ -15,7 +15,7 @@ export function FynkEyebrow({
   className?: string;
 }) {
   return (
-    <p className={cn("text-sm font-bold uppercase tracking-[0.14em] text-fynk-muted", className)}>
+    <p className={cn("text-xs font-bold uppercase tracking-[0.12em] text-fynk-muted sm:text-sm sm:tracking-[0.14em]", className)}>
       {children}
     </p>
   );
@@ -46,13 +46,13 @@ export function FynkHeading({
 
 export function FynkSubheading({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <p className={cn("mx-auto max-w-3xl text-body-lg text-fynk-muted lg:text-body-xl", className)}>{children}</p>
+    <p className={cn("mx-auto max-w-3xl text-body-base text-fynk-muted sm:text-body-lg lg:text-body-xl", className)}>{children}</p>
   );
 }
 
 /** Shared scale for landing section titles — keep font size & line height in sync site-wide. */
 export const FYNK_SECTION_TITLE_CLASSES =
-  "font-heading text-balance font-bold leading-[0.88] tracking-[-0.035em] text-[2.625rem] sm:text-[3.5rem] lg:text-[4.125rem]";
+  "font-heading text-balance font-bold leading-[0.92] tracking-[-0.03em] text-[1.875rem] sm:leading-[0.88] sm:tracking-[-0.035em] sm:text-[2.625rem] md:text-[3.5rem] lg:text-[4.125rem]";
 
 /** Large display headline — Labil Grotesk, tight tracking */
 export function FynkDisplayHeading({
@@ -306,7 +306,7 @@ export function FynkEventPill({
     <Link
       href={href}
       className={cn(
-        "group inline-flex items-center gap-2 rounded-full border border-fynk-border bg-white/80 px-4 py-2 text-sm font-medium text-fynk-body shadow-sm backdrop-blur transition-all hover:border-fynk-border-hover hover:bg-white sm:text-[15px]",
+        "group inline-flex items-center gap-1.5 rounded-full border border-fynk-border bg-white/80 px-3 py-1.5 text-xs font-medium text-fynk-body shadow-sm backdrop-blur transition-all hover:border-fynk-border-hover hover:bg-white sm:gap-2 sm:px-4 sm:py-2 sm:text-sm md:text-[15px]",
         className,
       )}
     >
@@ -610,7 +610,7 @@ export function FynkButtonPrimary({
     <Link
       href={href}
       className={cn(
-        "inline-flex h-12 items-center justify-center gap-2 rounded-full px-8 text-[15px] font-medium transition-all active:scale-[0.98] sm:h-[52px] sm:px-9 sm:text-base",
+        "inline-flex h-10 items-center justify-center gap-2 rounded-full px-6 text-sm font-medium transition-all active:scale-[0.98] sm:h-12 sm:px-8 sm:text-[15px] md:h-[52px] md:px-9 md:text-base",
         variant === "ink"
           ? "bg-fynk-ink text-white shadow-lg shadow-fynk-ink/15 hover:bg-fynk-ink/90 hover:shadow-fynk-ink/20"
           : "bg-fynk-orange text-white shadow-lg shadow-fynk-orange/20 hover:bg-fynk-orange-hover hover:shadow-fynk-orange/30",
@@ -634,7 +634,7 @@ export function FynkButtonSecondary({
     <Link
       href={href}
       className={cn(
-        "inline-flex h-12 items-center justify-center gap-2 rounded-full border border-fynk-border bg-white px-8 text-[15px] font-medium text-fynk-ink shadow-sm transition-all hover:border-fynk-border-hover hover:bg-fynk-surface-alt active:scale-[0.98] sm:h-[52px] sm:px-9 sm:text-base",
+        "inline-flex h-10 items-center justify-center gap-2 rounded-full border border-fynk-border bg-white px-6 text-sm font-medium text-fynk-ink shadow-sm transition-all hover:border-fynk-border-hover hover:bg-fynk-surface-alt active:scale-[0.98] sm:h-12 sm:px-8 sm:text-[15px] md:h-[52px] md:px-9 md:text-base",
         className,
       )}
       {...props}
@@ -657,7 +657,7 @@ export function FynkRatingBadge({
   return (
     <div
       className={cn(
-        "flex items-center gap-2 rounded-full border border-fynk-border bg-white px-4 py-2 shadow-sm",
+        "flex items-center gap-1.5 rounded-full border border-fynk-border bg-white px-3 py-1.5 shadow-sm sm:gap-2 sm:px-4 sm:py-2",
         className,
       )}
     >
@@ -687,7 +687,7 @@ export function FynkCard({
   return (
     <div
       className={cn(
-        "rounded-2xl border border-fynk-border bg-white p-6 transition-all duration-500 hover:border-fynk-border-hover hover:shadow-md",
+        "rounded-2xl border border-fynk-border bg-white p-4 transition-all duration-500 hover:border-fynk-border-hover hover:shadow-md sm:p-6",
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
         className,
       )}
@@ -815,7 +815,7 @@ export function FynkStepPill({
       type={onClick ? "button" : undefined}
       onClick={onClick}
       className={cn(
-        "rounded-full border px-4 py-2 text-sm font-medium transition-all",
+        "rounded-full border px-3 py-1.5 text-xs font-medium transition-all sm:px-4 sm:py-2 sm:text-sm",
         active
           ? "border-fynk-orange/30 bg-fynk-orange-light text-fynk-orange"
           : "border-fynk-border bg-white text-fynk-muted hover:border-fynk-border-hover",

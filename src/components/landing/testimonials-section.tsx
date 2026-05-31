@@ -31,7 +31,7 @@ export function TestimonialsSection() {
   const prev = () => setActive((i) => (i - 1 + featured.length) % featured.length);
 
   return (
-    <section className="light-surface-typography relative overflow-hidden bg-fynk-surface-alt px-4 py-20 sm:py-28">
+    <section className="light-surface-typography relative overflow-hidden bg-fynk-surface-alt px-4 py-12 sm:py-20 lg:py-28">
       <div ref={ref} className="relative mx-auto max-w-container">
         <FynkReveal visible={isVisible} className="text-center">
           <FynkDisplayHeading align="center">
@@ -39,14 +39,14 @@ export function TestimonialsSection() {
             <br />
             <FynkHeadingUnderlineAccent variant="rose">{t.resultsTitleAccent}</FynkHeadingUnderlineAccent>
           </FynkDisplayHeading>
-          <p className="mx-auto mt-4 max-w-2xl text-body-lg text-fynk-muted">{t.resultsSubtitle}</p>
+          <p className="mx-auto mt-3 max-w-2xl text-sm text-fynk-muted sm:mt-4 sm:text-body-lg">{t.resultsSubtitle}</p>
         </FynkReveal>
 
         {/* Browse customer stories pill button */}
-        <div className="mt-7 flex justify-center">
+        <div className="mt-5 flex justify-center sm:mt-7">
           <Link
             href={localizedPath("/customers")}
-            className="group inline-flex items-center gap-2 rounded-full border border-fynk-border bg-white px-5 py-2.5 text-sm font-semibold text-fynk-ink shadow-sm transition-all hover:border-fynk-border-hover hover:bg-fynk-surface-alt"
+            className="group inline-flex items-center gap-2 rounded-full border border-fynk-border bg-white px-4 py-2 text-xs font-semibold text-fynk-ink shadow-sm transition-all hover:border-fynk-border-hover hover:bg-fynk-surface-alt sm:px-5 sm:py-2.5 sm:text-sm"
           >
             Browse all customer stories
             <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -54,7 +54,7 @@ export function TestimonialsSection() {
         </div>
 
         {/* Stats row with soft gradient blur behind */}
-        <div className="relative mt-14">
+        <div className="relative mt-8 sm:mt-14">
           <div
             aria-hidden
             className="pointer-events-none absolute left-1/2 top-1/2 h-[300px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
@@ -63,11 +63,11 @@ export function TestimonialsSection() {
                 "radial-gradient(closest-side, rgba(240,90,40,0.25), transparent), radial-gradient(closest-side at 80% 50%, rgba(59,130,246,0.22), transparent)",
             }}
           />
-          <dl className="relative grid grid-cols-3 gap-6">
+          <dl className="relative grid grid-cols-3 gap-3 sm:gap-6">
             {t.stats.map((s) => (
               <div key={s.label} className="text-center">
                 <dt className="sr-only">{s.label}</dt>
-                <dd className="text-[clamp(2.125rem,4.5vw,3.25rem)] font-semibold leading-none tracking-[-0.04em] text-fynk-ink">
+                <dd className="text-[clamp(1.5rem,5vw,3.25rem)] font-semibold leading-none tracking-[-0.04em] text-fynk-ink">
                   {s.value}
                 </dd>
                 <p className="mt-2 text-xs text-fynk-muted sm:text-sm">{s.label}</p>
@@ -77,7 +77,7 @@ export function TestimonialsSection() {
         </div>
 
         {/* Stacked testimonial card — front + 2 ghost cards behind */}
-        <div className="relative mx-auto mt-12 max-w-3xl sm:mt-16">
+        <div className="relative mx-auto mt-8 max-w-3xl sm:mt-12 md:mt-16">
           {/* Ghost stack underneath */}
           <div
             aria-hidden
@@ -92,42 +92,42 @@ export function TestimonialsSection() {
           <figure
             key={current.author}
             className={cn(
-              "relative rounded-3xl border border-fynk-border bg-white p-8 shadow-md transition-all duration-500 sm:p-12",
+              "relative rounded-2xl border border-fynk-border bg-white p-5 shadow-md transition-all duration-500 sm:rounded-3xl sm:p-8 md:p-12",
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6",
             )}
           >
             <span
               aria-hidden
-              className="absolute left-8 top-8 select-none text-7xl font-serif leading-none text-rose-400"
+              className="absolute left-4 top-4 select-none text-5xl font-serif leading-none text-rose-400 sm:left-8 sm:top-8 sm:text-7xl"
               style={{ fontFamily: "Georgia, serif" }}
             >
               &ldquo;
             </span>
-            <blockquote className="relative pl-14 text-lg leading-relaxed text-fynk-ink sm:text-xl sm:leading-snug">
+            <blockquote className="relative pl-10 text-sm leading-relaxed text-fynk-ink sm:pl-14 sm:text-lg md:text-xl md:leading-snug">
               {current.text}
             </blockquote>
-            <figcaption className="mt-10 flex items-center gap-4">
+            <figcaption className="mt-6 flex items-center gap-3 sm:mt-10 sm:gap-4">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={avatarUrl(current.author)}
                 alt=""
                 width={48}
                 height={48}
-                className="h-12 w-12 shrink-0 rounded-full bg-fynk-surface-alt ring-2 ring-white"
+                className="h-10 w-10 shrink-0 rounded-full bg-fynk-surface-alt ring-2 ring-white sm:h-12 sm:w-12"
                 loading="lazy"
               />
               <div>
                 <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-fynk-ink">
                   {current.author}
                 </p>
-                <p className="text-base text-fynk-muted">{current.role}</p>
+                <p className="text-sm text-fynk-muted sm:text-base">{current.role}</p>
               </div>
             </figcaption>
           </figure>
         </div>
 
         {/* Carousel controls */}
-        <div className="mx-auto mt-10 flex max-w-3xl items-center justify-center gap-2">
+        <div className="mx-auto mt-6 flex max-w-3xl items-center justify-center gap-2 sm:mt-10">
           <button
             type="button"
             onClick={prev}
@@ -164,7 +164,7 @@ export function TestimonialsSection() {
         </div>
 
         {/* Rating chips at bottom */}
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:mt-10 sm:gap-4">
           <FynkRatingBadge score={t.g2Rating} label={t.g2Label} />
           <FynkRatingBadge score={t.betaRating} label={t.betaLabel} />
         </div>

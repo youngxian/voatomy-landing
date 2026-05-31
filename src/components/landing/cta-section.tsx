@@ -340,10 +340,10 @@ export function CTASection() {
     : [t.title, ""];
 
   return (
-    <section className="bg-fynk-surface-alt px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+    <section className="bg-fynk-surface-alt px-4 py-12 sm:px-6 sm:py-20 lg:px-8 lg:py-28">
       <div className="mx-auto max-w-container">
         <div
-          className="relative overflow-hidden rounded-[2rem] px-4 pb-0 pt-16 text-center sm:rounded-[3rem] sm:px-8 sm:pt-20 lg:px-12 lg:pt-24"
+          className="relative overflow-hidden rounded-[1.25rem] px-4 pb-0 pt-10 text-center sm:rounded-[2rem] sm:px-8 sm:pt-16 md:rounded-[3rem] md:pt-20 lg:px-12 lg:pt-24"
           style={{
             background:
               "linear-gradient(145deg, #021a12 0%, #004838 28%, #047857 52%, #0d9488 72%, #F05A28 100%)",
@@ -359,8 +359,8 @@ export function CTASection() {
           />
 
           <ScrollReveal direction="up" className="relative z-10">
-            <div className="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-xl sm:mb-10 sm:h-20 sm:w-20 sm:rounded-3xl">
-              <VoatomyLogoMark className="h-9 w-9 sm:h-11 sm:w-11" />
+            <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-white shadow-xl sm:mb-8 sm:h-16 sm:w-16 sm:rounded-2xl md:mb-10 md:h-20 md:w-20 md:rounded-3xl">
+              <VoatomyLogoMark className="h-7 w-7 sm:h-9 sm:w-9 md:h-11 md:w-11" />
             </div>
           </ScrollReveal>
 
@@ -375,15 +375,15 @@ export function CTASection() {
               ) : null}
             </FynkDisplayHeading>
 
-            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/85 sm:mt-8 sm:text-lg lg:text-xl">
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-white/85 sm:mt-6 sm:text-base md:mt-8 md:text-lg lg:text-xl">
               {t.subtitle}
             </p>
           </ScrollReveal>
 
-          <ScrollReveal direction="up" delayMs={160} className="relative z-10 mt-10 sm:mt-12">
+          <ScrollReveal direction="up" delayMs={160} className="relative z-10 mt-6 sm:mt-10 md:mt-12">
             <Link
               href={isLoggedIn ? localizedPath(dashboardUrl) : localizedPath("/signup")}
-              className="inline-flex items-center gap-2.5 rounded-full bg-white px-10 py-4 text-base font-bold text-gray-900 shadow-[0_8px_32px_rgba(0,0,0,0.2)] transition hover:bg-gray-50 hover:shadow-[0_12px_40px_rgba(0,0,0,0.25)] sm:px-12 sm:py-4.5 sm:text-lg"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-7 py-3 text-sm font-bold text-gray-900 shadow-[0_8px_32px_rgba(0,0,0,0.2)] transition hover:bg-gray-50 hover:shadow-[0_12px_40px_rgba(0,0,0,0.25)] sm:gap-2.5 sm:px-10 sm:py-4 sm:text-base md:px-12 md:text-lg"
             >
               {isLoggedIn ? nav.goToDashboard : t.startFreeTrial}
               {!isLoggedIn && (
@@ -395,18 +395,18 @@ export function CTASection() {
 
           {/* Mockup stage — much taller & full-bleed within banner */}
           <ScrollReveal direction="up" delayMs={240} className="relative z-10 mx-auto mt-12 w-full sm:mt-16 lg:mt-20">
-            <div className="relative mx-auto h-[300px] w-full sm:h-[400px] lg:h-[520px] xl:h-[580px]">
+            <div className="relative mx-auto h-[220px] w-full sm:h-[340px] md:h-[400px] lg:h-[520px] xl:h-[580px]">
               <CtaDesktopMock />
               <CtaMobileMock />
             </div>
           </ScrollReveal>
         </div>
 
-        <div className="mt-12 grid gap-8 sm:grid-cols-3 lg:mt-14">
+        <div className="mt-8 grid gap-6 sm:grid-cols-3 sm:gap-8 lg:mt-14">
           {t.trust.map((item, i) => (
             <ScrollReveal key={item.title} direction="up" delayMs={i * 80}>
-              <p className="text-lg font-semibold text-fynk-ink">{item.title}</p>
-              <p className="mt-1.5 text-base text-fynk-muted">{item.desc}</p>
+              <p className="text-base font-semibold text-fynk-ink sm:text-lg">{item.title}</p>
+              <p className="mt-1 text-sm text-fynk-muted sm:mt-1.5 sm:text-base">{item.desc}</p>
             </ScrollReveal>
           ))}
         </div>

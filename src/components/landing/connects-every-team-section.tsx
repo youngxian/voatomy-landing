@@ -46,7 +46,7 @@ export function ConnectsEveryTeamSection() {
   const items = tab === "teams" ? SOLUTIONS_TEAMS : INDUSTRIES;
 
   return (
-    <section className="light-surface-typography relative overflow-hidden bg-fynk-surface-alt px-4 py-16 sm:py-24">
+    <section className="light-surface-typography relative overflow-hidden bg-fynk-surface-alt px-4 py-12 sm:py-16 lg:py-24">
       <div ref={ref} className="relative z-[1] mx-auto max-w-container">
         <FynkReveal visible={isVisible} direction="right" className="text-center">
           <FynkDisplayHeading align="center">

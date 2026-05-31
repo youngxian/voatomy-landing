@@ -384,7 +384,7 @@ export function FeatureBucketsSection() {
   const { ref, isVisible } = useScrollAnimation();
 
   return (
-    <section className="light-surface-typography relative overflow-hidden bg-fynk-surface-alt px-4 py-20 sm:py-28">
+    <section className="light-surface-typography relative overflow-hidden bg-fynk-surface-alt px-4 py-12 sm:py-20 lg:py-28">
       <FynkGradientBackdrop intensity="soft" />
 
       <div ref={ref} className="relative z-[1] mx-auto max-w-container">

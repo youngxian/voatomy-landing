@@ -21,7 +21,7 @@ export function TrustSection() {
   const t = useDictionary().hero;
 
   return (
-    <section className="bg-white px-4 py-16 sm:py-20">
+    <section className="bg-white px-4 py-10 sm:py-16 lg:py-20">
       <div
         ref={ref}
         className={cn(
@@ -29,7 +29,7 @@ export function TrustSection() {
           isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
         )}
       >
-        <p className="mb-10 text-center text-body-base text-fynk-body sm:text-body-lg">
+        <p className="mb-6 text-center text-sm text-fynk-body sm:mb-10 sm:text-body-base md:text-body-lg">
           {t.socialProof}
         </p>
 

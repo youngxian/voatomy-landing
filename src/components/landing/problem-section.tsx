@@ -30,7 +30,7 @@ export function ProblemSection() {
   const step = t.steps[activeStep];
 
   return (
-    <section className="light-surface-typography relative overflow-hidden bg-fynk-surface-alt px-4 py-20 sm:py-28">
+    <section className="light-surface-typography relative overflow-hidden bg-fynk-surface-alt px-4 py-12 sm:py-20 lg:py-28">
       <FynkGradientBackdrop intensity="soft" />
 
       <div ref={ref} className="relative z-[1] mx-auto max-w-container">
@@ -43,10 +43,10 @@ export function ProblemSection() {
             <br />
             <FynkHeadingUnderlineAccent variant="amber">{t.titleAccent}</FynkHeadingUnderlineAccent>
           </FynkDisplayHeading>
-          <p className="mt-5 text-lg leading-relaxed text-fynk-muted">{t.intro}</p>
+          <p className="mt-4 text-sm leading-relaxed text-fynk-muted sm:mt-5 sm:text-base md:text-lg">{t.intro}</p>
         </FynkReveal>
 
-        <div className="mt-12 flex flex-wrap justify-center gap-2">
+        <div className="mt-8 flex flex-wrap justify-center gap-2 sm:mt-12">
           {t.steps.map((s, i) => (
             <FynkStepPill
               key={s.step}
@@ -58,7 +58,7 @@ export function ProblemSection() {
           ))}
         </div>
 
-        <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-20">
+        <div className="mt-10 grid gap-8 sm:mt-14 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-20">
         <FynkReveal visible={isVisible} direction="left" className="space-y-7">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-fynk-border bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-fynk-orange shadow-sm">
@@ -67,10 +67,10 @@ export function ProblemSection() {
                 </span>
                 {step.step}
               </div>
-              <h3 className="mt-5 text-[clamp(1.65rem,2.5vw,2.25rem)] font-bold leading-tight tracking-[-0.025em] text-fynk-ink">
+              <h3 className="mt-4 text-xl font-bold leading-tight tracking-[-0.025em] text-fynk-ink sm:mt-5 sm:text-[clamp(1.65rem,2.5vw,2.25rem)]">
                 {step.subtitle}
               </h3>
-              <p className="mt-4 text-body-lg leading-relaxed text-fynk-muted">
+              <p className="mt-3 text-sm leading-relaxed text-fynk-muted sm:mt-4 sm:text-body-lg">
                 {step.desc}
               </p>
             </div>

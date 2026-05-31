@@ -122,7 +122,7 @@ export function BenefitsSection() {
   const t = useDictionary().why;
 
   return (
-    <section className="light-surface-typography relative overflow-hidden bg-white px-4 py-20 sm:py-28">
+    <section className="light-surface-typography relative overflow-hidden bg-white px-4 py-12 sm:py-20 lg:py-28">
       <FynkGradientBackdrop intensity="soft" />
 
       <div ref={ref} className="relative z-[1] mx-auto max-w-container">
@@ -132,10 +132,10 @@ export function BenefitsSection() {
             <br />
             <FynkHeadingUnderlineAccent>{t.titleLine2}</FynkHeadingUnderlineAccent>
           </FynkDisplayHeading>
-          <FynkSubheading className="mt-5">{t.subtitle}</FynkSubheading>
+          <FynkSubheading className="mt-4 sm:mt-5">{t.subtitle}</FynkSubheading>
         </FynkReveal>
 
-        <ul className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+        <ul className="mt-10 grid gap-4 sm:mt-16 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6">
           {t.items.map((item, i) => (
             <li
               key={item.title}
@@ -145,15 +145,15 @@ export function BenefitsSection() {
               )}
               style={{ transitionDelay: `${i * 80}ms` }}
             >
-              <article className="group flex h-full flex-col rounded-3xl border border-fynk-border bg-fynk-surface-alt p-5 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-lg sm:p-6">
+              <article className="group flex h-full flex-col rounded-2xl border border-fynk-border bg-fynk-surface-alt p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white hover:shadow-lg sm:rounded-3xl sm:p-6">
                 {/* Visual mock area */}
-                <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-fynk-border bg-white">
+                <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-fynk-border bg-white sm:rounded-2xl">
                   <BenefitVisual index={i} />
                 </div>
 
-                <div className="mt-6 px-1 pb-1">
-                  <h3 className="text-lg font-bold text-fynk-ink">{item.title}</h3>
-                  <p className="mt-2.5 text-base leading-relaxed text-fynk-muted">{item.desc}</p>
+                <div className="mt-4 px-0.5 pb-0.5 sm:mt-6 sm:px-1 sm:pb-1">
+                  <h3 className="text-base font-bold text-fynk-ink sm:text-lg">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-fynk-muted sm:mt-2.5 sm:text-base">{item.desc}</p>
                 </div>
               </article>
             </li>

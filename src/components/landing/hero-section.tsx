@@ -67,7 +67,7 @@ export function HeroSection() {
     <section
       id="hero"
       ref={sectionRef as React.RefObject<HTMLElement>}
-      className="relative overflow-hidden bg-white px-4 pb-12 pt-20 sm:pb-20 sm:pt-24 lg:pt-28"
+      className="relative overflow-hidden bg-white px-4 pb-8 pt-14 sm:pb-20 sm:pt-24 lg:pt-28"
     >
       <FynkRibbonBackdrop className="animate-fynk-ambient" />
 
@@ -87,25 +87,25 @@ export function HeroSection() {
             </FynkEventPill>
           </HeroReveal>
 
-          <HeroReveal loaded={loaded} delayMs={80} className="mt-8 sm:mt-10">
-            <h1 className="font-heading text-balance text-[2.875rem] font-bold leading-[1.04] tracking-[-0.045em] text-fynk-ink sm:text-[3.875rem] md:text-[4.5rem] md:leading-[1.02] lg:text-[5.125rem] lg:leading-[0.98]">
+          <HeroReveal loaded={loaded} delayMs={80} className="mt-5 sm:mt-10">
+            <h1 className="font-heading text-balance text-[2rem] font-bold leading-[1.08] tracking-[-0.04em] text-fynk-ink min-[480px]:text-[2.25rem] sm:text-[3.875rem] md:text-[4.5rem] md:leading-[1.02] lg:text-[5.125rem] lg:leading-[0.98]">
               <span className="inline">
                 {t.headlinePrefix}{" "}
-                <FynkInlineAvatarCluster seeds={AVATAR_SEEDS} size="lg" /> {t.headlineBridge}{" "}
-                <FynkInlineDocIcon className="[&_span]:h-12 [&_span]:w-12 sm:[&_span]:h-16 sm:[&_span]:w-16 [&_svg]:h-6 [&_svg]:w-6 sm:[&_svg]:h-8 sm:[&_svg]:w-8" /> {t.headlineSuffix.replace(/\.$/, "")}
+                <FynkInlineAvatarCluster seeds={AVATAR_SEEDS} size="lg" className="[&_span]:h-8 [&_span]:w-8 sm:[&_span]:h-12 sm:[&_span]:w-12 md:[&_span]:h-16 md:[&_span]:w-16" /> {t.headlineBridge}{" "}
+                <FynkInlineDocIcon className="[&_span]:h-8 [&_span]:w-8 sm:[&_span]:h-12 sm:[&_span]:w-12 md:[&_span]:h-16 md:[&_span]:w-16 [&_svg]:h-4 [&_svg]:w-4 sm:[&_svg]:h-6 sm:[&_svg]:w-6 md:[&_svg]:h-8 md:[&_svg]:w-8" /> {t.headlineSuffix.replace(/\.$/, "")}
                 <span className="text-fynk-ink">.</span>
               </span>
             </h1>
           </HeroReveal>
 
-          <HeroReveal loaded={loaded} delayMs={160} className="mt-7 sm:mt-8">
-            <p className="mx-auto max-w-[56ch] text-body-base text-fynk-muted sm:text-body-lg lg:text-[1.3125rem] lg:leading-[1.55]">
+          <HeroReveal loaded={loaded} delayMs={160} className="mt-5 sm:mt-8">
+            <p className="mx-auto max-w-[56ch] text-sm leading-relaxed text-fynk-muted sm:text-body-base md:text-body-lg lg:text-[1.3125rem] lg:leading-[1.55]">
               {t.subheadline}
             </p>
           </HeroReveal>
 
-          <HeroReveal loaded={loaded} delayMs={240} className="mt-9 sm:mt-10">
-            <div className="flex flex-wrap items-center justify-center gap-3">
+          <HeroReveal loaded={loaded} delayMs={240} className="mt-6 sm:mt-10">
+            <div className="flex flex-col items-stretch justify-center gap-2.5 min-[480px]:flex-row min-[480px]:flex-wrap min-[480px]:items-center min-[480px]:gap-3">
               <FynkButtonPrimary
                 href={isLoggedIn ? dashboardUrl : localizedPath("/auth/signup")}
                 variant="ink"
@@ -120,8 +120,8 @@ export function HeroSection() {
             </div>
           </HeroReveal>
 
-          <HeroReveal loaded={loaded} delayMs={320} className="mt-6">
-            <div className="flex flex-wrap items-center justify-center gap-3">
+          <HeroReveal loaded={loaded} delayMs={320} className="mt-4 sm:mt-6">
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
               <FynkRatingBadge score={t.ratingG2} label={t.ratingG2Label} />
               <FynkRatingBadge score={t.ratingBeta} label={t.ratingBetaLabel} />
             </div>
@@ -131,12 +131,12 @@ export function HeroSection() {
         {/* fynk video — wide card overlapping ribbon, thin ink border */}
         <div
           className={cn(
-            "relative mx-auto mt-12 w-full sm:mt-14 lg:mt-16",
+            "relative mx-auto mt-8 w-full sm:mt-14 lg:mt-16",
             loaded ? "animate-hero-scale-in" : "opacity-0",
           )}
           style={{ animationDelay: "400ms" }}
         >
-          <div className="group relative mx-auto w-full overflow-hidden rounded-[32px] border border-fynk-ink/20 bg-white shadow-[0_12px_48px_rgba(17,24,39,0.1)] transition-shadow duration-500 hover:shadow-[0_20px_60px_rgba(17,24,39,0.14)] sm:rounded-[40px]">
+          <div className="group relative mx-auto w-full overflow-hidden rounded-2xl border border-fynk-ink/20 bg-white shadow-[0_8px_32px_rgba(17,24,39,0.08)] transition-shadow duration-500 hover:shadow-[0_20px_60px_rgba(17,24,39,0.14)] sm:rounded-[32px] md:rounded-[40px]">
             <div className="relative aspect-[16/9] w-full bg-gradient-to-b from-white via-fynk-surface-alt/50 to-white">
               <div
                 className="absolute inset-0 opacity-40 transition-opacity duration-700 group-hover:opacity-55"
@@ -147,14 +147,14 @@ export function HeroSection() {
               />
               <Link
                 href={localizedPath("/demo")}
-                className="group/play absolute left-1/2 top-1/2 flex h-[5.5rem] w-[5.5rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#E8EAED] shadow-inner transition-all duration-300 hover:scale-110 hover:bg-[#dfe2e6] sm:h-28 sm:w-28"
+                className="group/play absolute left-1/2 top-1/2 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#E8EAED] shadow-inner transition-all duration-300 hover:scale-110 hover:bg-[#dfe2e6] sm:h-20 sm:w-20 md:h-28 md:w-28"
                 aria-label="Watch demo video"
               >
                 <span
                   aria-hidden
                   className="absolute inset-0 rounded-full bg-[#E8EAED] opacity-70 animate-pulse-ring"
                 />
-                <Play className="relative ml-1.5 h-9 w-9 fill-fynk-muted text-fynk-muted transition-colors group-hover/play:fill-fynk-ink group-hover/play:text-fynk-ink sm:h-10 sm:w-10" />
+                <Play className="relative ml-1 h-6 w-6 fill-fynk-muted text-fynk-muted transition-colors group-hover/play:fill-fynk-ink group-hover/play:text-fynk-ink sm:ml-1.5 sm:h-8 sm:w-8 md:h-10 md:w-10" />
               </Link>
             </div>
           </div>

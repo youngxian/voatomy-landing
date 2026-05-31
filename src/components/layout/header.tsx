@@ -107,25 +107,22 @@ export function Header() {
         {t.nav.skipToContent}
       </a>
 
-      <header className="sticky top-0 z-50 bg-white">
+      <header className="sticky top-0 z-50">
         <UtilityTopBar scrolled={scrolled} />
 
+        {/* Nav wrapper — transparent at top, gains bg + shadow on scroll */}
         <div
           className={cn(
-            "transition-all duration-300 ease-out",
-            scrolled ? "px-3 pb-2 pt-2 sm:px-4" : "px-4 pb-6 pt-0 sm:px-6 sm:pb-8",
+            "transition-colors duration-200",
+            scrolled ? "bg-white/95 shadow-[0_1px_0_0_rgba(17,24,39,0.06)] backdrop-blur-md" : "bg-white",
           )}
         >
-          <div className="relative mx-auto max-w-container">
-            {/* fynk: integrated bar at top → floating pill on scroll */}
+          <div className="mx-auto max-w-container px-4 sm:px-6">
             <div
               className={cn(
-                "relative flex items-center justify-between gap-3 bg-white transition-all duration-300 ease-out",
+                "relative flex h-16 items-center justify-between gap-4",
                 !mounted && "opacity-0",
-                mounted && !scrolled && "animate-nav-slide-down",
-                scrolled
-                  ? "min-h-[68px] rounded-full border border-fynk-border px-4 shadow-[0_4px_24px_rgba(17,24,39,0.1)] backdrop-blur-xl sm:px-5 lg:min-h-[72px] lg:px-6"
-                  : "min-h-[80px] rounded-2xl border border-transparent px-2 shadow-none lg:min-h-[84px] lg:px-3",
+                mounted && "opacity-100 transition-opacity duration-150",
               )}
             >
             {/* Logo */}
@@ -263,66 +260,68 @@ export function Header() {
               )}
             </div>
 
-            {/* Mobile */}
-            <div className="relative z-[2] flex items-center gap-2 lg:hidden">
+            {/* Mobile hamburger */}
+            <div className="flex items-center gap-2 lg:hidden">
+              <LanguageSwitcher variant="light" compact />
               <button
                 type="button"
-                className="grid h-12 w-12 place-items-center rounded-full border border-fynk-border bg-white text-fynk-ink transition-colors hover:bg-fynk-surface-alt"
+                className="grid h-9 w-9 place-items-center rounded-lg text-fynk-muted transition-colors hover:bg-fynk-surface-alt hover:text-fynk-ink"
                 onClick={() => {
                   setMobileOpen(true);
                   trackEvent("navigation", "mobile_menu_open", "Mobile menu opened");
                 }}
                 aria-label="Open menu"
               >
-                <Menu className="h-4 w-4" />
+                <Menu className="h-5 w-5" />
               </button>
             </div>
-          </div>
+          </div>{/* /nav row */}
+        </div>{/* /max-w-container */}
 
-        {/* ================================================================
-            MEGA MENUS
-        ================================================================ */}
-
-        {/* -- Product Mega Menu -- */}
+        {/* ── Mega menus — rendered inside the sticky header so they scroll with it ── */}
         {activeMega === "product" && (
           <div
-            className="absolute left-1/2 top-[calc(100%+8px)] z-40 w-full max-w-3xl -translate-x-1/2 animate-nav-drop-in px-2 sm:px-0"
+            className="absolute left-0 right-0 z-40 animate-nav-drop-in px-4 pt-1 sm:px-6"
             onMouseEnter={() => openMega("product")}
             onMouseLeave={closeMega}
             role="menu"
             aria-label="Platform menu"
           >
-            <ProductMegaMenu />
+            <div className="mx-auto max-w-container">
+              <ProductMegaMenu />
+            </div>
           </div>
         )}
 
-        {/* -- Solutions Mega Menu -- */}
         {activeMega === "solutions" && (
           <div
-            className="absolute left-1/2 top-[calc(100%+8px)] z-40 w-full max-w-2xl -translate-x-1/2 animate-nav-drop-in px-2 sm:px-0"
+            className="absolute left-0 right-0 z-40 animate-nav-drop-in px-4 pt-1 sm:px-6"
             onMouseEnter={() => openMega("solutions")}
             onMouseLeave={closeMega}
             role="menu"
             aria-label="Solutions menu"
           >
-            <SolutionsMegaMenu />
+            <div className="mx-auto max-w-container">
+              <SolutionsMegaMenu />
+            </div>
           </div>
         )}
 
-        {/* -- Resources Mega Menu -- */}
         {activeMega === "resources" && (
           <div
-            className="absolute left-1/2 top-[calc(100%+8px)] z-40 w-full max-w-xl -translate-x-1/2 animate-nav-drop-in px-2 sm:px-0"
+            className="absolute left-0 right-0 z-40 animate-nav-drop-in px-4 pt-1 sm:px-6"
             onMouseEnter={() => openMega("resources")}
             onMouseLeave={closeMega}
             role="menu"
             aria-label="Resources menu"
           >
-            <ResourcesMegaMenu />
+            <div className="mx-auto max-w-container">
+              <ResourcesMegaMenu />
+            </div>
           </div>
         )}
-          </div>
-        </div>
+
+      </div>{/* /nav bg wrapper */}
       </header>
 
       {/* ================================================================
