@@ -25,8 +25,8 @@ export function StepNav({
   onSkip?: () => void;
 }) {
   return (
-    <div className="mt-5 space-y-1.5 border-t border-fynk-border/60 pt-4">
-      <div className="flex gap-2.5">
+    <div className="mt-6 space-y-2 border-t border-[#121312]/8 pt-5">
+      <div className="flex gap-3">
         <ObSecondaryButton onClick={onBack}>Back</ObSecondaryButton>
         <ObPrimaryButton
           onClick={onContinue}
@@ -70,7 +70,7 @@ export function StepHeader({
 }) {
   if (compact) {
     return (
-      <div className="mb-4 flex items-start gap-3 text-left">
+      <div className="mb-5 flex items-start gap-3.5 text-left">
         <div className="shrink-0 pt-0.5">
           {icon ?? (
             <OnboardingHeaderIcon
@@ -82,10 +82,10 @@ export function StepHeader({
           )}
         </div>
         <div className="min-w-0 flex-1">
-          <h1 className="font-heading text-xl font-bold tracking-tight text-fynk-ink sm:text-[1.35rem]">
+          <h1 className="font-heading text-[1.35rem] font-bold tracking-tight text-fynk-ink sm:text-2xl">
             {title}
           </h1>
-          <ObHint className="mt-0.5 line-clamp-2">{subtitle}</ObHint>
+          <ObHint className="mt-1 text-[13px] leading-snug">{subtitle}</ObHint>
         </div>
       </div>
     );
@@ -129,10 +129,10 @@ export function SelectCard({
       type="button"
       onClick={onClick}
       className={cn(
-        "group relative w-full rounded-xl border p-3 text-left transition-all duration-200",
+        "group relative w-full rounded-2xl border p-4 text-left transition-all duration-200",
         selected
-          ? "border-brand bg-brand/[0.04] ring-1 ring-brand/25"
-          : "border-fynk-border bg-white hover:border-fynk-border/80 hover:bg-fynk-surface-alt/40",
+          ? "border-[#F05A28]/35 bg-[#FFF8F5] ring-1 ring-[#F05A28]/20 shadow-sm"
+          : "border-[#121312]/10 bg-[#fafafa] hover:border-[#121312]/15 hover:bg-white hover:shadow-sm",
       )}
     >
       <div

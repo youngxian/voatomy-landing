@@ -5,6 +5,40 @@ export const de: Dictionary = {
     siteDescription:
       "Voatomy verwandelt Repos, Kapazität und Kundensignale in Sprint-Pläne, denen Ihr Team wirklich vertraut — damit Sie pünktlich liefern, nicht nur gut planen.",
   },
+  cookieConsent: {
+    bannerTitle: "Hallo! Auch wir brauchen Cookies 🍪",
+    bannerDescription:
+      "Sie helfen uns, die Funktionalität unseres Angebots zu verbessern. Sie können alle Cookies akzeptieren oder Ihre Auswahl in den Datenschutzeinstellungen verwalten.",
+    openSettingsLink: "Datenschutzeinstellungen",
+    backToBanner: "Zurück",
+    title: "Datenschutzeinstellungen",
+    descriptionBeforeLink:
+      "Hier können Sie die Informationen einsehen und anpassen, die wir über Sie erfassen. Weitere Informationen finden Sie in unserer",
+    descriptionAfterLink: "und",
+    privacyPolicyLink: "Datenschutzerklärung",
+    cookiePolicyLink: "Cookie-Richtlinie",
+    acceptAll: "Alle akzeptieren",
+    acceptSelected: "Auswahl akzeptieren",
+    decline: "Ablehnen",
+    toggleAllLabel: "Alle Dienste aktivieren oder deaktivieren",
+    toggleAllDescription: "Mit diesem Schalter können Sie alle Dienste aktivieren oder deaktivieren.",
+    categories: {
+      analytics: {
+        label: "Analyse",
+        description:
+          "Diese Cookies ermöglichen es uns, Besuche und Traffic-Quellen zu zählen, damit wir die Leistung unserer Website messen und verbessern können.",
+        services: ["Voatomy Analytics"],
+        servicesLabel: "1 Dienst",
+      },
+      preferences: {
+        label: "Präferenzen",
+        description:
+          "Diese Cookies ermöglichen es der Website, Ihre getroffenen Entscheidungen zu speichern und erweiterte, persönlichere Funktionen bereitzustellen.",
+        services: ["Theme-Einstellungen", "Spracheinstellungen", "Anzeigeoptionen"],
+        servicesLabel: "3 Dienste",
+      },
+    },
+  },
   announcement: {
     badge: "ATLAS Live",
     headline: "Demo ansehen — wann es Ihnen passt",
@@ -37,8 +71,9 @@ export const de: Dictionary = {
       "Die Daten haben Sie schon — in GitHub, Jira und Ihrem Kalender. Voatomy verbindet sie und liefert einen Sprint-Plan, dem Ihr Team vor dem Standup vertraut.",
     ctaPrimary: "Gratis testen",
     ctaSecondary: "Live-Demo ansehen",
-    socialProof:
-      "Schließen Sie sich über 1.200 Product- und Engineering-Teams an, die aufhörten zu raten — und mit Vertrauen shippen.",
+    socialProofBefore: "Schließen Sie sich",
+    socialProofHighlight: "über 1.200 Product- und Engineering-Teams",
+    socialProofAfter: "an, die aufhörten zu raten — und mit Vertrauen shippen.",
     ratingG2: "4,9",
     ratingBeta: "4,8",
     ratingG2Label: "G2",

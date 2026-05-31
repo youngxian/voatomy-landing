@@ -107,7 +107,38 @@ export function HeroSection() {
             </p>
           </HeroReveal>
 
-          <HeroReveal loaded={loaded} delayMs={240} className="mt-6 sm:mt-10">
+          {/* Social proof — avatars + stat badges */}
+          <HeroReveal loaded={loaded} delayMs={210} className="mt-6 sm:mt-8">
+            <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3">
+              {/* Avatar cluster */}
+              <div className="flex items-center gap-2 rounded-full border border-fynk-border bg-white px-3 py-1.5 shadow-sm">
+                <div className="flex -space-x-2">
+                  {["#F05A28","#3B82F6","#10B981","#8B5CF6"].map((c, i) => (
+                    <span
+                      key={i}
+                      className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-white text-[9px] font-bold text-white"
+                      style={{ backgroundColor: c }}
+                    >
+                      {["M","T","S","A"][i]}
+                    </span>
+                  ))}
+                </div>
+                <span className="text-xs font-semibold text-fynk-ink">500+ teams</span>
+              </div>
+              {/* Stat badges */}
+              {[
+                { value: "87%", label: "sprint accuracy" },
+                { value: "3 min", label: "to first plan" },
+              ].map((s) => (
+                <span key={s.label} className="inline-flex items-center gap-1.5 rounded-full border border-fynk-border bg-white px-3 py-1.5 text-xs shadow-sm">
+                  <span className="font-bold text-fynk-ink">{s.value}</span>
+                  <span className="text-fynk-muted">{s.label}</span>
+                </span>
+              ))}
+            </div>
+          </HeroReveal>
+
+          <HeroReveal loaded={loaded} delayMs={280} className="mt-5 sm:mt-8">
             <div className="flex flex-col items-stretch justify-center gap-2.5 min-[480px]:flex-row min-[480px]:flex-wrap min-[480px]:items-center min-[480px]:gap-3">
               <FynkButtonPrimary
                 href={isLoggedIn ? dashboardUrl : localizedPath("/auth/signup")}
@@ -119,7 +150,13 @@ export function HeroSection() {
                 {isLoggedIn ? nav.goToDashboard : t.ctaPrimary}
                 <ArrowRight className="h-4 w-4" />
               </FynkButtonPrimary>
-              <FynkButtonSecondary href={localizedPath("/demo")}>{t.ctaSecondary}</FynkButtonSecondary>
+              <a
+                href={localizedPath("/demo")}
+                className="inline-flex items-center gap-1.5 px-2 py-2 text-sm font-medium text-fynk-muted transition-colors hover:text-fynk-ink"
+              >
+                <Play className="h-3.5 w-3.5" />
+                {t.ctaSecondary}
+              </a>
             </div>
           </HeroReveal>
         </div>

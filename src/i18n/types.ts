@@ -2,6 +2,36 @@ export type Dictionary = {
   meta: {
     siteDescription: string;
   };
+  cookieConsent: {
+    bannerTitle: string;
+    bannerDescription: string;
+    openSettingsLink: string;
+    backToBanner: string;
+    title: string;
+    descriptionBeforeLink: string;
+    descriptionAfterLink: string;
+    privacyPolicyLink: string;
+    cookiePolicyLink: string;
+    acceptAll: string;
+    acceptSelected: string;
+    decline: string;
+    toggleAllLabel: string;
+    toggleAllDescription: string;
+    categories: {
+      analytics: {
+        label: string;
+        description: string;
+        services: readonly string[];
+        servicesLabel: string;
+      };
+      preferences: {
+        label: string;
+        description: string;
+        services: readonly string[];
+        servicesLabel: string;
+      };
+    };
+  };
   announcement: {
     badge: string;
     headline: string;
@@ -32,7 +62,9 @@ export type Dictionary = {
     subheadline: string;
     ctaPrimary: string;
     ctaSecondary: string;
-    socialProof: string;
+    socialProofBefore: string;
+    socialProofHighlight: string;
+    socialProofAfter: string;
     ratingG2: string;
     ratingBeta: string;
     ratingG2Label: string;

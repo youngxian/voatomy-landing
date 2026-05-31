@@ -11,6 +11,7 @@ import {
   trackClick,
   trackCTA,
 } from "@/lib/analytics";
+import { hasAnalyticsConsent, subscribeCookieConsent } from "@/lib/cookie-consent";
 
 // ══════════════════════════════════════════════════════════════════
 //  AnalyticsProvider
@@ -34,10 +35,14 @@ export function AnalyticsProvider({ children }: AnalyticsProviderProps) {
   const prevPathRef = React.useRef<string>("");
   const clickTimestamps = React.useRef<Array<{ x: number; y: number; t: number }>>([]);
 
-  // ── Initialize engine ──
+  // ── Initialize engine when analytics consent is granted ──
   React.useEffect(() => {
-    initAnalytics();
-    return () => destroyAnalytics();
+    if (hasAnalyticsConsent()) initAnalytics();
+
+    return subscribeCookieConsent(() => {
+      if (hasAnalyticsConsent()) initAnalytics();
+      else destroyAnalytics();
+    });
   }, []);
 
   // ── Track page views on route change ──

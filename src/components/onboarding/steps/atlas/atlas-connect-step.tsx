@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useOnboarding } from "../../onboarding-context";
 import { StepHeader, StepNav } from "../_shared";
+import { IntegrationLogo, ConnectToolsIconCluster } from "@/components/icons/integration-logos";
 import { INTEGRATION_CATALOG } from "@/lib/constants";
 import { initiateOAuthConnect, connectWithAPIKey, disconnectIntegration, openOAuthPopup } from "@/lib/api";
 import type { IntegrationKey, ConnectedIntegration, AuthMethod } from "@/types";
@@ -44,8 +45,8 @@ function IntegrationButton({
       )}
     >
       <span className="flex items-center gap-2.5 font-medium">
-        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#121312]/6 text-[11px] font-bold">
-          {integration.icon}
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-black/[0.06] bg-white shadow-sm">
+          <IntegrationLogo integrationKey={integration.key} name={integration.name} size="md" />
         </span>
         {integration.name}
       </span>
@@ -122,6 +123,12 @@ export function AtlasConnectStep() {
   return (
     <div>
       <StepHeader
+        icon={
+          <ConnectToolsIconCluster
+            keys={[...CODE_INTEGRATIONS, ...BOARD_INTEGRATIONS].slice(0, 3).map((i) => i.key)}
+            names={[...CODE_INTEGRATIONS, ...BOARD_INTEGRATIONS].slice(0, 3).map((i) => i.name)}
+          />
+        }
         stepKey="atlas-connect"
         title="Connect your tools"
         subtitle="Link your code repo and project board so Atlas can analyse complexity and plan your sprint."

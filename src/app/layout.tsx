@@ -1,11 +1,16 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
 import { SITE_CONFIG } from "@/lib/constants";
 import { fontVariables } from "@/lib/fonts";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AnalyticsProvider } from "@/components/analytics-provider";
+import { CookieConsentBanner } from "@/components/cookie-consent/cookie-consent-banner";
 import { JsonLd, organizationJsonLd, webSiteJsonLd } from "@/components/json-ld";
 import "./globals.css";
+
+export const viewport: Viewport = {
+  themeColor: "#F05A28",
+};
 
 export const metadata: Metadata = {
   title: {
@@ -41,6 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Suspense fallback={null}>
             <AnalyticsProvider>{children}</AnalyticsProvider>
           </Suspense>
+          <CookieConsentBanner />
         </ThemeProvider>
       </body>
     </html>

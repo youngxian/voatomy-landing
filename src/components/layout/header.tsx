@@ -234,9 +234,14 @@ export function Header() {
                   data-track-cta="header-free-trial"
                   data-track-cta-location="header"
                   onClick={() => trackConversion("signup_start", { source: "header" })}
-                  className="inline-flex h-10 items-center rounded-full border border-fynk-border bg-white px-5 text-[14px] font-semibold text-fynk-ink shadow-sm transition-all hover:border-fynk-border-hover hover:bg-fynk-surface-alt"
+                  className={cn(
+                    "inline-flex h-10 items-center rounded-full px-5 text-[14px] font-semibold transition-all duration-300",
+                    scrolled
+                      ? "bg-fynk-orange text-white shadow-md shadow-fynk-orange/25 hover:bg-fynk-orange-hover"
+                      : "border border-fynk-border bg-white text-fynk-ink shadow-sm hover:border-fynk-border-hover hover:bg-fynk-surface-alt",
+                  )}
                 >
-                  Free trial
+                  {scrolled ? "Start free →" : "Free trial"}
                 </Link>
               )}
               <Link

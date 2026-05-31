@@ -2,14 +2,19 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
+import { Check, Building2, Globe2, Loader2, Users, X } from "lucide-react";
 import { StepHeader, StepNav } from "./_shared";
-import { ob, ObField, ObInput } from "../onboarding-primitives";
-import { OnboardingIndustryIcon, OnboardingRegionIcon } from "../onboarding-icons";
+import { ob, ObField, ObHint, ObInput } from "../onboarding-primitives";
+import {
+  IndustryTileIcon,
+  PurposeTileIcon,
+  RegionTileIcon,
+  WorkspaceHeaderIcon,
+} from "../onboarding-icons";
 import { cn } from "@/lib/utils";
 import { useOnboarding } from "../onboarding-context";
 import {
   INDUSTRY_OPTIONS,
-  COMPANY_SIZE_OPTIONS,
   PURPOSE_OPTIONS,
   ROLE_PURPOSE_MAP,
   REGIONS,
@@ -18,6 +23,7 @@ import type { Industry, CompanySize, Region, Purpose, ProductKey } from "@/types
 import { checkSlugAvailability } from "@/lib/api";
 import { useProductOnboarding } from "@/hooks/use-product-onboarding";
 import { purposesForLicensedProducts } from "@/lib/product-onboarding-config";
+import { TeamSizeSlider } from "../team-size-slider";
 
 function generateSlug(name: string): string {
   return name
@@ -27,6 +33,26 @@ function generateSlug(name: string): string {
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "")
     .slice(0, 50);
+}
+
+function SectionBlock({
+  icon,
+  title,
+  children,
+}: {
+  icon?: React.ReactNode;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className={ob.sectionCard}>
+      <div className={ob.sectionLabel}>
+        {icon}
+        <span>{title}</span>
+      </div>
+      {children}
+    </section>
+  );
 }
 
 export function WorkspaceStep() {
@@ -51,7 +77,6 @@ export function WorkspaceStep() {
     }
   }, [workspaceName]);
 
-  // Debounced slug availability check
   React.useEffect(() => {
     if (!workspaceSlug || workspaceSlug.length < 2) {
       setSlugAvailable(null);
@@ -62,12 +87,8 @@ export function WorkspaceStep() {
     if (slugCheckTimer.current) clearTimeout(slugCheckTimer.current);
     slugCheckTimer.current = setTimeout(() => {
       checkSlugAvailability(workspaceSlug)
-        .then((result) => {
-          setSlugAvailable(result.available);
-        })
-        .catch(() => {
-          setSlugAvailable(null);
-        })
+        .then((result) => setSlugAvailable(result.available))
+        .catch(() => setSlugAvailable(null))
         .finally(() => setSlugChecking(false));
     }, 400);
     return () => {
@@ -91,14 +112,12 @@ export function WorkspaceStep() {
       opt.products.some((p) => licensedProducts.includes(p as ProductKey)),
   );
 
-  // Sync region from geo detection if user hasn't picked one yet
   React.useEffect(() => {
     if (!region && formData.region) {
       setRegion(formData.region);
     }
   }, [formData.region, region]);
 
-  // Clear any selected purposes that are no longer relevant for the current role
   React.useEffect(() => {
     setPurposes((prev) => {
       const valid = prev.filter((p) => relevantPurposes.includes(p));
@@ -106,7 +125,6 @@ export function WorkspaceStep() {
     });
   }, [formData.userRole]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Auto-select purpose when only one option for licensed products
   React.useEffect(() => {
     if (filteredPurposes.length === 1 && !purposes.includes(filteredPurposes[0].value)) {
       setPurposes([filteredPurposes[0].value]);
@@ -146,8 +164,7 @@ export function WorkspaceStep() {
       markStepComplete("workspace");
       goNext();
     } catch (err) {
-      const msg = err instanceof Error ? err.message : "Failed to save workspace";
-      setSaveError(msg);
+      setSaveError(err instanceof Error ? err.message : "Failed to save workspace");
     } finally {
       setIsSaving(false);
     }
@@ -157,99 +174,114 @@ export function WorkspaceStep() {
     <div>
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
         <StepHeader
+          icon={<WorkspaceHeaderIcon />}
           stepKey="workspace"
           title="Set up your workspace"
           subtitle={`Org-wide settings for ${primaryModule.label} and your team — product-specific setup comes later`}
+          color="#3B82F6"
         />
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className={cn(ob.section, "text-left")}>
-        <ObField label="Company or team name">
-          <ObInput
-            type="text"
-            value={workspaceName}
-            onChange={(e) => setWorkspaceName(e.target.value)}
-            placeholder="Acme Corp"
-            autoFocus
-          />
-          <div className="mt-1 flex items-center gap-1 text-xs text-fynk-muted">
-            <span>voatomy.com/</span>
-            <span className="font-mono font-medium text-fynk-ink/70">{workspaceSlug || "your-team"}</span>
-            {slugChecking && <span className="ml-1">checking…</span>}
-            {!slugChecking && slugAvailable === true && <span className="ml-1 text-emerald-600">✓ available</span>}
-            {!slugChecking && slugAvailable === false && <span className="ml-1 text-red-500">✗ taken</span>}
+      <motion.div
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="space-y-4 text-left"
+      >
+        {/* Identity */}
+        <SectionBlock icon={<Building2 className="h-3.5 w-3.5" strokeWidth={2.2} />} title="Workspace identity">
+          <ObField label="Company or team name">
+            <ObInput
+              type="text"
+              value={workspaceName}
+              onChange={(e) => setWorkspaceName(e.target.value)}
+              placeholder="Acme Corp"
+              autoFocus
+            />
+          </ObField>
+          <div className="mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-[#121312]/8 bg-white px-3.5 py-2.5">
+            <Globe2 className="h-4 w-4 shrink-0 text-[#121312]/35" />
+            <span className="text-xs text-[#121312]/45">voatomy.com/</span>
+            <span className="font-mono text-sm font-semibold text-[#121312]">
+              {workspaceSlug || "your-team"}
+            </span>
+            <span className="ml-auto flex items-center gap-1.5 text-[11px] font-medium">
+              {slugChecking && (
+                <>
+                  <Loader2 className="h-3 w-3 animate-spin text-[#121312]/40" />
+                  <span className="text-[#121312]/40">Checking…</span>
+                </>
+              )}
+              {!slugChecking && slugAvailable === true && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-emerald-700">
+                  <Check className="h-3 w-3" strokeWidth={3} />
+                  Available
+                </span>
+              )}
+              {!slugChecking && slugAvailable === false && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-red-600">
+                  <X className="h-3 w-3" strokeWidth={3} />
+                  Taken
+                </span>
+              )}
+            </span>
           </div>
-        </ObField>
+        </SectionBlock>
 
-        <ObField label="Industry" hint="We'll recommend products and integrations for your industry">
-          <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-5">
-            {INDUSTRY_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => setIndustry(opt.value)}
-                className={cn(
-                  "flex flex-col items-center gap-1 rounded-xl border py-2 px-0.5 text-center transition-all duration-200",
-                  industry === opt.value ? ob.chip(true) : ob.chip(false),
-                )}
-              >
-                <span className={cn("flex h-6 w-6 items-center justify-center rounded-md", industry === opt.value ? "text-brand" : "text-fynk-muted")}>
-                  <OnboardingIndustryIcon industry={opt.value} />
-                </span>
-                <span className={cn("text-[9px] font-medium leading-tight", industry === opt.value ? "text-fynk-ink" : "text-fynk-muted")}>
-                  {opt.label}
-                </span>
-              </button>
-            ))}
+        {/* Industry */}
+        <SectionBlock title="Industry">
+          <ObHint className="mb-3">We&apos;ll recommend products and integrations for your industry</ObHint>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {INDUSTRY_OPTIONS.map((opt) => {
+              const selected = industry === opt.value;
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setIndustry(opt.value)}
+                  className={ob.selectTile(selected)}
+                >
+                  <IndustryTileIcon industry={opt.value} />
+                  <span className={cn("text-[10px] font-semibold leading-tight", selected ? "text-fynk-ink" : "text-fynk-muted")}>
+                    {opt.label}
+                  </span>
+                </button>
+              );
+            })}
           </div>
-        </ObField>
+        </SectionBlock>
 
-        <ObField label="Team size">
-          <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-6">
-            {COMPANY_SIZE_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                type="button"
-                onClick={() => setCompanySize(opt.value)}
-                className={cn(
-                  "flex flex-col items-center gap-0.5 rounded-xl border py-2 transition-all duration-200",
-                  companySize === opt.value ? ob.chip(true) : ob.chip(false),
-                )}
-              >
-                <span className={cn("text-xs font-bold", companySize === opt.value ? "text-fynk-ink" : "text-fynk-muted")}>
-                  {opt.label}
-                </span>
-                <span className="text-[8px] text-fynk-muted/80">{opt.description}</span>
-              </button>
-            ))}
+        {/* Team size */}
+        <SectionBlock icon={<Users className="h-3.5 w-3.5" strokeWidth={2.2} />} title="Team size">
+          <TeamSizeSlider value={companySize} onChange={setCompanySize} />
+        </SectionBlock>
+
+        {/* Region */}
+        <SectionBlock icon={<Globe2 className="h-3.5 w-3.5" strokeWidth={2.2} />} title="Region">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {REGIONS.map((r) => {
+              const selected = region === r.value;
+              return (
+                <button
+                  key={r.value}
+                  type="button"
+                  onClick={() => setRegion(r.value)}
+                  className={ob.selectTile(selected)}
+                >
+                  <RegionTileIcon region={r.value} size="xs" />
+                  <span className={cn("text-[10px] font-semibold leading-tight", selected ? "text-fynk-ink" : "text-fynk-muted")}>
+                    {r.label}
+                  </span>
+                </button>
+              );
+            })}
           </div>
-        </ObField>
+        </SectionBlock>
 
-        <ObField label="Region">
-          <div className="grid grid-cols-3 gap-1.5">
-            {REGIONS.map((r) => (
-              <button
-                key={r.value}
-                type="button"
-                onClick={() => setRegion(r.value)}
-                className={cn(
-                  "flex flex-col items-center gap-1 rounded-xl border py-2 transition-all duration-200",
-                  region === r.value ? ob.chip(true) : ob.chip(false),
-                )}
-              >
-                <span className={cn("flex h-6 w-6 items-center justify-center", region === r.value ? "text-brand" : "text-fynk-muted")}>
-                  <OnboardingRegionIcon region={r.value} />
-                </span>
-                <span className={cn("text-[9px] font-medium leading-tight", region === r.value ? "text-fynk-ink" : "text-fynk-muted")}>
-                  {r.label}
-                </span>
-              </button>
-            ))}
-          </div>
-        </ObField>
-
-        <ObField label="What do you want to accomplish?" hint="Select all that apply — we'll recommend the right products">
-          <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
+        {/* Goals */}
+        <SectionBlock title="What do you want to accomplish?">
+          <ObHint className="mb-3">Select all that apply — we&apos;ll recommend the right products</ObHint>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {filteredPurposes.map((opt) => {
               const selected = purposes.includes(opt.value);
               return (
@@ -257,34 +289,30 @@ export function WorkspaceStep() {
                   key={opt.value}
                   type="button"
                   onClick={() => togglePurpose(opt.value)}
-                  className={cn(
-                    "flex items-center gap-2.5 rounded-xl border p-2.5 text-left transition-all duration-200",
-                    selected ? "border-brand bg-brand/[0.04] ring-1 ring-brand/20" : "border-fynk-border bg-white hover:bg-fynk-surface-alt/50",
-                  )}
+                  className={ob.selectRow(selected)}
                 >
-                  <span
-                    className={cn(
-                      "flex h-4 w-4 shrink-0 items-center justify-center rounded border transition-colors",
-                      selected ? "border-brand bg-brand text-white" : "border-fynk-border",
-                    )}
-                  >
-                    {selected && (
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
-                    )}
-                  </span>
-                  <div className="min-w-0">
-                    <p className={cn("text-xs font-medium", selected ? "text-fynk-ink" : "text-fynk-muted")}>
+                  <PurposeTileIcon purpose={opt.value} />
+                  <div className="min-w-0 flex-1">
+                    <p className={cn("text-sm font-semibold", selected ? "text-fynk-ink" : "text-fynk-muted")}>
                       {opt.label}
                     </p>
-                    <p className="text-[10px] text-fynk-muted/80 line-clamp-1">{opt.description}</p>
+                    <p className="mt-0.5 text-[11px] leading-snug text-fynk-muted/85 line-clamp-2">
+                      {opt.description}
+                    </p>
                   </div>
+                  <span
+                    className={cn(
+                      "flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-colors",
+                      selected ? "border-[#F05A28] bg-[#F05A28] text-white" : "border-[#121312]/12 bg-white",
+                    )}
+                  >
+                    {selected && <Check className="h-3 w-3" strokeWidth={3} />}
+                  </span>
                 </button>
               );
             })}
           </div>
-        </ObField>
+        </SectionBlock>
 
         {saveError && <p className={ob.error}>{saveError}</p>}
 

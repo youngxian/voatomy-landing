@@ -48,16 +48,16 @@ export default function LandingPage() {
         <TrustSection />
       </TrackedSection>
 
+      <TrackedSection id="workflow" name="Three-Step Workflow">
+        <ProblemSection />
+      </TrackedSection>
+
       <TrackedSection id="benefits" name="Why Voatomy">
         <BenefitsSection />
       </TrackedSection>
 
       <TrackedSection id="testimonials" name="Testimonials">
         <TestimonialsSection />
-      </TrackedSection>
-
-      <TrackedSection id="workflow" name="Three-Step Workflow">
-        <ProblemSection />
       </TrackedSection>
 
       <TrackedSection id="solutions" name="Solutions">

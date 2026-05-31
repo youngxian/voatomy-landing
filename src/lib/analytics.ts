@@ -1,3 +1,5 @@
+import { hasAnalyticsConsent } from "./cookie-consent";
+
 /**
  * ══════════════════════════════════════════════════════════════════
  *  Voatomy Analytics Engine
@@ -167,6 +169,7 @@ function getScrollDepth(): number {
  */
 export function initAnalytics(): void {
   if (_isInitialized || typeof window === "undefined") return;
+  if (!hasAnalyticsConsent()) return;
   _isInitialized = true;
 
   // Restore or create session
@@ -258,6 +261,8 @@ export function trackEvent(
   value?: number,
   metadata?: Record<string, unknown>,
 ): void {
+  if (!hasAnalyticsConsent()) return;
+
   const event: AnalyticsEvent = {
     id: generateId(),
     timestamp: new Date().toISOString(),

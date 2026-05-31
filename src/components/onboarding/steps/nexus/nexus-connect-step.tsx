@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useOnboarding } from "../../onboarding-context";
 import { StepHeader, StepNav } from "../_shared";
+import { IntegrationLogo } from "@/components/icons/integration-logos";
 import { INTEGRATION_CATALOG } from "@/lib/constants";
 import { initiateOAuthConnect, disconnectIntegration, openOAuthPopup } from "@/lib/api";
 import type { IntegrationKey, ConnectedIntegration, AuthMethod } from "@/types";
@@ -48,8 +49,8 @@ function IntegrationButton({
       )}
     >
       <span className="flex items-center gap-2.5 font-medium">
-        <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#121312]/6 text-[11px] font-bold">
-          {integration.icon}
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-black/[0.06] bg-white shadow-sm">
+          <IntegrationLogo integrationKey={integration.key} name={integration.name} size="md" />
         </span>
         {integration.name}
       </span>

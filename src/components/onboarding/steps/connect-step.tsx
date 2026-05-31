@@ -3,10 +3,11 @@
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lock, ShieldCheck } from "lucide-react";
+import { IntegrationLogo, ConnectToolsIconCluster } from "@/components/icons/integration-logos";
 import { cn } from "@/lib/utils";
 import { StepHeader } from "./_shared";
 import { useOnboarding } from "../onboarding-context";
-import { INTEGRATION_CATALOG, PRODUCT_CARDS } from "@/lib/constants";
+import { INTEGRATION_CATALOG } from "@/lib/constants";
 import {
   initiateOAuthConnect,
   connectWithAPIKey,
@@ -261,13 +262,6 @@ export function ConnectStep() {
     goNext();
   };
 
-  const getProductBadges = (products: readonly string[]) => {
-    return products
-      .filter((p) => subscribedProducts.includes(p as ProductKey))
-      .map((p) => PRODUCT_CARDS.find((pc) => pc.key === p))
-      .filter(Boolean);
-  };
-
   const authMethodLabel = (method: string) => {
     switch (method) {
       case "oauth2": return "OAuth";
@@ -281,6 +275,12 @@ export function ConnectStep() {
     <div>
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
         <StepHeader
+          icon={
+            <ConnectToolsIconCluster
+              keys={displayIntegrations.map((i) => i.key)}
+              names={displayIntegrations.map((i) => i.name)}
+            />
+          }
           stepKey="connect"
           title="Connect your tools"
           subtitle={`${primaryModule.connectBlurb} Other tools for your other products can wait until you open them.`}
@@ -355,12 +355,12 @@ export function ConnectStep() {
               {connected.length === 1 ? "tool connected" : "tools connected"}
             </span>
           </div>
-          <div className="flex gap-1">
+          <div className="flex -space-x-1.5">
             {connected.map((c) => {
               const integ = INTEGRATION_CATALOG.find((i) => i.key === c.key);
               return (
-                <span key={c.key} className="flex h-6 w-6 items-center justify-center rounded-md bg-white border border-[#121312]/10 text-[8px] font-bold text-[#121312]/60">
-                  {integ?.icon || "?"}
+                <span key={c.key} className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-white shadow-sm ring-1 ring-black/[0.06]">
+                  <IntegrationLogo integrationKey={c.key} name={integ?.name ?? c.key} size="sm" />
                 </span>
               );
             })}
@@ -520,8 +520,8 @@ export function ConnectStep() {
               className="mx-4 w-full max-w-md rounded-2xl border border-[#121312]/10 bg-white p-6 shadow-2xl"
             >
               <div className="mb-5 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#121312]/10 bg-[#121312]/[0.03] text-sm font-bold text-[#121312]/50">
-                  {apiKeyTarget.icon}
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-black/[0.06] bg-white shadow-sm">
+                  <IntegrationLogo integrationKey={apiKeyTarget.key} name={apiKeyTarget.name} size="md" />
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-[#121312]">Connect {apiKeyTarget.name}</h3>
@@ -591,13 +591,12 @@ export function ConnectStep() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6"
+        className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6"
       >
         <AnimatePresence mode="popLayout">
           {displayIntegrations.map((integ, index) => {
             const intConnected = isConnected(integ.key);
             const isLoading = connecting === integ.key;
-            const productBadges = getProductBadges(integ.products);
 
             return (
               <motion.div
@@ -608,40 +607,31 @@ export function ConnectStep() {
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ delay: index * 0.02 }}
                 className={cn(
-                  "flex items-center gap-3 rounded-xl border p-3 transition-all duration-200",
+                  "flex items-center gap-3.5 rounded-2xl border p-3.5 transition-all duration-200",
                   intConnected
-                    ? "border-brand/20 bg-brand/5"
-                    : "border-[#121312]/8 bg-white hover:border-[#121312]/15",
+                    ? "border-[#10B981]/25 bg-[#ECFDF5]/60"
+                    : "border-[#121312]/8 bg-[#fafafa] hover:border-[#121312]/14 hover:bg-white hover:shadow-sm",
                 )}
               >
-                {/* Icon */}
-                <div
-                  className={cn(
-                    "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border text-xs font-bold",
-                    intConnected
-                      ? "border-brand/20 bg-brand/10 text-[#121312]"
-                      : "border-[#121312]/10 bg-[#121312]/[0.03] text-[#121312]/50",
-                  )}
-                >
-                  {integ.icon}
+                {/* Logo */}
+                <div className={cn(
+                  "flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border bg-white shadow-sm",
+                  intConnected ? "border-[#10B981]/20" : "border-black/[0.06]",
+                )}>
+                  <IntegrationLogo integrationKey={integ.key} name={integ.name} size="md" />
                 </div>
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[13px] font-semibold text-[#121312]">{integ.name}</span>
-                    {productBadges.map((pb) => (
-                      <span key={pb!.key} className="text-[8px]">{pb!.icon}</span>
-                    ))}
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] text-[#121312]/40">{integ.category}</span>
+                  <span className="text-sm font-semibold text-[#121312]">{integ.name}</span>
+                  <div className="mt-0.5 flex items-center gap-1.5">
+                    <span className="text-[11px] text-[#121312]/45">{integ.category}</span>
                     <span className="text-[10px] text-[#121312]/25">·</span>
                     <span className={cn(
-                      "text-[9px] font-medium px-1.5 py-0.5 rounded",
+                      "rounded-md px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide",
                       integ.authMethod === "api_key"
-                        ? "bg-amber-50 text-amber-600"
-                        : "bg-blue-50 text-blue-600",
+                        ? "bg-amber-50 text-amber-700"
+                        : "bg-blue-50 text-blue-700",
                     )}>
                       {authMethodLabel(integ.authMethod)}
                     </span>

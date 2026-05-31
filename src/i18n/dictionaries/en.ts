@@ -5,6 +5,40 @@ export const en: Dictionary = {
     siteDescription:
       "Voatomy turns your repos, capacity, and customer signals into sprint plans your team can actually commit to — so you ship on time, not just plan well.",
   },
+  cookieConsent: {
+    bannerTitle: "Hello! Even we need cookies 🍪",
+    bannerDescription:
+      "They help us improve the functionality of our offer. You can accept all cookies, or manage your choices in privacy settings.",
+    openSettingsLink: "Privacy settings",
+    backToBanner: "Back",
+    title: "Privacy settings",
+    descriptionBeforeLink:
+      "Here you can see and customize the information that we collect about you. You can find more information in our",
+    descriptionAfterLink: "and",
+    privacyPolicyLink: "Privacy Policy",
+    cookiePolicyLink: "Cookie Policy",
+    acceptAll: "Accept all",
+    acceptSelected: "Accept selected",
+    decline: "Decline",
+    toggleAllLabel: "Enable or disable all services",
+    toggleAllDescription: "Use this switch to enable or disable all services.",
+    categories: {
+      analytics: {
+        label: "Analytics",
+        description:
+          "These cookies allow us to count visits and traffic sources so we can measure and improve the performance of our site.",
+        services: ["Voatomy Analytics"],
+        servicesLabel: "1 service",
+      },
+      preferences: {
+        label: "Preferences",
+        description:
+          "These cookies enable the website to remember choices you make and provide enhanced, more personal features.",
+        services: ["Theme preferences", "Language settings", "Display options"],
+        servicesLabel: "3 services",
+      },
+    },
+  },
   announcement: {
     badge: "ATLAS Live",
     headline: "Watch the demo on your schedule",
@@ -37,8 +71,9 @@ export const en: Dictionary = {
       "You already have the data — in GitHub, Jira, and your calendar. Voatomy connects the dots and builds a sprint plan your team believes in before standup ends.",
     ctaPrimary: "Try it free",
     ctaSecondary: "See a live demo",
-    socialProof:
-      "Join 1,200+ product and engineering teams who stopped guessing and started shipping with confidence.",
+    socialProofBefore: "Join",
+    socialProofHighlight: "1,200+ product and engineering teams",
+    socialProofAfter: "who stopped guessing and started shipping with confidence.",
     ratingG2: "4.9",
     ratingBeta: "4.8",
     ratingG2Label: "G2",

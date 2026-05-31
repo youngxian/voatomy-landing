@@ -8,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
       "Replace gut-feel sprint estimation with AI that analyzes code complexity, team capacity, and business priority.",
     start_url: "/",
     display: "standalone",
-    background_color: "#0a0a0a",
-    theme_color: "#0d9488",
+    background_color: "#ffffff",
+    theme_color: "#F05A28",
     icons: [
       { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
       { src: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
