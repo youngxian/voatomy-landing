@@ -1,0 +1,96 @@
+x-app-volumes: &app-volumes
+  - ./:/app
+  - voatomy_node_modules:/app/node_modules
+
+services:
+  voatomy-landing:
+    image: node:20-alpine
+    container_name: voatomy-landing
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- -H 0.0.0.0"
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: development
+      NEXT_TELEMETRY_DISABLED: "1"
+      NEXT_PUBLIC_DASHBOARD_URL: ${NEXT_PUBLIC_DASHBOARD_URL:-http://localhost:3000}
+    volumes: *app-volumes
+    restart: unless-stopped
+    networks:
+      - voatomy
+
+  # Catch auth/notification emails locally — Web UI :8025, SMTP :1025
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: voatomy-mailpit
+    profiles: [dev]
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    restart: unless-stopped
+    networks:
+      - voatomy
+
+  # Single entrypoint in front of Next dev server (http://localhost)
+  caddy:
+    image: caddy:2-alpine
+    container_name: voatomy-caddy
+    profiles: [dev]
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - voatomy-landing
+    restart: unless-stopped
+    networks:
+      - voatomy
+
+  vitest:
+    image: node:20-alpine
+    profiles: [test]
+    working_dir: /app
+    volumes: *app-volumes
+    command: sh -c "npm install && npm run test"
+    networks:
+      - voatomy
+
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.60.0-noble
+    profiles: [e2e]
+    working_dir: /app
+    volumes: *app-volumes
+    environment:
+      CI: "true"
+      PLAYWRIGHT_BASE_URL: http://voatomy-landing:3001
+      PLAYWRIGHT_SKIP_WEBSERVER: "1"
+    depends_on:
+      voatomy-landing:
+        condition: service_started
+    command: sh -c "npm install && npm run e2e"
+    networks:
+      - voatomy
+
+  lhci:
+    image: node:20-bookworm
+    profiles: [lhci]
+    working_dir: /app
+    volumes: *app-volumes
+    environment:
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: "1"
+    command: sh -c "npm install && npm run build && npm run lhci"
+    networks:
+      - voatomy
+
+networks:
+  voatomy:
+    driver: bridge
+
+volumes:
+  voatomy_node_modules:
+  caddy_data:
+  caddy_config:

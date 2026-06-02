@@ -1,0 +1,10 @@
+# HTTP — open http://localhost
+:80 {
+	reverse_proxy voatomy-landing:3001
+}
+
+# Optional local HTTPS — open https://localhost (self-signed)
+localhost {
+	tls internal
+	reverse_proxy voatomy-landing:3001
+}
